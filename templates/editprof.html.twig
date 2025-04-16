@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit User{% endblock %}
+
+{% block body %}
+    <style>
+        .form-container {
+            max-width: 700px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .form-container h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .form-container a {
+            display: inline-block;
+            margin-top: 20px;
+            color: white;
+            background-color: #3498db;
+            padding: 10px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-container a:hover {
+            background-color: #2980b9;
+        }
+
+        .form-container form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-container label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .form-container input,
+        .form-container select,
+        .form-container textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        .form-container input:focus,
+        .form-container select:focus,
+        .form-container textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .form-container button {
+            background-color: #2ecc71;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-container button:hover {
+            background-color: #27ae60;
+        }
+
+        .form-container select option:first-child {
+            color: #aaa;
+        }
+
+        .form-container .delete-form {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .form-container .delete-form form {
+            display: inline;
+        }
+
+        .form-container .delete-form button {
+            background-color: #e74c3c;
+        }
+
+        .form-container .delete-form button:hover {
+            background-color: #c0392b;
+        }
+    </style>
+
+    <div class="form-container">
+        <h1>Edit User</h1>
+
+        {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
+
+    </div>
+{% endblock %}
