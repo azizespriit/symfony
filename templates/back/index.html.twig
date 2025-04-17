@@ -1,0 +1,330 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Dashboard Admin Template by Tooplate.com</title>
+    <!--
+
+    Template 2108 Dashboard
+
+	http://www.tooplate.com/view/2108-dashboard
+
+    -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600">
+    <!-- https://fonts.google.com/specimen/Open+Sans -->
+    <link rel="stylesheet" href="{{ asset('assets/css/fontawesome.min.css')}}">
+    <!-- https://fontawesome.com/ -->
+    <link rel="stylesheet" href="{{ asset('assets/css/fullcalendar.min.css')}}">
+    <!-- https://fullcalendar.io/ -->
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css')}}">
+    <!-- https://getbootstrap.com/ -->
+    <link rel="stylesheet" href="{{ asset('assets/css/tooplate.css')}}">
+</head>
+
+<body id="reportsPage">
+    <div class="" id="home">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="navbar navbar-expand-xl navbar-light bg-light">
+                        <a class="navbar-brand" href="#">
+                            <i class="fas fa-3x fa-tachometer-alt tm-site-icon"></i>
+                            <h1 class="tm-site-title mb-0">Dashboard</h1>
+                        </a>
+                        <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav mx-auto">
+                                <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_back') }}">Dashboard</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_competition') }}">Competition</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if app.request.attributes.get('_route') == 'app_reservation' %}active{% endif %}" href="{{ path('app_reservation') }}">
+                Reservation
+                {% if app.request.attributes.get('_route') == 'app_reservation' %}
+                    <span class="sr-only">(current)</span>
+                {% endif %}
+            </a>
+        </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+            <!-- row -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mx-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_back') }}">Dashboard</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_competition') }}">Competition</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if app.request.attributes.get('_route') == 'app_reservation' %}active{% endif %}" href="{{ path('app_reservation') }}">
+                Reservation
+                {% if app.request.attributes.get('_route') == 'app_reservation' %}
+                    <span class="sr-only">(current)</span>
+                {% endif %}
+            </a>
+        </li>
+    </ul>
+</div>
+
+<!-- Row de contenu -->
+<div class="row tm-content-row tm-mt-big">
+    <!-- Graphique 1: Compétitions par mois -->
+    <div class="tm-col tm-col-big">
+        <div class="bg-white tm-block h-100">
+            <h2 class="tm-block-title">Competitions Stats by Month</h2>
+            <canvas id="barChartCompetitions"></canvas>
+        </div>
+    </div>
+
+    <!-- Graphique 2: Compétitions par type -->
+    <div class="tm-col tm-col-big">
+        <div class="bg-white tm-block h-100">
+            <h2 class="tm-block-title">Competitions Stats by Type</h2>
+            <canvas id="pieChartCompetitions"></canvas>
+        </div>
+    </div>
+
+    <!-- Graphique 3: Réservations par mois -->
+    <div class="tm-col tm-col-big">
+        <div class="bg-white tm-block h-100">
+            <h2 class="tm-block-title">Reservations Stats by Month</h2>
+            <canvas id="barChartReservations"></canvas>
+        </div>
+    </div>
+
+    <!-- Graphique 4: Réservations par mode de paiement -->
+    <div class="tm-col tm-col-big">
+        <div class="bg-white tm-block h-100">
+            <h2 class="tm-block-title">Reservations Stats by Payment Mode</h2>
+            <canvas id="pieChartReservations"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Graphique des compétitions par mois (Bar Chart)
+    var competitionsByMonth = {{ competitionsByMonth|json_encode()|raw }};
+    var months = Object.keys(competitionsByMonth);
+    var countsCompetitions = Object.values(competitionsByMonth);
+
+    var ctxBarCompetitions = document.getElementById('barChartCompetitions').getContext('2d');
+    var barChartCompetitions = new Chart(ctxBarCompetitions, {
+        type: 'bar',
+        data: {
+            labels: months,
+            datasets: [{
+                label: 'Nombre de compétitions par mois',
+                data: countsCompetitions,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.raw + ' compétitions';
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                }
+            }
+        }
+    });
+
+    // Graphique des compétitions par type (Pie Chart)
+    var competitionsByType = {{ competitionsByType|json_encode()|raw }};
+    var types = Object.keys(competitionsByType);
+    var countsByType = Object.values(competitionsByType);
+
+    var ctxPieCompetitions = document.getElementById('pieChartCompetitions').getContext('2d');
+    var pieChartCompetitions = new Chart(ctxPieCompetitions, {
+        type: 'pie',
+        data: {
+            labels: types,
+            datasets: [{
+                label: 'Répartition des compétitions par type',
+                data: countsByType,
+                backgroundColor: ['#FF6347', '#4CAF50', '#FFD700', '#00BFFF'],
+                borderColor: 'rgba(0, 0, 0, 0.1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.raw + ' compétitions';
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Graphique des réservations par mois (Bar Chart)
+    var reservationsByMonth = {{ reservationsByMonth|json_encode()|raw }};
+    var reservationMonths = Object.keys(reservationsByMonth);
+    var reservationCounts = Object.values(reservationsByMonth);
+
+    var ctxBarReservations = document.getElementById('barChartReservations').getContext('2d');
+    var barChartReservations = new Chart(ctxBarReservations, {
+        type: 'bar',
+        data: {
+            labels: reservationMonths,
+            datasets: [{
+                label: 'Nombre de réservations par mois',
+                data: reservationCounts,
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.raw + ' réservations';
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                }
+            }
+        }
+    });
+
+    // Graphique des réservations par mode de paiement (Pie Chart)
+    var reservationsByMode = {{ reservationsByMode|json_encode()|raw }};
+    var modes = Object.keys(reservationsByMode);
+    var modeCounts = Object.values(reservationsByMode);
+
+    var ctxPieReservations = document.getElementById('pieChartReservations').getContext('2d');
+    var pieChartReservations = new Chart(ctxPieReservations, {
+        type: 'pie',
+        data: {
+            labels: modes,
+            datasets: [{
+                label: 'Répartition des réservations par mode de paiement',
+                data: modeCounts,
+                backgroundColor: ['#FF5733', '#33FF57', '#3357FF', '#F4A300'],
+                borderColor: 'rgba(0, 0, 0, 0.1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.raw + ' réservations';
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+            <footer class="row tm-mt-small">
+                <div class="col-12 font-weight-light">
+                    <p class="d-inline-block tm-bg-black text-white py-2 px-4">
+                        Copyright &copy; 2018 Admin Dashboard . Created by
+                        <a rel="nofollow" href="https://www.tooplate.com" class="text-white tm-footer-link">Tooplate</a>
+                    </p>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script src="{{ asset('assets/js/jquery-3.3.1.min.js')}}"></script>
+    <!-- https://jquery.com/download/ -->
+    <script src="{{ asset('assets/js/moment.min.js')}}"></script>
+    <!-- https://momentjs.com/ -->
+    <script src="{{ asset('assets/js/utils.js')}}"></script>
+    <script src="{{ asset('assets/js/Chart.min.js')}}"></script>
+    <!-- http://www.chartjs.org/docs/latest/ -->
+    <script src="{{ asset('assets/js/fullcalendar.min.js')}}"></script>
+    <!-- https://fullcalendar.io/ -->
+    <script src="{{ asset('assets/js/bootstrap.min.js')}}"></script>
+    <!-- https://getbootstrap.com/ -->
+    <script src="{{ asset('assets/js/tooplate-scripts.js')}}"></script>
+    <script>
+        let ctxLine,
+            ctxBar,
+            ctxPie,
+            optionsLine,
+            optionsBar,
+            optionsPie,
+            configLine,
+            configBar,
+            configPie,
+            lineChart;
+        barChart, pieChart;
+        // DOM is ready
+        $(function () {
+            updateChartOptions();
+            drawLineChart(); // Line Chart
+            drawBarChart(); // Bar Chart
+            drawPieChart(); // Pie Chart
+            drawCalendar(); // Calendar
+
+            $(window).resize(function () {
+                updateChartOptions();
+                updateLineChart();
+                updateBarChart();
+                reloadPage();
+            });
+        })
+    </script>
+</body>
+</html>
+
+{% endblock %}

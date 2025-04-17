@@ -1,0 +1,200 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Accounts Page - Dashboard Template</title>
+    <!--
+
+    Template 2108 Dashboard
+
+	http://www.tooplate.com/view/2108-dashboard
+
+    -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600">
+    <!-- https://fonts.google.com/specimen/Open+Sans -->
+    <link rel="stylesheet" href="{{ asset('assets/css/fontawesome.min.css')}}">
+    <!-- https://fontawesome.com/ -->
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css')}}">
+    <!-- https://getbootstrap.com/ -->
+    <link rel="stylesheet" href="{{ asset('assets/css/tooplate.css')}}">
+</head>
+
+<body class="bg03">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="navbar navbar-expand-xl navbar-light bg-light">
+                    <a class="navbar-brand" href="index.html">
+                        <i class="fas fa-3x fa-tachometer-alt tm-site-icon"></i>
+                        <h1 class="tm-site-title mb-0">Dashboard</h1>
+                    </a>
+                    <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mx-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_back') }}">Dashboard</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_competition') }}">Competition</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if app.request.attributes.get('_route') == 'app_reservation' %}active{% endif %}" href="{{ path('app_reservation') }}">
+                Reservation
+                {% if app.request.attributes.get('_route') == 'app_reservation' %}
+                    <span class="sr-only">(current)</span>
+                {% endif %}
+            </a>
+        </li>
+    </ul>
+</div>
+
+                </nav>
+            </div>
+        </div>
+        <!-- row -->
+            
+<div class="row tm-content-row tm-mt-big">
+    <div class="col-xl-12 col-lg-12 tm-md-12 tm-sm-12 tm-col">
+        <div class="bg-white tm-block h-100">
+    <h2>Modifier la Réservation</h2>
+
+    <form id="reservationEditForm" method="POST" novalidate>
+    <div class="mb-3">
+        <label for="nomP" class="form-label">Nom</label>
+        <input type="text" class="form-control" name="nomP" id="nomP" value="{{ reservation.nomP }}">
+        <div class="text-danger" id="error-nomP"></div>
+    </div>
+
+    <div class="mb-3">
+        <label for="prenomP" class="form-label">Prénom</label>
+        <input type="text" class="form-control" name="prenomP" id="prenomP" value="{{ reservation.prenomP }}">
+        <div class="text-danger" id="error-prenomP"></div>
+    </div>
+
+    <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" name="email" id="email" value="{{ reservation.email }}">
+        <div class="text-danger" id="error-email"></div>
+    </div>
+
+    <div class="mb-3">
+        <label for="num" class="form-label">Numéro</label>
+        <input type="number" class="form-control" name="num" id="num" value="{{ reservation.num }}">
+        <div class="text-danger" id="error-num"></div>
+    </div>
+
+    <div class="mb-3">
+        <label for="dateR" class="form-label">Date Réservation</label>
+        <input type="date" class="form-control" name="dateR" id="dateR" value="{{ reservation.dateR|date('Y-m-d') }}">
+        <div class="text-danger" id="error-dateR"></div>
+    </div>
+
+    <div class="mb-3">
+    <label for="modeP" class="form-label">Mode</label>
+    <select class="form-control" name="modeP" id="modeP">
+        <option value="">Sélectionnez un mode de paiement</option>
+        <option value="En ligne" {% if app.request.get('modeP') == 'En ligne' %}selected{% endif %}>En ligne</option>
+        <option value="Carte" {% if app.request.get('modeP') == 'Carte' %}selected{% endif %}>Carte</option>
+        <option value="Espèce" {% if app.request.get('modeP') == 'Espèce' %}selected{% endif %}>Espèce</option>
+    </select>
+    <div class="text-danger" id="error-modeP"></div>
+</div>
+
+
+    <button type="submit" class="btn btn-success">Enregistrer</button>
+    <a href="{{ path('app_reservation') }}" class="btn btn-secondary">Annuler</a>
+</form>
+
+<script>
+document.getElementById('reservationEditForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    let valid = true;
+
+    document.querySelectorAll('.text-danger').forEach(el => el.textContent = '');
+
+    const nomP = document.getElementById('nomP');
+    const prenomP = document.getElementById('prenomP');
+    const email = document.getElementById('email');
+    const num = document.getElementById('num');
+    const dateR = document.getElementById('dateR');
+    const modeP = document.getElementById('modeP');
+
+    const regexText = /^[A-Za-zÀ-ÿ\s\-']+$/;
+    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Nom
+    if (!regexText.test(nomP.value) || nomP.value.length < 2 || nomP.value.length > 50) {
+        document.getElementById('error-nomP').textContent = "Le nom doit contenir entre 2 et 50 lettres.";
+        valid = false;
+    }
+
+    // Prénom
+    if (!regexText.test(prenomP.value) || prenomP.value.length < 2 || prenomP.value.length > 50) {
+        document.getElementById('error-prenomP').textContent = "Le prénom doit contenir entre 2 et 50 lettres.";
+        valid = false;
+    }
+
+    // Email
+    if (!regexEmail.test(email.value)) {
+        document.getElementById('error-email').textContent = "Adresse e-mail invalide.";
+        valid = false;
+    }
+
+    // Numéro
+    if (!num.value || num.value.length < 8 || num.value.length > 15) {
+        document.getElementById('error-num').textContent = "Le numéro doit contenir entre 8 et 15 chiffres.";
+        valid = false;
+    }
+
+    // Date
+    const today = new Date().toISOString().split('T')[0];
+    if (!dateR.value || dateR.value < today) {
+        document.getElementById('error-dateR').textContent = "Veuillez choisir une date future.";
+        valid = false;
+    }
+
+    // Mode de paiement
+    if (modeP.value === "") {
+        document.getElementById('error-modeP').textContent = "Le mode de paiement est obligatoire.";
+        valid = false;
+    }
+
+    if (valid) {
+        this.submit();
+    }
+});
+</script>
+
+</div>
+        <footer class="row tm-mt-small">
+            <div class="col-12 font-weight-light">
+                <p class="d-inline-block tm-bg-black text-white py-2 px-4">
+                    Copyright &copy; 2018 Admin Dashboard . Created by
+                    <a rel="nofollow" href="https://www.tooplate.com" class="text-white tm-footer-link">Tooplate</a>
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="{{ asset('assets/js/jquery-3.3.1.min.js')}}"></script>
+    <!-- https://jquery.com/download/ -->
+    <script src="{{ asset('assets/js/bootstrap.min.js')}}"></script>
+    <!-- https://getbootstrap.com/ -->
+</body>
+
+</html>
+
+{% endblock %}

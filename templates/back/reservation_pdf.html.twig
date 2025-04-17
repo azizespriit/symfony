@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h2>Liste des Réservations</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>Numéro</th>
+                <th>Date</th>
+                <th>Mode</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reservation in reservations %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ reservation.nomP }}</td>
+                    <td>{{ reservation.prenomP }}</td>
+                    <td>{{ reservation.email }}</td>
+                    <td>{{ reservation.num }}</td>
+                    <td>{{ reservation.dateR|date('d/m/Y') }}</td>
+                    <td>{{ reservation.modeP }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7" class="text-center">Aucune réservation trouvée.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
