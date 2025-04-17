@@ -1,0 +1,161 @@
+{% extends 'baseback.html.twig' %}
+
+{% block title %}Admin - Orders List{% endblock %}
+
+{% block body %}
+<div class="row tm-content-row tm-mt-big">
+    <div class="col-12 tm-block-col">
+        <div class="bg-white tm-block h-100">
+            <div class="row">
+                <div class="col-md-8 col-sm-12">
+                    <h2 class="tm-block-title d-inline-block">Orders</h2>
+                </div>
+                <div class="col-md-4 col-sm-12 text-right">
+                    <a href="{{ path('commande_new') }}" class="btn btn-small btn-primary">Create New Order</a>
+                </div>
+            </div>
+            
+            <!-- Order Summary Cards -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="bg-primary text-white p-3 rounded">
+                        <div class="d-flex justify-content-between">
+                            <h5>Total Orders</h5>
+                            <i class="fas fa-shopping-cart fa-2x"></i>
+                        </div>
+                        <h3>{{ commandes|length }}</h3>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="bg-success text-white p-3 rounded">
+                        <div class="d-flex justify-content-between">
+                            <h5>Total Revenue</h5>
+                            <i class="fas fa-euro-sign fa-2x"></i>
+                        </div>
+                        <h3>
+                            {% set totalRevenue = 0 %}
+                            {% for commande in commandes %}
+                                {% if commande.panier is defined and commande.panier is not null %}
+                                    {% set totalRevenue = totalRevenue + commande.panier.prixTotal %}
+                                {% endif %}
+                            {% endfor %}
+                            {{ totalRevenue|number_format(2, '.', ',') }} €
+                        </h3>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="bg-info text-white p-3 rounded">
+                        <div class="d-flex justify-content-between">
+                            <h5>Average Order</h5>
+                            <i class="fas fa-calculator fa-2x"></i>
+                        </div>
+                        <h3>
+                            {% if commandes|length > 0 and totalRevenue > 0 %}
+                                {% set avgOrder = totalRevenue / commandes|length %}
+                                {{ avgOrder|number_format(2, '.', ',') }} €
+                            {% else %}
+                                0.00 €
+                            {% endif %}
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-hover table-striped tm-table-striped-even mt-3">
+                    <thead>
+                        <tr class="tm-bg-gray">
+                            <th scope="col">ID</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Customer</th>
+                            <th scope="col">Shipping Address</th>
+                            <th scope="col">Total</th>
+                            <th scope="col" class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for commande in commandes %}
+                        <tr>
+                            <td>{{ commande.id }}</td>
+                            <td>{{ commande.dateCommande|date('d/m/Y H:i') }}</td>
+                            <td>
+                                <div>{{ commande.email }}</div>
+                            </td>
+                            <td>
+                                <div class="address-truncate">{{ commande.localisation }}</div>
+                            </td>
+                            <td>
+                                {% if commande.panier is defined and commande.panier is not null %}
+                                    {{ commande.panier.prixTotal|number_format(2, '.', ',') }} €
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                <a href="{{ path('commande_show', {'id': commande.id}) }}" class="tm-product-delete-link">
+                                    <i class="far fa-eye tm-product-delete-icon"></i>
+                                </a>
+                                <a href="{{ path('commande_edit', {'id': commande.id}) }}" class="tm-product-delete-link">
+                                    <i class="far fa-edit tm-product-delete-icon"></i>
+                                </a>
+                                <a href="{{ path('commande_delete', {'id': commande.id}) }}" class="tm-product-delete-link" onclick="return confirm('Are you sure you want to delete this order?')">
+                                    <i class="far fa-trash-alt tm-product-delete-icon"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center">No orders found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block css %}
+<style>
+    .tm-product-delete-link {
+        padding: 10px;
+        color: #6c757d;
+    }
+    .tm-product-delete-icon {
+        font-size: 1.1rem;
+    }
+    .address-truncate {
+        max-width: 250px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .rounded {
+        border-radius: 5px;
+    }
+    .bg-primary {
+        background-color: #007bff !important;
+    }
+    .bg-success {
+        background-color: #28a745 !important;
+    }
+    .bg-info {
+        background-color: #17a2b8 !important;
+    }
+</style>
+{% endblock %}
+
+{% block js %}
+{{ parent() }}
+<script>
+    $(document).ready(function() {
+        // Add tooltips to truncated addresses
+        $(".address-truncate").each(function() {
+            if(this.offsetWidth < this.scrollWidth) {
+                $(this).attr('title', $(this).text());
+            }
+        });
+    });
+</script>
+{% endblock %}
