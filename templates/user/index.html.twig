@@ -1,234 +1,375 @@
+{% extends 'baseback.html.twig' %}
 {% block title %}
-    <h1 class="page-title">User Table</h1>
+    <h1 class="page-title">User Management Dashboard</h1>
 {% endblock %}
 
-
 {% block body %}
+    {# Initialize gender counters #}
+    {% set maleCount = 0 %}
+    {% set femaleCount = 0 %}
+
+    {# Count genders as we iterate through users #}
+    {% for user in users %}
+        {% if user.gender == 'Male' %}
+            {% set maleCount = maleCount + 1 %}
+        {% elseif user.gender == 'Female' %}
+            {% set femaleCount = femaleCount + 1 %}
+        {% endif %}
+    {% endfor %}
     <style>
-        body {
-            margin: auto;
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-            overflow: auto;
-            background: linear-gradient(315deg, rgba(101,0,94,1) 3%, rgba(60,132,206,1) 38%, rgba(48,238,226,1) 68%, rgba(255,25,25,1) 98%);
-            animation: gradient 15s ease infinite;
-            background-size: 400% 400%;
-            background-attachment: fixed;
-        }
-
-        @keyframes gradient {
-            0% {
-                background-position: 0% 0%;
-            }
-            50% {
-                background-position: 100% 100%;
-            }
-            100% {
-                background-position: 0% 0%;
-            }
-        }
-
-        .wave {
-            background: rgb(255 255 255 / 25%);
-            border-radius: 1000% 1000% 0 0;
-            position: fixed;
-            width: 200%;
-            height: 12em;
-            animation: wave 10s -3s linear infinite;
-            transform: translate3d(0, 0, 0);
-            opacity: 0.8;
-            bottom: 0;
-            left: 0;
-            z-index: -1;
-        }
-
-        .wave:nth-of-type(2) {
-            bottom: -1.25em;
-            animation: wave 18s linear reverse infinite;
-            opacity: 0.8;
-        }
-
-        .wave:nth-of-type(3) {
-            bottom: -2.5em;
-            animation: wave 20s -1s reverse infinite;
-            opacity: 0.9;
-        }
-
-        @keyframes wave {
-            2% {
-                transform: translateX(1);
-            }
-
-            25% {
-                transform: translateX(-25%);
-            }
-
-            50% {
-                transform: translateX(-50%);
-            }
-
-            75% {
-                transform: translateX(-25%);
-            }
-
-            100% {
-                transform: translateX(1);
-            }
-        }
-
-        .container {
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
             padding: 20px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-
-        table {
-            background-color: white;
-        }
-        .custom-btn {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 5px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            color: white;
-        }
-
-        .btn-blue {
-            background-color: #007bff;
-        }
-
-        .btn-blue:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
-        }
-
-        .btn-grey {
-            background-color: #6c757d;
-        }
-
-        .btn-grey:hover {
-            background-color: #5a6268;
-            transform: translateY(-2px);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .page-title {
             text-align: center;
             font-size: 2.5rem;
-            font-weight: bold;
-            margin-top: 30px;
-            margin-bottom: 20px;
-            color: #fff;
-            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+            font-weight: 600;
+            margin: 30px 0;
+            color: #2c3e50;
+            position: relative;
+            padding-bottom: 15px;
         }
 
+        .page-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #3498db, #9b59b6);
+            border-radius: 2px;
+        }
 
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .custom-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-blue {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .btn-blue:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-grey {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            color: white;
+        }
+
+        .btn-grey:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(149, 165, 166, 0.3);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+        }
+
+        .search-container {
+            margin: 20px 0;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        #search {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 300px;
+            font-size: 0.95rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        #search:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.2);
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            cursor: pointer; /* Make header clickable for sorting */
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #555;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .stat-card {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            margin-top: 0;
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+
+        .stat-card p {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 10px 0 0;
+            color: #2c3e50;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        .chart-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .no-records {
+            text-align: center;
+            padding: 30px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        .action-cell {
+            display: flex;
+            gap: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .stats-container {
+                flex-direction: column;
+            }
+
+            .search-container {
+                justify-content: center;
+            }
+
+            #search {
+                width: 100%;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .custom-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
     </style>
 
-    <!-- Wave Background Elements -->
-    <div>
-        <div class="wave"></div>
-        <div class="wave"></div>
-        <div class="wave"></div>
-    </div>
+    <div class="dashboard-container">
+        <div class="stats-container">
+            <div class="stat-card">
+                <h3>Total Users</h3>
+                <p>{{ maleCount + femaleCount }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Male Users</h3>
+                <p>{{ maleCount }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Female Users</h3>
+                <p>{{ femaleCount }}</p>
+            </div>
+        </div>
 
+        <div class="action-buttons">
+            <a href="{{ path('app_user_new') }}" class="custom-btn btn-blue">
+                <i class="fas fa-user-plus" style="margin-right: 8px;"></i>Create New User
+            </a>
+            <button id="download-pdf" class="custom-btn btn-grey">
+                <i class="fas fa-file-pdf" style="margin-right: 8px;"></i>Download PDF
+            </button>
+            <button id="download-excel" class="custom-btn btn-grey">
+                <i class="fas fa-file-excel" style="margin-right: 8px;"></i>Download Excel
+            </button>
+        </div>
 
-    <div class="text-center mt-3 mb-4">
-        <a href="{{ path('app_user_new') }}" class="custom-btn btn-blue">Create New User</a>
-        <a href="/back" class="custom-btn btn-grey">Back to dashboard</a>
-    </div>
+        <div class="search-container">
+            <input type="text" id="search" onkeyup="searchFunction()" placeholder="Search users...">
+        </div>
 
-
-    <table style="border-collapse: collapse; width: 100%; font-family: sans-serif; font-size: 0.8rem; letter-spacing: 1px; border: 2px solid rgb(140 140 140);">
-            <thead>
-            <tr>
-                <th scope="col" style="background-color: #505050; color: #fff; border: 1px solid rgb(160 160 160); padding: 8px 10px;">Id_user</th>
-                <th scope="col" style="background-color: #505050; color: #fff; border: 1px solid rgb(160 160 160); padding: 8px 10px;">Cin</th>
-                <th scope="col" style="background-color: #505050; color: #fff; border: 1px solid rgb(160 160 160); padding: 8px 10px;">Last Name</th>
-                <th scope="col" style="background-color: #505050; color: #fff; border: 1px solid rgb(160 160 160); padding: 8px 10px;">First Name</th>
-                <th scope="col" style="background-color: #505050; color: #fff; border: 1px solid rgb(160 160 160); padding: 8px 10px;">Gender</th>
-                <th scope="col" style="background-color: #505050; color: #fff; border: 1px solid rgb(160 160 160); padding: 8px 10px;">Phone</th>
-                <th scope="col" style="background-color: #505050; color: #fff; border: 1px solid rgb(160 160 160); padding: 8px 10px;">Roles</th>
-                <th scope="col" style="background-color: #505050; color: #fff; border: 1px solid rgb(160 160 160); padding: 8px 10px;">Email</th>
-                <th scope="col" style="background-color: #505050; color: #fff; border: 1px solid rgb(160 160 160); padding: 8px 10px;">Password</th>
-                <th scope="col" style="background-color: #505050; color: #fff; border: 1px solid rgb(160 160 160); padding: 8px 10px;">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% set maleCount = 0 %}
-            {% set femaleCount = 0 %}
-
-            {% for user in users %}
-                {% if user.gender == 'Male' %}
-                    {% set maleCount = maleCount + 1 %}
-                {% elseif user.gender == 'Female' %}
-                    {% set femaleCount = femaleCount + 1 %}
-                {% endif %}
-
-                <tr style="background-color: {% if loop.index is even %}#eee{% endif %};">
-                    <th scope="row" style="background-color: #d6ecd4; border: 1px solid rgb(160 160 160); padding: 8px 10px;">{{ user.id_user }}</th>
-                    <td style="border: 1px solid rgb(160 160 160); padding: 8px 10px; text-align: center;">{{ user.cin }}</td>
-                    <td style="border: 1px solid rgb(160 160 160); padding: 8px 10px; text-align: center;">{{ user.lastName }}</td>
-                    <td style="border: 1px solid rgb(160 160 160); padding: 8px 10px; text-align: center;">{{ user.firstName }}</td>
-                    <td style="border: 1px solid rgb(160 160 160); padding: 8px 10px; text-align: center;">{{ user.gender }}</td>
-                    <td style="border: 1px solid rgb(160 160 160); padding: 8px 10px; text-align: center;">{{ user.phone }}</td>
-                    <td style="border: 1px solid rgb(160 160 160); padding: 8px 10px; text-align: center;">{{ user.rolesAsString }}</td>
-                    <td style="border: 1px solid rgb(160 160 160); padding: 8px 10px; text-align: center;">{{ user.email }}</td>
-                    <td style="border: 1px solid rgb(160 160 160); padding: 8px 10px; text-align: center;">{{ user.password }}</td>
-                    <td style="border: 1px solid rgb(160 160 160); padding: 8px 10px; text-align: center;">
-                        <a href="{{ path('app_user_show', {'id_user': user.id_user}) }}" class="btn btn-info btn-sm">Show</a>
-                        <a href="{{ path('app_user_edit', {'id_user': user.id_user}) }}" class="btn btn-warning btn-sm">Edit</a>
-                    </td>
-                </tr>
-            {% else %}
+        <div class="table-container">
+            <table>
+                <thead>
                 <tr>
-                    <td colspan="10" style="text-align: center;">No records found</td>
+                    <th onclick="sortTable(0)">CIN</th>
+                    <th onclick="sortTable(1)">Last Name</th>
+                    <th onclick="sortTable(2)">First Name</th>
+                    <th onclick="sortTable(3)">Gender</th>
+                    <th onclick="sortTable(4)">Phone</th>
+                    <th onclick="sortTable(5)">Roles</th>
+                    <th onclick="sortTable(6)">Email</th>
+                    <th>Actions</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.cin }}</td>
+                        <td>{{ user.lastName }}</td>
+                        <td>{{ user.firstName }}</td>
+                        <td>
+                            <span style="display: inline-block; padding: 4px 8px; border-radius: 12px;
+                                    background-color: {{ user.gender == 'Male' ? '#3498db' : '#e84393' }};
+                                    color: white; font-size: 0.8rem;">
+                                {{ user.gender }}
+                            </span>
+                        </td>
+                        <td>{{ user.phone }}</td>
+                        <td>{{ user.rolesAsString }}</td>
+                        <td>{{ user.email }}</td>
+                        <td class="action-cell">
+                            <a href="{{ path('app_user_show', {'id_user': user.id_user}) }}" class="btn btn-info">
+                                <i class="fas fa-eye"></i> Show
+                            </a>
+                            <a href="{{ path('app_user_edit', {'id_user': user.id_user}) }}" class="btn btn-warning">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
 
+                            {# Lock/Unlock Button Form #}
+                            <form method="post" action="{{ path('app_user_toggle_lock', {'id_user': user.id_user}) }}" style="display:inline;">
+                                <input type="hidden" name="_token" value="{{ csrf_token('toggle' ~ user.id_user) }}">
+                                <button type="submit" class="btn btn-sm {{ user.isLocked ? 'btn-success' : 'btn-danger' }}">
+                                    {{ user.isLocked ? 'Unlock' : 'Lock' }}
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="8" class="no-records">No users found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
+        <div class="chart-container">
+            <h3 class="chart-title">User Gender Distribution</h3>
+            <canvas id="genderChart" style="max-height: 400px;"></canvas>
+        </div>
 
-                    <h4>Gender Statistics</h4>
-                    <ul>
-                        <li><strong>Male users:</strong> {{ maleCount }}</li>
-                        <li><strong>Female users:</strong> {{ femaleCount }}</li>
-                        <li><strong>Total users:</strong> {{ maleCount + femaleCount }}</li>
-                    </ul>
+    </div>
 
-                    <h4 class="text-center">Gender Distribution</h4>
-                    <canvas id="genderChart" style="max-height: 250px;"></canvas>
-
-
-
+    <!-- Include Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <!-- Include Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Include html2pdf.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <!-- Include SheetJS for Excel export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <!-- Include Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize gender chart
             const ctx = document.getElementById('genderChart').getContext('2d');
-            const genderChart = new Chart(ctx, {
-                type: 'pie',
+            new Chart(ctx, {
+                type: 'doughnut',
                 data: {
                     labels: ['Male', 'Female'],
                     datasets: [{
                         data: [{{ maleCount }}, {{ femaleCount }}],
                         backgroundColor: [
-                            'rgba(54, 162, 235, 0.7)',
-                            'rgba(255, 99, 132, 0.7)'
+                            '#3498db',
+                            '#e84393'
                         ],
-                        borderColor: [
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 99, 132, 1)'
-                        ],
-                        borderWidth: 1
+                        borderWidth: 0,
+                        hoverOffset: 10
                     }]
                 },
                 options: {
@@ -236,6 +377,11 @@
                     plugins: {
                         legend: {
                             position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
                         },
                         tooltip: {
                             callbacks: {
@@ -248,9 +394,95 @@
                                 }
                             }
                         }
-                    }
+                    },
+                    cutout: '65%',
+                    borderRadius: 10
                 }
             });
+
+            // PDF Export
+            document.getElementById('download-pdf').addEventListener('click', function() {
+                const element = document.querySelector('.dashboard-container');
+                const opt = {
+                    margin: [10, 10, 10, 10],
+                    filename: 'users_report.pdf',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: {
+                        scale: 2,
+                        logging: true,
+                        useCORS: true
+                    },
+                    jsPDF: {
+                        unit: 'mm',
+                        format: 'a4',
+                        orientation: 'portrait'
+                    }
+                };
+
+                // Create a clone to avoid affecting the original layout
+                const clone = element.cloneNode(true);
+                document.body.appendChild(clone);
+                clone.style.width = '210mm';
+                clone.style.margin = '0 auto';
+                clone.style.padding = '20px';
+
+                html2pdf().from(clone).set(opt).save().then(() => {
+                    document.body.removeChild(clone);
+                });
+            });
+
+            // Excel Export
+            document.getElementById('download-excel').addEventListener('click', function() {
+                const table = document.querySelector('table');
+                const workbook = XLSX.utils.table_to_book(table, {sheet: "Users"});
+                XLSX.writeFile(workbook, 'users_data.xlsx', {compression: true});
+            });
         });
+
+        function searchFunction() {
+            const input = document.getElementById("search");
+            const filter = input.value.toUpperCase();
+            const table = document.querySelector("table");
+            const tr = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < tr.length; i++) {
+                let found = false;
+                const td = tr[i].getElementsByTagName("td");
+
+                for (let j = 0; j < td.length - 1; j++) { // Skip actions column
+                    if (td[j]) {
+                        const txtValue = td[j].textContent || td[j].innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+
+                tr[i].style.display = found ? "" : "none";
+            }
+        }
+    </script>
+    <script>
+        // Sorting functionality
+        function sortTable(n) {
+            const table = document.querySelector('table');
+            const rows = Array.from(table.rows).slice(1); // Skip the header row
+            const isAscending = table.rows[0].cells[n].getAttribute("data-sort") === "asc";
+
+            rows.sort((rowA, rowB) => {
+                const cellA = rowA.cells[n].innerText.toLowerCase();
+                const cellB = rowB.cells[n].innerText.toLowerCase();
+
+                if (cellA < cellB) return isAscending ? -1 : 1;
+                if (cellA > cellB) return isAscending ? 1 : -1;
+                return 0;
+            });
+
+            rows.forEach(row => table.appendChild(row));
+
+            // Toggle the sort direction
+            table.rows[0].cells[n].setAttribute("data-sort", isAscending ? "desc" : "asc");
+        }
     </script>
 {% endblock %}

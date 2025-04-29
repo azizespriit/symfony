@@ -50,7 +50,7 @@ final class ProfileController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'User updated successfully!');
-            return $this->redirectToRoute('app_test', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_user_profile', ['id_user' => $user->getId_user()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('editprof.html.twig', [
