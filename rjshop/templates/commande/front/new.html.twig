@@ -1,0 +1,226 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Finaliser votre commande{% endblock %}
+
+{% block body %}
+<div class="site-section checkout-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10 section-heading text-center">
+                <span class="subheading">Dernière étape</span>
+                <h2 class="heading mb-3">Finaliser votre commande</h2>
+                <p class="text-muted">Veuillez compléter les informations ci-dessous pour finaliser votre commande.</p>
+            </div>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card order-summary mb-4 shadow border-0 rounded-lg">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="icon-shopping-cart mr-2"></i> Résumé du panier</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th>Produit</th>
+                                        <th class="text-center">Quantité</th>
+                                        <th class="text-right">Prix</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in panierProduits %}
+                                        <tr class="product-row">
+                                            <td class="font-weight-bold">{{ item.nom }}</td>
+                                            <td class="text-center">{{ item.quantite }}</td>
+                                            <td class="text-right">{{ (item.prix * item.quantite)|number_format(2, ',', ' ') }} €</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="2" class="text-right">Total:</th>
+                                        <th class="text-right text-primary h4">{{ panier.prixTotal|number_format(2, ',', ' ') }} €</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card checkout-form shadow border-0 rounded-lg">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="icon-user mr-2"></i> Vos informations</h5>
+                    </div>
+                    <div class="card-body">
+                        {{ form_start(form, {'attr': {'class': 'needs-validation', 'id': 'checkout-form', 'novalidate': 'novalidate'}}) }}
+                            <div class="form-group">
+                                {{ form_label(form.email, 'Adresse email', {'label_attr': {'class': 'font-weight-bold required'}}) }}
+                                {{ form_widget(form.email, {'attr': {
+                                    'class': 'form-control form-control-lg', 
+                                    'placeholder': 'Entrez votre adresse email',
+                                    'required': 'required',
+                                    'pattern': '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'
+                                }}) }}
+                                <div class="invalid-feedback">
+                                    Veuillez entrer une adresse email valide.
+                                </div>
+                                <small class="form-text text-muted">Nous utiliserons cette adresse pour vous envoyer la confirmation de commande.</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                {{ form_label(form.localisation, 'Adresse de livraison', {'label_attr': {'class': 'font-weight-bold required'}}) }}
+                                {{ form_widget(form.localisation, {'attr': {
+                                    'class': 'form-control form-control-lg', 
+                                    'placeholder': 'Entrez votre adresse complète', 
+                                    'rows': 3,
+                                    'required': 'required',
+                                    'minlength': '10'
+                                }}) }}
+                                <div class="invalid-feedback">
+                                    Veuillez entrer une adresse de livraison valide (minimum 10 caractères).
+                                </div>
+                                <small class="form-text text-muted">Veuillez entrer l'adresse complète où vous souhaitez être livré.</small>
+                            </div>
+                            
+                            <div class="mt-5 text-center">
+                                <button type="submit" id="checkout-button" class="btn btn-primary btn-lg px-5 rounded-pill" style="min-width: 200px;">
+                                    <i class="icon-credit-card mr-2"></i> Payer avec Stripe
+                                </button>
+                            </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+                
+                <div class="mt-4 text-center">
+                    <a href="{{ path('panier_view') }}" class="btn btn-outline-secondary rounded-pill">
+                        <i class="icon-arrow-left mr-2"></i> Retour au panier
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .checkout-section {
+        padding-top: 80px;
+        padding-bottom: 80px;
+    }
+    
+    .subheading {
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        color: #007bff;
+        margin-bottom: 10px;
+        display: block;
+    }
+    
+    .product-row {
+        transition: all 0.2s ease;
+    }
+    
+    .product-row:hover {
+        background-color: rgba(0, 123, 255, 0.05);
+    }
+    
+    .card {
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .card-header {
+        padding: 1rem 1.5rem;
+    }
+    
+    .form-control {
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+    }
+    
+    .form-control:focus {
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        border-color: #80bdff;
+    }
+    
+    .btn {
+        transition: all 0.3s ease;
+    }
+    
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+    }
+    
+    .order-summary, .checkout-form {
+        animation: fadeIn 0.6s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+        0% { opacity: 0; transform: translateY(20px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+    
+    .required:after {
+        content: " *";
+        color: #dc3545;
+    }
+</style>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Form validation
+        const form = document.querySelector('.needs-validation');
+        const stripe = Stripe('{{ stripe_public_key }}');
+        
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            if (!form.checkValidity()) {
+                event.stopPropagation();
+                form.classList.add('was-validated');
+                return;
+            }
+            
+            // Show loading state
+            const submitButton = document.getElementById('checkout-button');
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span> Traitement en cours...';
+            
+            // Submit form data via AJAX
+            fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(session) {
+                return stripe.redirectToCheckout({ sessionId: session.id });
+            })
+            .then(function(result) {
+                // If redirectToCheckout fails due to a browser or network
+                // error, display the localized error message to your customer
+                if (result.error) {
+                    alert(result.error.message);
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = '<i class="icon-credit-card mr-2"></i> Payer avec Stripe';
+                }
+            })
+            .catch(function(error) {
+                console.error('Error:', error);
+                alert('Une erreur est survenue. Veuillez réessayer.');
+                submitButton.disabled = false;
+                submitButton.innerHTML = '<i class="icon-credit-card mr-2"></i> Payer avec Stripe';
+            });
+        });
+    });
+</script>
+{% endblock %} 
