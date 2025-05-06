@@ -27,6 +27,10 @@ services:
         arguments:
             $mailer: '@mailer.mailer'
 
+    
+    # Vos services personnalisés
+    App\Service\GeminiMedicalService: ~
+
     # Configuration des repositories
     App\Repository\JourRepository:
         tags: ['doctrine.repository_service']

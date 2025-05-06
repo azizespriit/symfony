@@ -1,0 +1,107 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Publications et Commentaires{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-C5wSkXLMXYOBTfB+0DbSyPlbABNsZ4v3XUpSjyGQn1gRcyWfjw5oDUWqzMtYAZ03VZnFntX6PtyiXAbcVf0RPA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.01);
+        }
+
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+
+        .share-label {
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding-left: 15px;
+            margin-bottom: 5px;
+            color: #444;
+        }
+
+        .share-icons {
+            display: flex;
+            justify-content: flex-start;
+            gap: 12px;
+            padding-left: 15px;
+            padding-bottom: 15px;
+        }
+
+        .share-icons a {
+            color: #555;
+            font-size: 1.3rem;
+            transition: color 0.2s ease;
+        }
+
+        .share-icons a:hover {
+            color: #007bff;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="container my-4">
+    <h1 class="mb-4">Mes Publications</h1>
+    {% if publications is not empty %}
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for publication in publications %}
+                <div class="col">
+                    <div class="card h-100">
+                        {% if publication.imageUrl %}
+                            <img src="{{ asset('uploads/publications/' ~ publication.imageUrl) }}" class="card-img-top" alt="{{ publication.description }}">
+                        {% else %}
+                            <img src="{{ asset('images/default.png') }}" class="card-img-top" alt="Image par défaut">
+                        {% endif %}
+                        <div class="card-body">
+                            <p class="card-text">{{ publication.contenu|length > 100 ? publication.contenu|slice(0, 100) ~ '...' : publication.contenu }}</p>
+                            <p class="card-text">{{ publication.description|length > 100 ? publication.description|slice(0, 100) ~ '...' : publication.description }}</p>
+                        </div>
+                        <p class="share-label">Partager via :</p>
+                        <div class="share-icons">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ absolute_url(path('app_publication_show', {'id': publication.id})) }}" target="_blank" title="Partager sur Facebook">
+                                <i class="fab fa-facebook"></i>
+                            </a>
+                            <a href="https://twitter.com/intent/tweet?url={{ absolute_url(path('app_publication_show', {'id': publication.id})) }}" target="_blank" title="Partager sur Twitter">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Aucune publication à afficher.</p>
+    {% endif %}
+
+    <h2 class="mt-5">Mes Commentaires</h2>
+    {% if commentaires is not empty %}
+        <ul class="list-group">
+            {% for com in commentaires %}
+                <li class="list-group-item">
+                    {{ com.contenu }} (Publication : {{ com.publication.description|length > 50 ? com.publication.description|slice(0, 50) ~ '...' : com.publication.description }})
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucun commentaire à afficher.</p>
+    {% endif %}
+</div>
+
+<a href="{{ path('app_publications') }}" class="btn btn-secondary mt-4 mb-5">Retour à la liste des publications</a>
+{% endblock %}

@@ -1,13 +1,40 @@
-{% extends 'base.html.twig' %}
+{# templates/commentaire/edit.html.twig #}
+{% extends 'frontoffice/index.html.twig' %}
 
-{% block title %}Edit Commentaire{% endblock %}
+{% block title %}Edit Comment{% endblock %}
 
 {% block body %}
-    <h1>Edit Commentaire</h1>
-
-    {{ include('commentaire/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('app_commentaire_index') }}">back to list</a>
-
-    {{ include('commentaire/_delete_form.html.twig') }}
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card fade-in">
+                    <div class="card-header bg-white">
+                        <h4 class="mb-0">Edit Comment</h4>
+                    </div>
+                    <div class="card-body">
+                        {{ form_start(form) }}
+                            <div class="mb-3">
+                                {{ form_widget(form.contenu, {
+                                    'attr': {
+                                        'class': 'form-control',
+                                        'rows': 5,
+                                        'placeholder': 'Edit your comment...'
+                                    }
+                                }) }}
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <a href="{{ path('app_publication_show', {'id': commentaire.publication.id}) }}" 
+                                   class="btn btn-outline-secondary">
+                                    <i class="fas fa-arrow-left me-1"></i> Cancel
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-1"></i> Update Comment
+                                </button>
+                            </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

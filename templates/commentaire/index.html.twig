@@ -1,39 +1,48 @@
+{# templates/commentaire/index.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Commentaire index{% endblock %}
+{% block title %}Comments{% endblock %}
 
 {% block body %}
-    <h1>Commentaire index</h1>
+    <h1>Comments</h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Id_user</th>
-                <th>Contenu</th>
-                <th>Datee</th>
-                <th>actions</th>
+                <th>Content</th>
+                <th>Date</th>
+                <th>User</th>
+                <th>Publication</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for commentaire in commentaires %}
             <tr>
                 <td>{{ commentaire.id }}</td>
-                <td>{{ commentaire.idUser }}</td>
                 <td>{{ commentaire.contenu }}</td>
-                <td>{{ commentaire.datee }}</td>
+                <td>{{ commentaire.datee|date('Y-m-d H:i') }}</td>
+                <td>{{ commentaire.user.getFullName() }}</td>
                 <td>
-                    <a href="{{ path('app_commentaire_show', {'id': commentaire.id}) }}">show</a>
-                    <a href="{{ path('app_commentaire_edit', {'id': commentaire.id}) }}">edit</a>
+                    <a href="{{ path('app_publication_show', {'id': commentaire.publication.id}) }}">
+                        Publication #{{ commentaire.publication.id }}
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ path('app_commentaire_show', {'id': commentaire.id}) }}" class="btn btn-sm btn-info">Show</a>
+                    {% if commentaire.user == app.user or is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_commentaire_edit', {'id': commentaire.id}) }}" class="btn btn-sm btn-warning">Edit</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="5">no records found</td>
+                <td colspan="6">No comments found</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_commentaire_new') }}">Create new</a>
+    <a href="{{ path('app_commentaire_new') }}" class="btn btn-primary">Create new</a>
 {% endblock %}

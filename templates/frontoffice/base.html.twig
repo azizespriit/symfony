@@ -1,0 +1,148 @@
+{# templates/base.html.twig #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+        <title>{% block title %}Sportify{% endblock %}</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <meta name="author" content="Free-Template.co" />
+        
+        {% block favicon %}
+            <link rel="shortcut icon" href="{{ asset('frontoffice/images/ftco-32x32.png') }}">
+        {% endblock %}
+        
+        {% block fonts %}
+            <link href="https://fonts.googleapis.com/css?family=Muli:300,400,700,900" rel="stylesheet">
+        {% endblock %}
+        
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('frontoffice/fonts/icomoon/style.css') }}">
+            <link rel="stylesheet" href="{{ asset('frontoffice/css/bootstrap/bootstrap.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('frontoffice/css/jquery-ui.css') }}">
+            <link rel="stylesheet" href="{{ asset('frontoffice/css/owl.carousel.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('frontoffice/css/owl.theme.default.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('frontoffice/css/jquery.fancybox.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('frontoffice/css/bootstrap-datepicker.css') }}">
+            <link rel="stylesheet" href="{{ asset('frontoffice/fonts/flaticon/font/flaticon.css') }}">
+            <link rel="stylesheet" href="{{ asset('frontoffice/css/aos.css') }}">
+            <link rel="stylesheet" href="{{ asset('frontoffice/css/jquery.mb.YTPlayer.min.css') }}" media="all">
+            <link rel="stylesheet" href="{{ asset('frontoffice/css/style.css') }}">
+        {% endblock %}
+        
+        {% block preload %}
+            <link rel="preload" href="{{ asset('frontoffice/fonts/flaticon/font/flaticon.woff') }}" as="font" type="font/woff" crossorigin>
+        {% endblock %}
+    {% endblock %}
+</head>
+
+<body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+    <div class="site-wrap">
+        {% block header %}
+            <header class="site-navbar py-4 js-sticky-header site-navbar-target" role="banner">
+                <div class="container-fluid">
+                    <div class="d-flex align-items-center">
+                        <div class="site-logo"><a href="index.html">Sportify<span>.</span> </a></div>
+                        <div class="ml-auto">
+                            <nav class="site-navigation position-relative text-right" role="navigation">
+                                <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
+                                    <li><a href="#home-section" class="nav-link">Home</a></li>
+                                    <li><a href="#classes-section" class="nav-link">Products</a></li>
+                                    <li><a href="#schedule-section" class="nav-link">Publications</a></li>
+                                    <li><a href="#trainer-section" class="nav-link">Commandes</a></li>
+                                    <li><a href="#services-section" class="nav-link">Services</a></li>
+                                    <li><a href="#contact-section" class="nav-link">Contact</a></li>
+                                </ul>
+                            </nav>
+                            <a href="#" class="d-inline-block d-lg-none site-menu-toggle js-menu-toggle float-right"><span class="icon-menu h3"></span></a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+        {% endblock %}
+
+        {% block mobile_menu %}
+            <div class="site-mobile-menu site-navbar-target">
+                <div class="site-mobile-menu-header">
+                    <div class="site-mobile-menu-close mt-3">
+                        <span class="icon-close2 js-menu-toggle"></span>
+                    </div>
+                </div>
+                <div class="site-mobile-menu-body"></div>
+            </div>
+        {% endblock %}
+
+        {% block video_background %}
+            <a id="bgndVideo" class="player"
+                data-property="{videoURL:'https://www.youtube.com/watch?v=w-cRWOjlk8c',showYTLogo:false, showAnnotations: false, showControls: false, cc_load_policy: false, containment:'#home-section',autoPlay:true, mute:true, startAt:255, stopAt: 271, opacity:1}">
+            </a>
+        {% endblock %}
+
+        {% block content %}{% endblock %}
+
+        {% block footer %}
+            <footer class="footer-section">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h3 class="text-dark">About Stamina</h3>
+                            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                        </div>
+
+                        <div class="col-md-3 ml-auto">
+                            <h3 class="text-dark">Links</h3>
+                            <ul class="list-unstyled footer-links">
+                                <li><a href="#">Home</a></li>
+                                <li><a href="#">Classes</a></li>
+                                <li><a href="#">Schedule</a></li>
+                                <li><a href="#">Trainer</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="col-md-4">
+                            <h3 class="text-dark">Subscribe</h3>
+                            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                            <form action="#">
+                                <div class="d-flex mb-5">
+                                    <input type="text" class="form-control rounded-0" placeholder="Email">
+                                    <input type="submit" class="btn btn-primary rounded-0" value="Subscribe">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="row pt-5 mt-5 text-center">
+                        <div class="col-md-12">
+                            <div class=" pt-5">
+                                <p class="copyright"><small>&copy;
+                                    <script>document.write(new Date().getFullYear());</script> Stamina. All Rights Reserved. Design by <a
+                                        href="https://free-template.co" target="_blank">Free-Template.co</a></small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        {% endblock %}
+    </div>
+
+    {% block javascripts %}
+        <script src="{{ asset('frontoffice/js/jquery-3.3.1.min.js') }}"></script>
+        <script src="{{ asset('frontoffice/js/jquery-migrate-3.0.1.min.js') }}"></script>
+        <script src="{{ asset('frontoffice/js/jquery-ui.js') }}"></script>
+        <script src="{{ asset('frontoffice/js/popper.min.js') }}"></script>
+        <script src="{{ asset('frontoffice/js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('frontoffice/js/owl.carousel.min.js') }}"></script>
+        <script src="{{ asset('frontoffice/js/jquery.stellar.min.js') }}"></script>
+        <script src="{{ asset('frontoffice/js/jquery.countdown.min.js') }}"></script>
+        <script src="{{ asset('frontoffice/js/bootstrap-datepicker.min.js') }}"></script>
+        <script src="{{ asset('frontoffice/js/jquery.easing.1.3.js') }}"></script>
+        <script src="{{ asset('frontoffice/js/aos.js') }}"></script>
+        <script src="{{ asset('frontoffice/js/jquery.fancybox.min.js') }}"></script>
+        <script src="{{ asset('frontoffice/js/jquery.sticky.js') }}"></script>
+        <script src="{{ asset('frontoffice/js/jquery.mb.YTPlayer.min.js') }}"></script>
+        <script src="{{ asset('frontoffice/js/main.js') }}"></script>
+    {% endblock %}
+</body>
+</html>

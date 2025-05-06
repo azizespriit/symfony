@@ -1,0 +1,90 @@
+{% extends 'publication/new.html.twig' %}
+
+{% block title %}Create New Publication with Generated Description{% endblock %}
+
+{% block body %}
+    <div class="container py-5">
+        <div class="form-container">
+            <div class="form-header">
+                <h2>Create New Publication</h2>
+                <p>Review the generated description and share your thoughts. Save a draft to regenerate the description.</p>
+            </div>
+
+            <div class="form-card">
+                {# Publish Form #}
+                {{ form_start(form, {
+                    'attr': {'class': 'publication-form', 'id': 'publicationForm', 'data-turbo': 'false'},
+                    'action': path('app_publication_new')
+                }) }}
+                    <div class="mb-4">
+                        <div class="form-floating">
+                            {{ form_widget(form.contenu, {
+                                'attr': {
+                                    'class': 'form-control content-textarea',
+                                    'placeholder': 'What would you like to share?',
+                                    'maxlength': '500',
+                                    'id': 'contentField',
+                                    'required': 'required'
+                                }
+                            }) }}
+                            {{ form_label(form.contenu, 'Share your thoughts') }}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="form-floating">
+                            {{ form_widget(form.description, {
+                                'attr': {
+                                    'class': 'form-control description-textarea',
+                                    'placeholder': 'Generated description',
+                                    'maxlength': '1000',
+                                    'id': 'descriptionField'
+                                }
+                            }) }}
+                            {{ form_label(form.description, 'Generated description') }}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label">Add an image (optional)</label>
+                        <div class="image-upload-container">
+                            <div>
+                                <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                <h5>Click to browse files</h5>
+                                <p class="text-muted">Image upload supported</p>
+                            </div>
+                            {{ form_widget(form.imageUrl, {
+                                'attr': {
+                                    'class': 'd-none',
+                                    'accept': 'image/*'
+                                }
+                            }) }}
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <a href="{{ path('app_publication_new') }}" class="btn btn-outline-secondary btn-lg">
+                            <i class="fas fa-arrow-left me-2"></i> Cancel
+                        </a>
+                        <div>
+                            <button type="submit" class="btn btn-save-draft" name="save_draft" value="1">
+                                <i class="fas fa-save me-2"></i> Save Draft
+                            </button>
+                            <button type="submit" class="btn btn-publish" name="publish" value="1">
+                                <i class="fas fa-paper-plane me-2"></i> Publish Now
+                            </button>
+                        </div>
+                    </div>
+                {{ form_end(form) }}
+
+                {# Regenerate Description Link #}
+                <div class="mt-3">
+                    <a href="{{ path('app_publication_generate_description', {'content': publication.contenu|default('placeholder')|url_encode}) }}"
+                       class="btn-get-description {{ publication.contenu is empty ? 'disabled' : '' }}">
+                        <i class="fas fa-magic me-2"></i> Regenerate Description
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

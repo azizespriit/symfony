@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% block meta %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta name="author" content="Free-Template.co" />
+  {% endblock %}
+
+  {% block title %}
+    <title>Sportify</title>
+  {% endblock %}
+
+  {% block favicon %}
+    <link rel="shortcut icon" href="{{ asset('frontoffice/images/ftco-32x32.png') }}">
+  {% endblock %}
+
+  {% block fonts %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Muli:300,400,700,900" rel="stylesheet">
+  {% endblock %}
+
+  {% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('frontoffice/fonts/icomoon/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontoffice/css/bootstrap/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontoffice/css/jquery-ui.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontoffice/css/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontoffice/css/owl.theme.default.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontoffice/css/jquery.fancybox.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontoffice/css/bootstrap-datepicker.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontoffice/fonts/flaticon/font/flaticon.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontoffice/css/aos.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontoffice/css/jquery.mb.YTPlayer.min.css') }}" media="all">
+    <link rel="stylesheet" href="{{ asset('frontoffice/css/style.css') }}">
+    <style>
+      /* Enhanced header styling */
+      .site-header {
+        background-image: url('{{ asset('frontoffice/images/header-bg.jpg') }}');
+        background-size: cover;
+        background-position: center;
+        color: white;
+        padding: 60px 0;
+        text-align: center;
+        border-bottom: 3px solid #ff7043;
+      }
+
+      .site-header h1 {
+        font-size: 3rem;
+        font-weight: bold;
+        letter-spacing: 2px;
+      }
+
+      .site-header p {
+        font-size: 1.2rem;
+        margin-top: 10px;
+        font-style: italic;
+      }
+
+      /* Improved card design */
+      .publications-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        justify-content: center;
+      }
+
+      .publication-card {
+        width: 300px;
+        background-color: #fff;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        text-align: center;
+        padding: 20px;
+      }
+
+      .publication-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .publication-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+      }
+
+      .publication-card h3 {
+        font-size: 20px;
+        font-weight: 600;
+        margin-top: 15px;
+        color: #333;
+      }
+
+      .publication-card p {
+        font-size: 1rem;
+        color: #777;
+        margin-bottom: 15px;
+        line-height: 1.5;
+      }
+
+      .publication-card .btn {
+        background-color: #ff7043;
+        color: white;
+        border-radius: 20px;
+        padding: 10px 20px;
+        font-weight: bold;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+      }
+
+      .publication-card .btn:hover {
+        background-color: #e64a19;
+      }
+
+      /* Button styling for view all publications */
+      .btn-primary {
+        background-color: #ff7043;
+        border: none;
+        padding: 12px 30px;
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        border-radius: 50px;
+        transition: background-color 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        background-color: #e64a19;
+      }
+
+      /* Spacing improvements */
+      .section-heading h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      .section-heading p {
+        font-size: 1.1rem;
+        color: #555;
+        font-style: italic;
+      }
+
+    </style>
+  {% endblock %}
+
+  {% block preload %}
+    <link rel="preload" href="{{ asset('frontoffice/fonts/flaticon/font/flaticon.woff') }}" as="font" type="font/woff" crossorigin>
+  {% endblock %}
+</head>
+
+{% block body %}
+<body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+  {% block site_wrapper %}
+  <div class="site-wrap">
+
+    <!-- Enhanced Header Section -->
+    <header class="site-header">
+      <h1>Welcome to Sportify</h1>
+      <p>Your platform for the latest sports publications</p>
+    </header>
+
+    {% block publications_section %}
+    <div class="site-section" id="publications-section">
+        <div class="container">
+            <div class="row justify-content-center text-center mb-5">
+                <div class="col-md-8 section-heading">
+                    <h2 class="heading mb-3">Most Commented Publications</h2>
+                    <p>See what our community members are sharing</p>
+                </div>
+            </div>        
+
+            <!-- Publications container -->
+            <div class="publications-container">
+              {# This will render the publications_content block from the child template #}
+              {% block publications_content %}
+                {% include 'publication/index.html.twig' with {'publications': publications} %}
+              {% endblock %}
+            </div>
+
+            <div class="text-center mt-5">
+                <a href="{{ path('app_publications') }}" class="btn btn-primary">
+                    View All Publications <span class="icon-arrow-right"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+  </div>
+  {% endblock %}
+
+  {% block javascripts %}
+  <script src="{{ asset('frontoffice/js/jquery-3.3.1.min.js') }}"></script>
+  <script src="{{ asset('frontoffice/js/jquery-migrate-3.0.1.min.js') }}"></script>
+  <script src="{{ asset('frontoffice/js/jquery-ui.js') }}"></script>
+  <script src="{{ asset('frontoffice/js/popper.min.js') }}"></script>
+  <script src="{{ asset('frontoffice/js/bootstrap.min.js') }}"></script>
+  <script src="{{ asset('frontoffice/js/owl.carousel.min.js') }}"></script>
+  <script src="{{ asset('frontoffice/js/jquery.stellar.min.js') }}"></script>
+  <script src="{{ asset('frontoffice/js/jquery.countdown.min.js') }}"></script>
+  <script src="{{ asset('frontoffice/js/bootstrap-datepicker.min.js') }}"></script>
+  <script src="{{ asset('frontoffice/js/jquery.easing.1.3.js') }}"></script>
+  <script src="{{ asset('frontoffice/js/aos.js') }}"></script>
+  <script src="{{ asset('frontoffice/js/jquery.fancybox.min.js') }}"></script>
+  <script src="{{ asset('frontoffice/js/jquery.sticky.js') }}"></script>
+  <script src="{{ asset('frontoffice/js/jquery.mb.YTPlayer.min.js') }}"></script>
+  <script src="{{ asset('frontoffice/js/main.js') }}"></script>
+  {% endblock %}
+</body>
+{% endblock %}
+</html>

@@ -2,78 +2,85 @@
 
 namespace App\Entity;
 
+use App\Repository\CommentaireRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
-use App\Entity\Publication;
-
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: CommentaireRepository::class)]
+#[ORM\Table(name: 'commentaire')]
 class Commentaire
 {
-
     #[ORM\Id]
-    #[ORM\Column(type: "integer")]
-    private int $id;
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private $id;
 
-        #[ORM\ManyToOne(targetEntity: Publication::class, inversedBy: "commentaires")]
-    #[ORM\JoinColumn(name: 'Id_pub', referencedColumnName: 'Id_pub', onDelete: 'CASCADE')]
-    private Publication $Id_pub;
+    #[ORM\Column(type: 'text')]
+    private $contenu;
 
-    #[ORM\Column(type: "integer")]
-    private int $id_user;
+    #[ORM\Column(type: 'datetime')]
+    private $datee;
 
-    #[ORM\Column(type: "string", length: 255)]
-    private string $contenu;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'commentaires')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    private $user;
 
-    #[ORM\Column(type: "string", length: 255)]
-    private string $datee;
+    #[ORM\ManyToOne(targetEntity: Publication::class, inversedBy: 'commentaires')]
+    #[ORM\JoinColumn(name: 'publication_id', referencedColumnName: 'id')]
+    private $publication;
 
-    public function getId()
+    public function __construct()
+    {
+        $this->datee = new \DateTime();
+    }
+
+    // Getters and Setters
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId($value)
-    {
-        $this->id = $value;
-    }
-
-    public function getId_pub()
-    {
-        return $this->Id_pub;
-    }
-
-    public function setId_pub($value)
-    {
-        $this->Id_pub = $value;
-    }
-
-    public function getId_user()
-    {
-        return $this->id_user;
-    }
-
-    public function setId_user($value)
-    {
-        $this->id_user = $value;
-    }
-
-    public function getContenu()
+    public function getContenu(): ?string
     {
         return $this->contenu;
     }
 
-    public function setContenu($value)
+    public function setContenu(string $contenu): self
     {
-        $this->contenu = $value;
+        $this->contenu = $contenu;
+        return $this;
     }
 
-    public function getDatee()
+    public function getDatee(): ?\DateTimeInterface
     {
         return $this->datee;
     }
 
-    public function setDatee($value)
+    public function setDatee(\DateTimeInterface $datee): self
     {
-        $this->datee = $value;
+        $this->datee = $datee;
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    public function getPublication(): ?Publication
+    {
+        return $this->publication;
+    }
+
+    public function setPublication(?Publication $publication): self
+    {
+        $this->publication = $publication;
+        return $this;
     }
 }

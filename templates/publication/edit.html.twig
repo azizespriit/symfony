@@ -1,0 +1,409 @@
+{# templates/publication/edit.html.twig #}
+{% extends 'frontoffice/index.html.twig' %}
+
+{% block title %}Edit Publication - {{ publication.user.getFullName() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .edit-publication-container {
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .edit-publication-card {
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: none;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .edit-publication-card:hover {
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        }
+        
+        .edit-publication-header {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-bottom: 1px solid #dee2e6;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .edit-publication-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: #0d6efd;
+        }
+        
+        .edit-publication-title {
+            font-weight: 600;
+            margin-bottom: 0;
+            position: relative;
+            padding-left: 15px;
+        }
+        
+        .edit-publication-title::before {
+            content: '\f044';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            left: -5px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #0d6efd;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+            animation: slideInLeft 0.5s ease-out;
+            animation-fill-mode: both;
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        
+        .form-control {
+            border-radius: 8px;
+            padding: 12px 15px;
+            border: 1px solid #dee2e6;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+        }
+        
+        .current-image-container {
+            margin-top: 20px;
+            text-align: center;
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        .current-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .current-image:hover {
+            transform: scale(1.02);
+        }
+        
+        .image-upload-container {
+            margin-top: 20px;
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .image-upload-container:hover {
+            border-color: #adb5bd;
+            background-color: #f8f9fa;
+        }
+        
+        .image-upload-container.dragover {
+            border-color: #0d6efd;
+            background-color: rgba(13, 110, 253, 0.05);
+        }
+        
+        .image-upload-icon {
+            font-size: 2rem;
+            color: #6c757d;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .image-upload-container:hover .image-upload-icon {
+            color: #0d6efd;
+            transform: translateY(-5px);
+        }
+        
+        .image-preview-container {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .image-preview {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .remove-image-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .image-preview-container:hover .remove-image-btn {
+            opacity: 1;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            animation: fadeIn 0.6s ease-out;
+            animation-delay: 0.4s;
+            animation-fill-mode: both;
+        }
+        
+        .btn-cancel {
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            padding: 10px 20px;
+        }
+        
+        .btn-submit {
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            padding: 10px 25px;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-submit::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%, -50%);
+            transform-origin: 50% 50%;
+        }
+        
+        .btn-submit:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20);
+                opacity: 0;
+            }
+        }
+        
+        .character-counter {
+            font-size: 0.8rem;
+            color: #6c757d;
+            text-align: right;
+            margin-top: 5px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container py-5">
+        <div class="edit-publication-container">
+            <div class="card edit-publication-card mb-5">
+                <div class="edit-publication-header">
+                    <h4 class="edit-publication-title">Edit Publication</h4>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form, {'attr': {'class': 'edit-publication-form'}}) }}
+                        <div class="form-group">
+                            {{ form_label(form.contenu, 'Content') }}
+                            {{ form_widget(form.contenu, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'rows': 3,
+                                    'maxlength': 500,
+                                    'data-character-counter': 'content-counter'
+                                }
+                            }) }}
+                            <div class="character-counter" id="content-counter">
+                                <span class="character-count">{{ publication.contenu|length }}</span>/500 characters
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            {{ form_label(form.description, 'Description') }}
+                            {{ form_widget(form.description, {
+                                'attr': {
+                                    'class': 'form-control',
+                                    'rows': 3,
+                                    'maxlength': 1000,
+                                    'data-character-counter': 'description-counter'
+                                }
+                            }) }}
+                            <div class="character-counter" id="description-counter">
+                                <span class="character-count">{{ publication.description|length }}</span>/1000 characters
+                            </div>
+                        </div>
+                        
+                        {% if publication.imageUrl %}
+                            <div class="current-image-container">
+                                <p class="text-muted mb-2">Current Image</p>
+                                <img src="{{ asset('uploads/publications/' ~ publication.imageUrl) }}" 
+                                     class="current-image" 
+                                     alt="Current publication image"
+                                     onerror="this.onerror=null; this.src='{{ asset('frontoffice/images/default-publication.jpg') }}'">
+                            </div>
+                        {% endif %}
+                        
+                        <div class="form-group">
+                            <label class="form-label">Change Image (optional)</label>
+                            <div class="image-upload-container" id="imageUploadContainer">
+                                <div class="image-upload-icon">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                </div>
+                                <p class="mb-1">Drag & drop your image here or click to browse</p>
+                                <small class="text-muted">Supports JPG, PNG (Max 5MB)</small>
+                                {{ form_widget(form.imageUrl, {
+                                    'attr': {
+                                        'class': 'd-none',
+                                        'onchange': 'previewImage(this)'
+                                    }
+                                }) }}
+                            </div>
+                            <div class="image-preview-container" id="imagePreviewContainer">
+                                <img id="imagePreview" class="image-preview" src="#" alt="Image preview">
+                                <button type="button" class="btn btn-danger btn-sm remove-image-btn" onclick="removeImage()">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <a href="{{ path('app_publication_show', {'id': publication.id}) }}" 
+                               class="btn btn-outline-secondary btn-cancel">
+                                <i class="fas fa-arrow-left me-1"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-submit">
+                                <i class="fas fa-save me-1"></i> Save Changes
+                            </button>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        // Image upload functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Focus on content field when page loads
+            document.querySelector('#publication_contenu').focus();
+            
+            // Initialize character counters
+            document.querySelectorAll('[data-character-counter]').forEach(textarea => {
+                const counterId = textarea.getAttribute('data-character-counter');
+                const counter = document.getElementById(counterId);
+                const countDisplay = counter.querySelector('.character-count');
+                
+                // Update counter on input
+                textarea.addEventListener('input', function() {
+                    countDisplay.textContent = this.value.length;
+                });
+            });
+            
+            // Drag and drop functionality
+            const uploadContainer = document.getElementById('imageUploadContainer');
+            const fileInput = document.querySelector('input[type="file"]');
+            
+            uploadContainer.addEventListener('click', () => {
+                fileInput.click();
+            });
+            
+            uploadContainer.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadContainer.classList.add('dragover');
+            });
+            
+            uploadContainer.addEventListener('dragleave', () => {
+                uploadContainer.classList.remove('dragover');
+            });
+            
+            uploadContainer.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadContainer.classList.remove('dragover');
+                
+                if (e.dataTransfer.files.length) {
+                    fileInput.files = e.dataTransfer.files;
+                    previewImage(fileInput);
+                }
+            });
+        });
+        
+        function previewImage(input) {
+            const previewContainer = document.getElementById('imagePreviewContainer');
+            const preview = document.getElementById('imagePreview');
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    previewContainer.style.display = 'block';
+                }
+                
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        
+        function removeImage() {
+            const fileInput = document.querySelector('input[type="file"]');
+            const previewContainer = document.getElementById('imagePreviewContainer');
+            
+            fileInput.value = '';
+            previewContainer.style.display = 'none';
+        }
+    </script>
+{% endblock %}

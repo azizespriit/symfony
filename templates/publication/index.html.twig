@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}Publications{% endblock %}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+    <!-- Ajoutez vos fichiers CSS ici -->
+    {% block stylesheets %}
+        <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
+    {% endblock %}
+</head>
+<body>
+    <header>
+        <nav>
+            <!-- Navbar ici -->
+        </nav>
+    </header>
+
+    <main>
+        {% block body %}
+            <h1>Liste des publications</h1>
+
+            {# Barre de recherche #}
+            <div class="mb-4">
+                {{ form_start(form) }}
+                    <div class="input-group">
+                        {{ form_widget(form.search) }}
+                        <button type="submit" class="btn btn-primary">Rechercher</button>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+
+            {# Résultats #}
+            {% if publications is not empty %}
+                <ul>
+                    {% for publication in publications %}
+                        <li><strong>{{ publication.title }}</strong> - {{ publication.content }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Aucune publication trouvée.</p>
+            {% endif %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <!-- Footer ici -->
+    </footer>
+
+    {% block javascripts %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!-- Ajoutez vos fichiers JS ici -->
+        <script src="{{ asset('js/scripts.js') }}"></script>
+    {% endblock %}
+</body>
+</html>

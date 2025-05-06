@@ -3,6 +3,9 @@ framework:
         # The paths to make available to the asset mapper.
         paths:
             - assets/
+        # paths:
+        #     - assets/frontoffice
+        #     - assets/backoffice
         missing_import_mode: strict
 
 when@prod:
