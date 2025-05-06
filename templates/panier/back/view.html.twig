@@ -1,0 +1,251 @@
+{% extends 'baseback.html.twig' %}
+
+{% block title %}Admin - Cart Details{% endblock %}
+
+{% block body %}
+<div class="row tm-content-row tm-mt-big">
+    <div class="col-xl-8 col-lg-12 tm-md-12 tm-sm-12 tm-col">
+        <div class="bg-white tm-block h-100">
+            <div class="row">
+                <div class="col-md-8 col-sm-12">
+                    <h2 class="tm-block-title">Cart #{{ panier.id }} Details</h2>
+                </div>
+                <div class="col-md-4 col-sm-12 text-right">
+                   
+                    <a href="{{ path('panier_index') }}" class="btn btn-small btn-secondary">
+                        <i class="fas fa-list"></i> Back to List
+                    </a>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="cart-summary">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="tm-info-card">
+                                    <div class="tm-info-card-header">Cart Overview</div>
+                                    <div class="tm-info-card-body">
+                                        <div class="tm-info-row">
+                                            <div class="tm-info-label">Total Price:</div>
+                                            <div class="tm-info-value">{{ panier.prixTotal|number_format(2, '.', ',') }} €</div>
+                                        </div>
+                                        <div class="tm-info-row">
+                                            <div class="tm-info-label">Status:</div>
+                                            <div class="tm-info-value">
+                                                {% if panier.commande %}
+                                                    <span class="badge badge-success">Ordered</span>
+                                                {% else %}
+                                                    <span class="badge badge-warning">Pending</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="tm-info-row">
+                                            <div class="tm-info-label">Number of Items:</div>
+                                            <div class="tm-info-value">{{ panierProduits|length }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            {% if panier.commande %}
+                            <div class="col-md-6">
+                                <div class="tm-info-card">
+                                    <div class="tm-info-card-header">Associated Order</div>
+                                    <div class="tm-info-card-body">
+                                        <div class="tm-info-row">
+                                            <div class="tm-info-label">Order ID:</div>
+                                            <div class="tm-info-value">
+                                                <a href="{{ path('commande_show', {'id': panier.commande.id}) }}">#{{ panier.commande.id }}</a>
+                                            </div>
+                                        </div>
+                                        <div class="tm-info-row">
+                                            <div class="tm-info-label">Order Date:</div>
+                                            <div class="tm-info-value">{{ panier.commande.dateCommande|date('d/m/Y H:i') }}</div>
+                                        </div>
+                                        <div class="tm-info-row">
+                                            <div class="tm-info-label">Customer:</div>
+                                            <div class="tm-info-value">{{ panier.commande.email }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="cart-items mt-4">
+                        <h4>Cart Items</h4>
+                        {% if panierProduits|length > 0 %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 80px">Image</th>
+                                            <th>Product</th>
+                                            <th>Unit Price</th>
+                                            <th>Quantity</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in panierProduits %}
+                                        <tr>
+                                            <td>
+                                                {% if item.photo %}
+                                                    <img src="{{ asset('uploads/produits/' ~ item.photo) }}" 
+                                                         alt="{{ item.nom }}" 
+                                                         class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;">
+                                                {% else %}
+                                                    <div class="no-image">
+                                                        <i class="fas fa-image"></i>
+                                                    </div>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <a href="{{ path('produit_show', {'id': item.id_produit}) }}">
+                                                    {{ item.nom }}
+                                                </a>
+                                            </td>
+                                            <td>{{ item.prix|number_format(2, '.', ',') }} €</td>
+                                            <td>{{ item.quantite }}</td>
+                                            <td>{{ (item.prix * item.quantite)|number_format(2, '.', ',') }} €</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="cart-total">
+                                            <td colspan="4" class="text-right font-weight-bold">Total:</td>
+                                            <td class="font-weight-bold">{{ panier.prixTotal|number_format(2, '.', ',') }} €</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info">
+                                This cart is empty.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-4 col-lg-12 tm-md-12 tm-sm-12 tm-col">
+        <div class="bg-white tm-block h-100">
+            <h2 class="tm-block-title">Cart Actions</h2>
+            
+            <div class="tm-actions-container p-3">
+                {% if not panier.commande %}
+                <div class="action-section">
+                    <h5>Convert to Order</h5>
+                    <p>This cart is still pending. Create an order from it:</p>
+                    <a href="{{ path('commande_create_from_panier', {'panierId': panier.id}) }}" class="btn btn-primary btn-block">
+                        <i class="fas fa-shopping-bag mr-2"></i> Create Order
+                    </a>
+                </div>
+                
+                <div class="action-section mt-4">
+                    <h5>Manage Items</h5>
+                    <a href="#" class="btn btn-outline-info btn-block mb-2">
+                        <i class="fas fa-plus mr-2"></i> Add Product
+                    </a>
+                    {% if panierProduits|length > 0 %}
+                    <a href="#" class="btn btn-outline-warning btn-block">
+                        <i class="fas fa-trash-restore mr-2"></i> Empty Cart
+                    </a>
+                    {% endif %}
+                </div>
+                {% else %}
+                <div class="action-section">
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle mr-2"></i> This cart has been converted to an order.
+                    </div>
+                    <a href="{{ path('commande_show', {'id': panier.commande.id}) }}" class="btn btn-info btn-block">
+                        <i class="fas fa-shopping-bag mr-2"></i> View Order Details
+                    </a>
+                </div>
+                {% endif %}
+                
+               
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block css %}
+<style>
+    .tm-info-card {
+        border: 1px solid #e4e4e4;
+        border-radius: 5px;
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+    
+    .tm-info-card-header {
+        background-color: #4e657a;
+        color: white;
+        padding: 12px 15px;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+    
+    .tm-info-card-body {
+        padding: 15px;
+    }
+    
+    .tm-info-row {
+        display: flex;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .tm-info-row:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+    
+    .tm-info-label {
+        font-weight: 600;
+        color: #555;
+        width: 40%;
+    }
+    
+    .tm-info-value {
+        width: 60%;
+    }
+    
+    .badge {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+    }
+    
+    .action-section {
+        padding: 15px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .action-section:last-child {
+        border-bottom: none;
+    }
+    
+    .no-image {
+        width: 60px;
+        height: 60px;
+        background-color: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #aaa;
+        border-radius: 5px;
+    }
+    
+    .cart-total {
+        background-color: #f8f9fa;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,320 @@
+{% extends 'baseback.html.twig' %}
+
+{% block title %}Admin - Order Details{% endblock %}
+
+{% block body %}
+<div class="row tm-content-row tm-mt-big">
+    <div class="col-xl-8 col-lg-12 tm-md-12 tm-sm-12 tm-col">
+        <div class="bg-white tm-block h-100">
+            <div class="row">
+                <div class="col-md-8 col-sm-12">
+                    <h2 class="tm-block-title">Order #{{ commande.id }} Details</h2>
+                </div>
+                <div class="col-md-4 col-sm-12 text-right">
+                    <a href="{{ path('commande_edit', {'id': commande.id}) }}" class="btn btn-small btn-primary">
+                        <i class="far fa-edit"></i> Edit
+                    </a>
+                    <a href="{{ path('commande_index') }}" class="btn btn-small btn-secondary">
+                        <i class="fas fa-list"></i> Back to List
+                    </a>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="order-status-bar mb-4">
+                        <div class="status-badge-container">
+                            <div class="status-badge active">
+                                <div class="badge-circle"><i class="fas fa-check"></i></div>
+                                <div class="badge-label">Order Placed</div>
+                                <div class="badge-date">{{ commande.dateCommande|date('d/m/Y') }}</div>
+                            </div>
+                            <div class="status-line"></div>
+                            <div class="status-badge">
+                                <div class="badge-circle"><i class="fas fa-box"></i></div>
+                                <div class="badge-label">Processing</div>
+                                <div class="badge-date">--</div>
+                            </div>
+                            <div class="status-line"></div>
+                            <div class="status-badge">
+                                <div class="badge-circle"><i class="fas fa-truck"></i></div>
+                                <div class="badge-label">Shipped</div>
+                                <div class="badge-date">--</div>
+                            </div>
+                            <div class="status-line"></div>
+                            <div class="status-badge">
+                                <div class="badge-circle"><i class="fas fa-home"></i></div>
+                                <div class="badge-label">Delivered</div>
+                                <div class="badge-date">--</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="tm-info-card">
+                                <div class="tm-info-card-header">Order Information</div>
+                                <div class="tm-info-card-body">
+                                    <div class="tm-info-row">
+                                        <div class="tm-info-label">Order ID:</div>
+                                        <div class="tm-info-value">#{{ commande.id }}</div>
+                                    </div>
+                                    <div class="tm-info-row">
+                                        <div class="tm-info-label">Order Date:</div>
+                                        <div class="tm-info-value">{{ commande.dateCommande|date('d/m/Y H:i') }}</div>
+                                    </div>
+                                    <div class="tm-info-row">
+                                        <div class="tm-info-label">Total Amount:</div>
+                                        <div class="tm-info-value font-weight-bold">
+                                            {% if commande.panier %}
+                                                {{ commande.panier.prixTotal|number_format(2, '.', ',') }} €
+                                            {% else %}
+                                                N/A
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="tm-info-card">
+                                <div class="tm-info-card-header">Customer Information</div>
+                                <div class="tm-info-card-body">
+                                    <div class="tm-info-row">
+                                        <div class="tm-info-label">Email:</div>
+                                        <div class="tm-info-value">{{ commande.email }}</div>
+                                    </div>
+                                    <div class="tm-info-row">
+                                        <div class="tm-info-label">Shipping Address:</div>
+                                        <div class="tm-info-value">{{ commande.localisation }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="order-items mt-4">
+                        <h4>Order Items</h4>
+                        {% if commande.panier and panierProduits|length > 0 %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 80px">Image</th>
+                                            <th>Product</th>
+                                            <th>Unit Price</th>
+                                            <th>Quantity</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in panierProduits %}
+                                        <tr>
+                                            <td>
+                                                {% if item.photo %}
+                                                    <img src="{{ asset('uploads/produits/' ~ item.photo) }}" 
+                                                         alt="{{ item.nom }}" 
+                                                         class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;">
+                                                {% else %}
+                                                    <div class="no-image">
+                                                        <i class="fas fa-image"></i>
+                                                    </div>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <a href="{{ path('produit_show', {'id': item.id_produit}) }}">
+                                                    {{ item.nom }}
+                                                </a>
+                                            </td>
+                                            <td>{{ item.prix|number_format(2, '.', ',') }} €</td>
+                                            <td>{{ item.quantite }}</td>
+                                            <td>{{ (item.prix * item.quantite)|number_format(2, '.', ',') }} €</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="order-total">
+                                            <td colspan="4" class="text-right font-weight-bold">Total:</td>
+                                            <td class="font-weight-bold">
+                                                {{ commande.panier.prixTotal|number_format(2, '.', ',') }} €
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info">
+                                No items found for this order.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-4 col-lg-12 tm-md-12 tm-sm-12 tm-col">
+        <div class="bg-white tm-block h-100">
+            <h2 class="tm-block-title">Order Actions</h2>
+            
+            <div class="tm-actions-container p-3">
+                <div class="action-section">
+                    <h5>View Associated Cart</h5>
+                    {% if commande.panier %}
+                    <a href="{{ path('panier_show', {'id': commande.idPanier}) }}" class="btn btn-outline-secondary btn-block">
+                        <i class="fas fa-shopping-cart mr-2"></i> View Cart Details
+                    </a>
+                    {% else %}
+                    <div class="alert alert-warning">
+                        No associated cart found.
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="action-section mt-4">
+                    <h5>Danger Zone</h5>
+                    <a href="{{ path('commande_delete', {'id': commande.id}) }}" 
+                       onclick="return confirm('Are you sure you want to delete this order? This action cannot be undone.')" 
+                       class="btn btn-outline-danger btn-block">
+                        <i class="far fa-trash-alt mr-2"></i> Delete Order
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block css %}
+<style>
+    .tm-info-card {
+        border: 1px solid #e4e4e4;
+        border-radius: 5px;
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+    
+    .tm-info-card-header {
+        background-color: #4e657a;
+        color: white;
+        padding: 12px 15px;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+    
+    .tm-info-card-body {
+        padding: 15px;
+    }
+    
+    .tm-info-row {
+        display: flex;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .tm-info-row:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+    
+    .tm-info-label {
+        font-weight: 600;
+        color: #555;
+        width: 40%;
+    }
+    
+    .tm-info-value {
+        width: 60%;
+    }
+    
+    .badge {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+    }
+    
+    .action-section {
+        padding: 15px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .action-section:last-child {
+        border-bottom: none;
+    }
+    
+    .no-image {
+        width: 60px;
+        height: 60px;
+        background-color: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #aaa;
+        border-radius: 5px;
+    }
+    
+    .order-total {
+        background-color: #f8f9fa;
+    }
+    
+    .order-status-bar {
+        margin: 30px 0;
+    }
+    
+    .status-badge-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+    }
+    
+    .status-badge {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        width: 80px;
+    }
+    
+    .badge-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #f0f0f0;
+        color: #888;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 8px;
+        border: 2px solid #ddd;
+    }
+    
+    .status-badge.active .badge-circle {
+        background-color: #28a745;
+        color: white;
+        border-color: #28a745;
+    }
+    
+    .badge-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #555;
+    }
+    
+    .badge-date {
+        font-size: 0.7rem;
+        color: #888;
+    }
+    
+    .status-line {
+        position: relative;
+        height: 3px;
+        background-color: #ddd;
+        flex-grow: 1;
+        z-index: 1;
+    }
+</style>
+{% endblock %}

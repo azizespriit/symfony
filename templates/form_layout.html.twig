@@ -1,0 +1,31 @@
+{% block form_row %}
+<div class="form-group mb-3">
+    {{ form_label(form) }}
+    {{ form_widget(form) }}
+    {{ form_errors(form) }}
+    {% if form.vars.help is defined and form.vars.help %}
+        <small class="form-text text-muted">{{ form.vars.help }}</small>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block submit_widget %}
+<button type="{{ type|default('submit') }}" class="btn btn-primary mt-3">
+    {{ label|default('Save') }}
+</button>
+{% endblock %}
+
+{% block form_start %}
+    {% set attr = attr|merge({
+        class: (attr.class|default('') ~ ' needs-validation')|trim,
+        novalidate: 'novalidate'
+    }) %}
+    {{ parent() }}
+{% endblock %}
+
+{% block file_widget %}
+<div class="custom-file">
+    {{ form_widget(form, {'attr': {'class': 'custom-file-input'}}) }}
+    <label class="custom-file-label" for="{{ id }}">{{ form.vars.attr.placeholder|default('Choose file...') }}</label>
+</div>
+{% endblock %} 

@@ -1,0 +1,240 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Votre Panier{% endblock %}
+
+{% block body %}
+<div class="site-section cart-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10 section-heading text-center">
+                <span class="subheading">Mes articles</span>
+                <h2 class="heading mb-3">Votre Panier</h2>
+                <p class="text-muted">Consultez et gérez les produits dans votre panier.</p>
+            </div>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                {% if panier and panierProduits|length > 0 %}
+                    <div class="card shopping-cart shadow border-0 rounded-lg overflow-hidden">
+                        <div class="card-header bg-primary text-white py-3">
+                            <h5 class="mb-0"><i class="icon-shopping-cart mr-2"></i> Articles dans votre panier</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="bg-light">
+                                        <tr>
+                                            <th style="width: 100px">Produit</th>
+                                            <th>Nom</th>
+                                            <th class="text-center">Prix</th>
+                                            <th class="text-center">Quantité</th>
+                                            <th class="text-center">Total</th>
+                                            <th class="text-center">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in panierProduits %}
+                                            <tr class="product-row" data-product-id="{{ item.id_produit }}">
+                                                <td>
+                                                    <div class="product-thumbnail">
+                                                        {% if item.photo %}
+                                                            <img src="{{ asset('uploads/produits/' ~ item.photo) }}" alt="{{ item.nom }}" class="img-fluid rounded" style="max-height: 80px;">
+                                                        {% else %}
+                                                            <img src="{{ asset('images/no-image.jpg') }}" alt="No image" class="img-fluid rounded" style="max-height: 80px;">
+                                                        {% endif %}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <h6 class="mb-0 product-name">{{ item.nom }}</h6>
+                                                    <small class="text-muted">{{ item.description|slice(0, 50) }}{% if item.description|length > 50 %}...{% endif %}</small>
+                                                </td>
+                                                <td class="text-center">{{ item.prix|number_format(2, ',', ' ') }} €</td>
+                                                <td class="text-center">{{ item.quantite }}</td>
+                                                <td class="text-center font-weight-bold">{{ (item.prix * item.quantite)|number_format(2, ',', ' ') }} €</td>
+                                                <td class="text-center">
+                                                    <a href="{{ path('panier_remove_produit', {'produitId': item.id_produit}) }}" class="btn btn-sm btn-outline-danger remove-item" data-toggle="tooltip" title="Supprimer">
+                                                        <i class="icon-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="bg-light">
+                                            <td colspan="4" class="text-right font-weight-bold">Total du panier:</td>
+                                            <td class="text-center h4 text-primary font-weight-bold">{{ panier.prixTotal|number_format(2, ',', ' ') }} €</td>
+                                            <td></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card-footer py-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="{{ path('produit_catalogue') }}" class="btn btn-outline-secondary rounded-pill px-4">
+                                    <i class="icon-arrow-left mr-2"></i> Continuer mes achats
+                                </a>
+                                <a href="{{ path('commande_create_from_panier', {'panierId': panier.id}) }}" class="btn btn-primary rounded-pill px-4 checkout-btn">
+                                    <i class="icon-credit-card mr-2"></i> Passer au paiement sécurisé
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="card empty-cart shadow border-0 rounded-lg text-center py-5">
+                        <div class="card-body">
+                            <div class="mb-4 empty-cart-icon">
+                                <i class="icon-shopping-cart" style="font-size: 5rem; opacity: 0.3;"></i>
+                            </div>
+                            <h3>Votre panier est vide</h3>
+                            <p class="text-muted">Vous n'avez pas encore ajouté de produits à votre panier.</p>
+                            <a href="{{ path('produit_catalogue') }}" class="btn btn-primary btn-lg rounded-pill px-5 mt-4">
+                                <i class="icon-shopping-bag mr-2"></i> Commencer vos achats
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .cart-section {
+        padding: 80px 0;
+    }
+    
+    .subheading {
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        color: #007bff;
+        margin-bottom: 10px;
+        display: block;
+    }
+    
+    .shopping-cart, .empty-cart {
+        animation: fadeIn 0.6s ease-in-out;
+        margin-bottom: 2rem;
+    }
+    
+    @keyframes fadeIn {
+        0% { opacity: 0; transform: translateY(20px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+    
+    .product-row {
+        transition: all 0.3s ease;
+    }
+    
+    .product-row:hover {
+        background-color: rgba(0, 123, 255, 0.05);
+    }
+    
+    .product-thumbnail {
+        width: 80px;
+        height: 80px;
+        overflow: hidden;
+        border-radius: 5px;
+        border: 1px solid #e9ecef;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f8f9fa;
+    }
+    
+    .product-thumbnail img {
+        transition: all 0.3s ease;
+    }
+    
+    .product-thumbnail:hover img {
+        transform: scale(1.1);
+    }
+    
+    .product-name {
+        font-weight: 600;
+        color: #343a40;
+    }
+    
+    .empty-cart-icon {
+        animation: bounce 2s infinite;
+    }
+    
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+        40% {transform: translateY(-20px);}
+        60% {transform: translateY(-10px);}
+    }
+    
+    .btn {
+        transition: all 0.3s ease;
+    }
+    
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+    }
+    
+    .checkout-btn {
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        background-color: #6772e5; /* Stripe blue color */
+        border-color: #6772e5;
+    }
+    
+    .checkout-btn:hover {
+        background-color: #5469d4;
+        border-color: #5469d4;
+    }
+    
+    .card-header {
+        padding: 1rem 1.5rem;
+    }
+    
+    .card-footer {
+        background-color: #f8f9fa;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .remove-item-animation {
+        animation: fadeOut 0.5s ease-in-out forwards;
+    }
+    
+    @keyframes fadeOut {
+        0% { opacity: 1; transform: translateX(0); }
+        100% { opacity: 0; transform: translateX(20px); }
+    }
+</style>
+
+<script>
+    function removeItem(event, productId) {
+        event.preventDefault();
+        
+        // Get the href from the clicked link
+        const url = event.currentTarget.getAttribute('href');
+        
+        // Find the row with the product
+        const row = document.querySelector(`.product-row[data-product-id="${productId}"]`);
+        
+        if (row) {
+            // Add the animation class
+            row.classList.add('remove-item-animation');
+            
+            // Wait for the animation to complete before redirecting
+            setTimeout(function() {
+                window.location.href = url;
+            }, 500);
+        } else {
+            // If we can't find the row, redirect immediately
+            window.location.href = url;
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize tooltips
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+{% endblock %} 

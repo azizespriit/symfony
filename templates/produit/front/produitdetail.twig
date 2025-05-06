@@ -1,0 +1,498 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ produit.nom }} - Détails{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <style>
+        .product-detail-section {
+            padding: 80px 0;
+            background-color: #f8f9fa;
+        }
+        
+        .subheading {
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            color: #007bff;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .product-image-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        .product-image {
+            width: 100%;
+            height: auto;
+            transition: transform 0.5s ease;
+        }
+        
+        .product-image:hover {
+            transform: scale(1.03);
+        }
+        
+        .product-info {
+            animation: fadeIn 0.8s ease-in-out;
+            animation-delay: 0.2s;
+            animation-fill-mode: both;
+        }
+        
+        .product-name {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #212529;
+            transition: all 0.3s ease;
+        }
+        
+        .product-price {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #ff5733;
+            margin-bottom: 20px;
+            display: inline-block;
+            position: relative;
+        }
+        
+        .product-price::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: #ff5733;
+            border-radius: 3px;
+        }
+        
+        .stock-indicator {
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .stock-indicator i {
+            margin-right: 8px;
+        }
+        
+        .in-stock {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .in-stock:hover {
+            background-color: #c3e6cb;
+            transform: translateY(-3px);
+        }
+        
+        .low-stock {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .low-stock:hover {
+            background-color: #ffeeba;
+            transform: translateY(-3px);
+        }
+        
+        .out-of-stock {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .out-of-stock:hover {
+            background-color: #f5c6cb;
+            transform: translateY(-3px);
+        }
+        
+        .product-description-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .product-description-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+        }
+        
+        .description-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #343a40;
+            border-bottom: 2px solid #f8f9fa;
+            padding-bottom: 15px;
+            position: relative;
+        }
+        
+        .description-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 80px;
+            height: 2px;
+            background-color: #007bff;
+        }
+        
+        .description-content {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #495057;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .btn-back {
+            background-color: #6c757d;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+        }
+        
+        .btn-back:hover {
+            background-color: #5a6268;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(108, 117, 125, 0.3);
+        }
+        
+        .btn-cart {
+            background-color: #ff5733;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+        }
+        
+        .btn-cart:hover {
+            background-color: #e64a2e;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(255, 87, 51, 0.3);
+        }
+        
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .quantity-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .quantity-btn:hover {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        
+        .quantity-input {
+            width: 70px;
+            height: 45px;
+            text-align: center;
+            margin: 0 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+        
+        .quantity-input:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            outline: none;
+        }
+        
+        .related-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #343a40;
+        }
+        
+        .breadcrumb-container {
+            background-color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        
+        .breadcrumb {
+            margin-bottom: 0;
+            background-color: transparent;
+            padding: 0;
+        }
+        
+        .breadcrumb-item a {
+            color: #6c757d;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .breadcrumb-item a:hover {
+            color: #007bff;
+            text-decoration: none;
+        }
+        
+        .breadcrumb-item.active {
+            color: #343a40;
+            font-weight: 600;
+        }
+        
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: "›";
+            color: #adb5bd;
+            font-size: 1.2rem;
+            line-height: 1;
+            padding: 0 10px;
+        }
+        
+        .no-image-placeholder {
+            background-color: #f8f9fa;
+            text-align: center;
+            padding: 80px 40px;
+            border-radius: 12px;
+        }
+        
+        .no-image-placeholder i {
+            font-size: 5rem;
+            color: #dee2e6;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<!-- Breadcrumb -->
+<div class="breadcrumb-container">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('produit_catalogue') }}">Accueil</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('produit_catalogue') }}">Produits</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ produit.nom }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<section class="product-detail-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="product-image-container">
+                    {% if produit.photo %}
+                        <img src="{{ asset('uploads/produits/' ~ produit.photo) }}" class="product-image" alt="{{ produit.nom }}">
+                    {% else %}
+                        <div class="no-image-placeholder">
+                            <i class="icon-image pulse"></i>
+                            <p class="text-muted">Image non disponible</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="col-md-6 product-info">
+                <span class="subheading">Détails du produit</span>
+                <h1 class="product-name">{{ produit.nom }}</h1>
+                
+                <div class="product-price">{{ produit.prix|number_format(2, ',', ' ') }} €</div>
+                
+                {% if produit.stock > 10 %}
+                    <div class="stock-indicator in-stock">
+                        <i class="icon-check-circle"></i> En stock ({{ produit.stock }} disponibles)
+                    </div>
+                {% elseif produit.stock > 0 %}
+                    <div class="stock-indicator low-stock">
+                        <i class="icon-alert-circle"></i> Stock limité ({{ produit.stock }} restants)
+                    </div>
+                {% else %}
+                    <div class="stock-indicator out-of-stock">
+                        <i class="icon-x-circle"></i> Rupture de stock
+                    </div>
+                {% endif %}
+                
+                {% if produit.stock > 0 %}
+                <div class="quantity-selector">
+                    <div class="quantity-btn decrease">-</div>
+                    <input type="number" class="quantity-input" value="1" min="1" max="{{ produit.stock }}">
+                    <div class="quantity-btn increase">+</div>
+                </div>
+                {% endif %}
+                
+                <div class="product-description-card">
+                    <h3 class="description-title">Description</h3>
+                    <div class="description-content">
+                        {% if produit.description %}
+                            {{ produit.description|nl2br }}
+                        {% else %}
+                            <p class="text-muted">Aucune description disponible pour ce produit.</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <a href="{{ path('produit_catalogue') }}" class="btn btn-back">
+                        <i class="icon-arrow-left"></i> Retour aux produits
+                    </a>
+                    
+                    {% if produit.stock > 0 %}
+                    <button type="button" class="btn btn-cart" id="add-to-cart" data-product-id="{{ produit.id }}">
+                        <i class="icon-shopping-cart"></i> Ajouter au panier
+                    </button>
+                    {% else %}
+                    <button type="button" class="btn btn-cart" disabled>
+                        <i class="icon-shopping-cart"></i> Indisponible
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related products placeholder section -->
+
+{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+            // Quantity selector functionality with improved UX
+            $('.decrease').on('click', function() {
+                var input = $(this).siblings('.quantity-input');
+                var value = parseInt(input.val());
+                if (value > 1) {
+                    input.val(value - 1);
+                    animateQuantityChange(input);
+                }
+            });
+            
+            $('.increase').on('click', function() {
+                var input = $(this).siblings('.quantity-input');
+                var value = parseInt(input.val());
+                var max = parseInt(input.attr('max'));
+                if (value < max) {
+                    input.val(value + 1);
+                    animateQuantityChange(input);
+                }
+            });
+            
+            // Validate manual input
+            $('.quantity-input').on('change', function() {
+                var min = parseInt($(this).attr('min'));
+                var max = parseInt($(this).attr('max'));
+                var value = parseInt($(this).val());
+                
+                if (value < min) {
+                    $(this).val(min);
+                    animateQuantityChange($(this));
+                } else if (value > max) {
+                    $(this).val(max);
+                    animateQuantityChange($(this));
+                }
+            });
+            
+            // Animation for quantity change
+            function animateQuantityChange(input) {
+                input.addClass('pulse');
+                setTimeout(function() {
+                    input.removeClass('pulse');
+                }, 300);
+            }
+            
+            // Add to cart button functionality with animation
+            $('#add-to-cart').on('click', function() {
+                const quantity = $('.quantity-input').val();
+                const productId = $(this).data('product-id');
+                
+                // Animate button
+                $(this).html('<i class="icon-check"></i> Ajouté au panier!').css('background-color', '#28a745');
+                
+                // Wait a bit before redirecting
+                setTimeout(function() {
+                    // Redirect to the add to cart route with the product ID and quantity
+                    window.location.href = "{{ path('panier_add_produit', {'id': 'PRODUCT_ID'}) }}".replace('PRODUCT_ID', productId) + "?quantite=" + quantity;
+                }, 800);
+            });
+            
+            // Image zoom effect on hover
+            $('.product-image').on('mousemove', function(e) {
+                const imageWidth = $(this).width();
+                const imageHeight = $(this).height();
+                const mouseX = e.pageX - $(this).offset().left;
+                const mouseY = e.pageY - $(this).offset().top;
+                const moveX = (mouseX / imageWidth) * 5;
+                const moveY = (mouseY / imageHeight) * 5;
+                
+                $(this).css('transform', `scale(1.05) translate(${-moveX}px, ${-moveY}px)`);
+            }).on('mouseleave', function() {
+                $(this).css('transform', 'scale(1)');
+            });
+        });
+    </script>
+{% endblock %}

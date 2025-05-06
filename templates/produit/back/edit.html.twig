@@ -1,0 +1,204 @@
+{% extends 'baseback.html.twig' %}
+
+{% block title %}Admin - Edit Product{% endblock %}
+
+{% block body %}
+<div class="row tm-content-row tm-mt-big">
+    <div class="col-xl-8 col-lg-12 tm-md-12 tm-sm-12 tm-col">
+        <div class="bg-white tm-block h-100">
+            <div class="row">
+                <div class="col-md-8 col-sm-12">
+                    <h2 class="tm-block-title">Edit Product</h2>
+                </div>
+                <div class="col-md-4 col-sm-12 text-right">
+                    <a href="{{ path('produit_index') }}" class="btn btn-small btn-secondary">
+                        <i class="fas fa-list"></i> Back to List
+                    </a>
+                </div>
+            </div>
+            
+            {{ form_start(form, {'attr': {'class': 'tm-edit-product-form needs-validation', 'novalidate': 'novalidate'}}) }}
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form_label(form.nom, 'Product Name', {'label_attr': {'class': 'form-label required'}}) }}
+                        {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Enter product name', 'required': 'required', 'minlength': '2', 'maxlength': '255'}}) }}
+                        <div class="invalid-feedback">
+                            {{ form_errors(form.nom) }}
+                            {% if not form_errors(form.nom) %}Please enter a valid product name (2-255 characters).{% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        {{ form_label(form.prix, 'Price (€)', {'label_attr': {'class': 'form-label required'}}) }}
+                        {{ form_widget(form.prix, {'attr': {'class': 'form-control', 'placeholder': 'Enter price', 'required': 'required', 'min': '0.01', 'step': '0.01'}}) }}
+                        <div class="invalid-feedback">
+                            {{ form_errors(form.prix) }}
+                            {% if not form_errors(form.prix) %}Please enter a valid price (greater than 0).{% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        {{ form_label(form.stock, 'Stock Quantity', {'label_attr': {'class': 'form-label required'}}) }}
+                        {{ form_widget(form.stock, {'attr': {'class': 'form-control', 'placeholder': 'Enter stock quantity', 'required': 'required', 'min': '0'}}) }}
+                        <div class="invalid-feedback">
+                            {{ form_errors(form.stock) }}
+                            {% if not form_errors(form.stock) %}Please enter a valid stock quantity (non-negative number).{% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {% if produit.photo %}
+                            <div class="current-image mb-3">
+                                <label class="form-label">Current Image</label>
+                                <img src="{{ asset('uploads/produits/' ~ produit.photo) }}" alt="{{ produit.nom }}" class="img-thumbnail" style="max-height: 150px;">
+                            </div>
+                        {% endif %}
+                        
+                        {{ form_label(form.photoFile, 'Product Image', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.photoFile, {'attr': {'class': 'form-control-file'}}) }}
+                        <small class="form-text text-muted">Upload a new image to replace the current one. Leave empty to keep the current image.</small>
+                        <div class="invalid-feedback">
+                            {{ form_errors(form.photoFile) }}
+                            {% if not form_errors(form.photoFile) %}Please select a valid image file.{% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': '5', 'placeholder': 'Enter product description', 'minlength': '10'}}) }}
+                        <div class="invalid-feedback">
+                            {{ form_errors(form.description) }}
+                            {% if not form_errors(form.description) %}Please provide a description (minimum 10 characters).{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-3">
+                <div class="col-12">
+                    <hr class="mt-2 mb-3">
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ path('produit_show', {'id': produit.id}) }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-times"></i> Cancel
+                        </a>
+                        <div>
+                            <a href="{{ path('produit_delete', {'id': produit.id}) }}" 
+                               class="btn btn-outline-danger mr-2"
+                               onclick="return confirm('Are you sure you want to delete this product?')">
+                                <i class="fas fa-trash-alt"></i> Delete
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            {{ form_rest(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+    
+    <div class="col-xl-4 col-lg-12 tm-md-12 tm-sm-12 tm-col">
+        <div class="bg-white tm-block h-100">
+            <h2 class="tm-block-title">Product Information</h2>
+            
+            <div class="p-4">
+                <div class="product-info-item">
+                    <h5>Tips for Product Details</h5>
+                    <ul class="product-tips">
+                        <li>Use a descriptive, unique product name</li>
+                        <li>Include key features in the description</li>
+                        <li>Use high-quality product images</li>
+                        <li>Keep stock levels accurate</li>
+                    </ul>
+                </div>
+                
+                <div class="product-info-item mt-4">
+                    <h5>Image Guidelines</h5>
+                    <p>For best results, use images that are:</p>
+                    <ul class="product-tips">
+                        <li>High resolution (min 800x800 pixels)</li>
+                        <li>Well-lit with clear visibility</li>
+                        <li>On a white or neutral background</li>
+                        <li>In JPEG, PNG or WebP format</li>
+                    </ul>
+                </div>
+                
+                {% if produit.id %}
+                <div class="product-info-item mt-4">
+                    <h5>Product History</h5>
+                    <div class="product-info-data">
+                        <p><strong>Creation:</strong> {{ produit.id ? 'Existing product' : 'New product' }}</p>
+                        <p><strong>In Cart Count:</strong> {{ cartCount }}</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block css %}
+<style>
+    .form-label {
+        font-weight: 600;
+        color: #444;
+    }
+    
+    .form-error {
+        color: #dc3545;
+        font-size: 0.85rem;
+        margin-top: 0.25rem;
+    }
+    
+    .form-control {
+        border: 1px solid #ced4da;
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .form-control:focus {
+        border-color: #4e657a;
+        box-shadow: 0 0 0 0.2rem rgba(78, 101, 122, 0.25);
+    }
+    
+    .product-info-item {
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .product-info-item:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+    
+    .product-info-item h5 {
+        color: #4e657a;
+        font-size: 1.1rem;
+        margin-bottom: 12px;
+    }
+    
+    .product-tips {
+        padding-left: 18px;
+    }
+    
+    .product-tips li {
+        margin-bottom: 8px;
+        color: #666;
+    }
+    
+    .current-image {
+        text-align: center;
+        padding: 10px;
+        background-color: #f8f9fa;
+        border-radius: 4px;
+    }
+</style>
+{% endblock %}
