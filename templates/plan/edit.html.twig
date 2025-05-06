@@ -1,0 +1,26 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Modifier le Plan{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3 class="mb-0"><i class="fas fa-edit me-2"></i>Modifier le plan</h3>
+                <a href="{{ path('app_plan_by_objectif', {'id': plan.getIdObj().id}) }}" class="btn btn-light btn-sm">
+                    <i class="fas fa-arrow-left me-1"></i> Retour à la liste
+                </a>
+            </div>
+        </div>
+
+        <div class="card-body p-4">
+            {{ include('plan/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+        </div>
+
+        <div class="card-footer bg-light text-end">
+            {{ include('plan/_delete_form.html.twig') }}
+        </div>
+    </div>
+</div>
+{% endblock %}

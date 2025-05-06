@@ -1,0 +1,16 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Noter l'Objectif{% endblock %}
+
+{% block body %}
+    <div class="container py-5">
+        <h1>Donner une note à l'objectif "{{ objectif.nom }}"</h1>
+        
+        {{ form_start(form) }}
+            <div class="rating mt-3 d-flex align-items-center">
+                {{ form_widget(form.score, {'attr': {'class': 'form-select form-select-sm me-2', 'style': 'width: auto;'}}) }}
+                {{ form_widget(form.submit, {'attr': {'class': 'btn btn-sm btn-success'}}) }}
+            </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

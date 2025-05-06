@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\UserType;
+use App\Form\PublicRegistrationType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,7 +31,7 @@ final class RegisterController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(PublicRegistrationType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -41,9 +41,8 @@ final class RegisterController extends AbstractController
             $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
             $user->setPassword($hashedPassword);
 
-            // 🎭 Handle roles conversion from stringified JSON
-            $rolesArray = $form->get('roles')->getData();
-            $user->setRoles($rolesArray);
+            // Set default role for public registration (always user role)
+            $user->setRoles(['ROLE_USER']);
 
             // Set timestamps
             $user->setCreatedAt(new \DateTimeImmutable());

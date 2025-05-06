@@ -2,91 +2,144 @@
 
 namespace App\Entity;
 
+use App\Repository\PlanRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
-use App\Entity\Objectif;
-
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: PlanRepository::class)]
 class Plan
 {
-
     #[ORM\Id]
-    #[ORM\Column(type: "integer")]
-    private int $id_plan;
+    #[ORM\GeneratedValue]
 
-        #[ORM\ManyToOne(targetEntity: Objectif::class, inversedBy: "plans")]
-    #[ORM\JoinColumn(name: 'id_obj', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    private Objectif $id_obj;
+    #[ORM\Column]
+    private ?int $id = null;
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le jour ne peut pas être vide.")]
+    private ?string $Jour = null;
 
-    #[ORM\Column(type: "string", length: 20)]
-    private string $jour;
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "La nutrition ne peut pas être vide.")]
+    private ?string $Nutration = null;
 
-    #[ORM\Column(type: "string", length: 20)]
-    private string $nutration_protein;
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Les muscles ne peuvent pas être vides.")]
+    private ?string $Muscle = null;
 
     #[ORM\Column(type: "float")]
-    private float $course_kilometrage;
+    #[Assert\NotNull(message: "La distance doit être renseignée.")]
+    #[Assert\PositiveOrZero(message: "La distance doit être un nombre positif.")]
+    private ?float $Course = null;
+    /**
+     * @var Collection<int, Objectif>
+     */
+    #[ORM\OneToMany(targetEntity: Objectif::class, mappedBy: 'plan')]
+    private Collection $Plan;
 
-    #[ORM\Column(type: "string", length: 20)]
-    private string $muscle;
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Objectif $id_obj = null;
 
-    public function getId_plan()
+    public function __construct()
     {
-        return $this->id_plan;
+        $this->Plan = new ArrayCollection();
     }
 
-    public function setId_plan($value)
+
+    public function getId(): ?int
     {
-        $this->id_plan = $value;
+        return $this->id;
     }
 
-    public function getId_obj()
+    public function getJour(): ?string
+    {
+        return $this->Jour;
+    }
+
+    public function setJour(string $Jour): static
+    {
+        $this->Jour = $Jour;
+
+        return $this;
+    }
+
+    public function getNutration(): ?string
+    {
+        return $this->Nutration;
+    }
+
+    public function setNutration(string $Nutration): static
+    {
+        $this->Nutration = $Nutration;
+
+        return $this;
+    }
+
+    public function getMuscle(): ?string
+    {
+        return $this->Muscle;
+    }
+
+    public function setMuscle(string $Muscle): static
+    {
+        $this->Muscle = $Muscle;
+
+        return $this;
+    }
+
+    public function getCourse(): ?string
+    {
+        return $this->Course;
+    }
+
+    public function setCourse(string $Course): static
+    {
+        $this->Course = $Course;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Objectif>
+     */
+    public function getPlan(): Collection
+    {
+        return $this->Plan;
+    }
+
+    public function addPlan(Objectif $plan): static
+    {
+        if (!$this->Plan->contains($plan)) {
+            $this->Plan->add($plan);
+            $plan->setPlan($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlan(Objectif $plan): static
+    {
+        if ($this->Plan->removeElement($plan)) {
+            // set the owning side to null (unless already changed)
+            if ($plan->getPlan() === $this) {
+                $plan->setPlan(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getIdObj(): ?Objectif
     {
         return $this->id_obj;
     }
 
-    public function setId_obj($value)
+    public function setIdObj(?Objectif $id_obj): static
     {
-        $this->id_obj = $value;
-    }
+        $this->id_obj = $id_obj;
 
-    public function getJour()
-    {
-        return $this->jour;
-    }
-
-    public function setJour($value)
-    {
-        $this->jour = $value;
-    }
-
-    public function getNutration_protein()
-    {
-        return $this->nutration_protein;
-    }
-
-    public function setNutration_protein($value)
-    {
-        $this->nutration_protein = $value;
-    }
-
-    public function getCourse_kilometrage()
-    {
-        return $this->course_kilometrage;
-    }
-
-    public function setCourse_kilometrage($value)
-    {
-        $this->course_kilometrage = $value;
-    }
-
-    public function getMuscle()
-    {
-        return $this->muscle;
-    }
-
-    public function setMuscle($value)
-    {
-        $this->muscle = $value;
+        return $this;
     }
 }

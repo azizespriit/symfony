@@ -1,0 +1,120 @@
+{% extends 'baseback.html.twig' %}
+
+{% block title %}Objectif index{% endblock %}
+
+{% block body %}
+    <style>
+        .table td, .table th {
+            padding: 12px !important;
+            font-size: 1.85rem;
+            vertical-align: middle;
+        }
+
+        .objectif-image {
+            max-height: 80px;
+            max-width: 160px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .btn-sm-custom {
+            padding: 6px 12px;
+            font-size: 1rem;
+        }
+
+        .table th {
+            background-color: #343a40;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        /* Nouvelle règle pour élargir les colonnes NOM et DESCRIPTION */
+        .td-nom, .td-description {
+            max-width: 300px;
+            word-break: break-word;
+        }
+    </style>
+
+<div class="bg-white tm-block h-100 p-4" style="max-width: 1500px; margin: 0 auto;">
+        <div class="row mb-4">
+            <div class="col-8">
+                <h2 class="tm-block-title" style="font-size: 2rem;">LISTE DES OBJECTIFS</h2>
+            </div>
+            <div class="col-4 text-end">
+                <a href="{{ path('app_objectif_new') }}" class="btn btn-primary btn-sm-custom">
+                    <i class="fas fa-plus"></i> NOUVEL OBJECTIF
+                </a>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>NOM</th>
+                        <th>IMAGE</th>
+                        <th>DESCRIPTION</th>
+                        <th>NIVEAU</th>
+                        <th>SEMAINE</th>
+                        <th>LIEN</th>
+                        <th>ACTIONS</th>
+                        <th>Plan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for objectif in objectifs %}
+                        <tr>
+                            <td class="td-nom">{{ objectif.nom }}</td>
+                            <td>
+                                {% if objectif.image %}
+                                    <img src="{{ asset(objectif.image) }}" alt="Image" class="objectif-image">
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td class="td-description">{{ objectif.description }}</td>
+                            <td>{{ objectif.niveau }}</td>
+                            <td>{{ objectif.semaine }}</td>
+                            <td>
+                                {% if objectif.lien %}
+                                    <a href="{{ objectif.lien }}" target="_blank" class="btn btn-outline-primary btn-sm-custom" title="{{ objectif.lien }}">
+                                        🔗
+                                    </a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="d-flex justify-content-between">
+                                    <a href="{{ path('app_objectif_show', {'id': objectif.id}) }}" class="btn btn-info btn-sm-custom" title="Voir">
+                                        👁️
+                                    </a>
+                                    <a href="{{ path('app_objectif_edit', {'id': objectif.id}) }}" class="btn btn-warning btn-sm-custom" title="Modifier">
+                                        ✏️
+                                    </a>
+                                </div>
+                            </td>
+                        <td>
+    <a href="{{ path('app_plan_by_objectif', {'id': objectif.id}) }}" class="btn btn-secondary btn-sm-custom" title="Voir les plans">
+        📄
+    </a>
+</td>
+
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="8" class="text-center py-4" style="font-size: 1.2rem;">
+                                <i class="fas fa-exclamation-circle mr-2"></i>
+                                Aucun objectif enregistré
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

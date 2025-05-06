@@ -65,14 +65,6 @@ class UserType extends AbstractType
                         'max' => 4096, // max length allowed by Symfony for security reasons
                     ]),
                 ],
-            ])
-            ->add('createdAt', DateTimeType::class, [
-                'widget' => 'single_text',
-                'label' => 'Created At',
-            ])
-            ->add('updateAt', DateTimeType::class, [
-                'widget' => 'single_text',
-                'label' => 'Updated At',
             ]);
     }
 

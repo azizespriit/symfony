@@ -1,0 +1,114 @@
+{% extends 'baseback.html.twig' %}
+
+{% block title %}Créer un Objectif{% endblock %}
+
+{% block body %}
+<div class="container-fluid py-5" style="background-color:#fff; min-height: 100vh;">
+    <div class="row justify-content-center align-items-center h-100">
+        <div class="col-lg-8 col-xl-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white py-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="mb-0" style="font-size: 1.8rem; font-weight: 600;">
+                            <i class="fas fa-bullseye me-2"></i>NOUVEL OBJECTIF
+                        </h2>
+                        <a href="{{ path('app_objectif_index') }}" class="btn btn-light btn-sm">
+                            <i class="fas fa-arrow-left me-2"></i>Retour
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-body p-5">
+                    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+
+                    <div class="mb-4">
+                        {{ form_label(form.nom, "Nom de l'objectif", {'label_attr': {'class': 'form-label fw-bold', 'style': 'font-size: 1.1rem;'}}) }}
+                        {{ form_widget(form.nom, {
+                            'attr': {
+                                'class': 'form-control form-control-lg py-3',
+                                'placeholder': 'Ex: Maîtrise du marketing digital',
+                                'required': true,
+                                'pattern': '^[a-zA-Z\\s]+$',
+                                'title': 'Le nom doit contenir uniquement des lettres et des espaces.'
+                            }
+                        }) }}
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            {{ form_label(form.niveau, 'Niveau de difficulté', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                            {{ form_widget(form.niveau, {
+                                'attr': {
+                                    'class': 'form-select py-3',
+                                    'required': true,
+                                    'min': 1,
+                                    'title': 'Le niveau doit être un nombre entier.'
+                                }
+                            }) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_label(form.semaine, 'Semaine cible', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                            {{ form_widget(form.semaine, {
+                                'attr': {
+                                    'class': 'form-control py-3',
+                                    'required': true,
+                                    'min': 1,
+                                    'max': 52,
+                                    'title': 'La semaine doit être entre 1 et 52.'
+                                }
+                            }) }}
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        {{ form_label(form.description, 'Description détaillée', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                        {{ form_widget(form.description, {
+                            'attr': {
+                                'class': 'form-control',
+                                'rows': 5,
+                                'style': 'font-size: 1.1rem;',
+                                'required': true,
+                                'title': 'La description est obligatoire.'
+                            }
+                        }) }}
+                    </div>
+
+                    <div class="mb-4">
+                        {{ form_label(form.image, 'Image illustrative', {
+                            'label_attr': {'class': 'form-label fw-bold'}
+                        }) }}
+                        {{ form_widget(form.image, {
+                            'attr': {
+                                'class': 'form-control',
+                                'accept': 'image/jpeg,image/png'
+                            }
+                        }) }}
+                        <small class="text-muted">Formats acceptés : JPG, PNG | Taille max : 2MB</small>
+                    </div>
+
+                    <div class="mb-4">
+                        {{ form_label(form.lien, 'Lien ressource', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                        {{ form_widget(form.lien, {
+                            'attr': {
+                                'class': 'form-control py-3',
+                                'placeholder': 'https://exemple.com/ressource',
+                                'required': true,
+                                'pattern': '^https?://.+',
+                                'title': 'Veuillez entrer un lien valide commençant par http:// ou https://.'
+                            }
+                        }) }}
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5">
+                        <button type="submit" class="btn btn-primary btn-lg px-5 py-3">
+                            <i class="fas fa-save me-2"></i>Enregistrer
+                        </button>
+                    </div>
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

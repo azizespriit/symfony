@@ -56,7 +56,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $password;
 
     #[ORM\Column(name:'isLocked', type: "boolean", nullable: true)]
-    private ?bool $isLocked = false;
+    private bool $isLocked = false;
 
     #[ORM\Column(name: 'failedAttempts', type: 'integer', nullable: true)]
     private ?int $failedAttempts = null;
@@ -64,13 +64,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name:'lockoutTime', type: "datetime", nullable: true)]
     private ?\DateTimeInterface $lockoutTime = null;
 
-    #[ORM\Column(name:'createdAt', type: "datetime")]
-    #[Assert\NotNull]
-    private \DateTimeInterface $createdAt;
+    #[ORM\Column(name: 'createdAt', type: 'datetime')]
+    private ?\DateTimeInterface $createdAt = null;
 
-    #[ORM\Column(name:'updateAt', type: "datetime")]
-    #[Assert\NotNull]
-    private \DateTimeInterface $updateAt;
+    #[ORM\Column(name: 'updateAt', type: 'datetime')]
+    private ?\DateTimeInterface $updateAt = null;
 
     #[ORM\Column(name:'reset_token', type: "string", length: 255)]
     private string $reset_token;
@@ -88,6 +86,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->admins = new ArrayCollection();
         $this->clients = new ArrayCollection();
+        $this->isLocked = false;
+    }
+
+    #[ORM\PrePersist]
+    public function onPrePersist(): void
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updateAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate(): void
+    {
+        $this->updateAt = new \DateTimeImmutable();
     }
 
     public function getId_user(): int
@@ -95,10 +107,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->id_user;
     }
 
-    public function setId_user(int $value): void
-    {
-        $this->id_user = $value;
-    }
+//    public function setId_user(int $value): void
+//    {
+//        $this->id_user = $value;
+//    }
 
     public function getCin(): string
     {
@@ -195,16 +207,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->password = $value;
     }
 
-    public function getIsLocked(): ?bool
+    // Getter for the isLocked property
+    public function getIsLocked(): bool
     {
         return $this->isLocked;
     }
 
-    public function setIsLocked(?bool $value): void
+    // Setter for the isLocked property
+    public function setIsLocked(bool $isLocked): self
     {
-        $this->isLocked = $value;
+        $this->isLocked = $isLocked;
+        return $this;
     }
 
+    // Implement the method to check if the account is locked
+    public function isAccountNonLocked(): bool
+    {
+        return !$this->isLocked; // Returns true if the account is NOT locked
+    }
     public function getFailedAttempts(): ?int
     {
         return $this->failedAttempts;

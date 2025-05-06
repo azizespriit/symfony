@@ -4,6 +4,11 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    app.chatbot.api_key: '%env(CHATBOT_API_KEY)%'
+    app.chatbot.api_endpoint: '%env(CHATBOT_API_ENDPOINT)%'
+    translate.api_url: 'https://libretranslate.de/translate'
+    translate.timeout: 3
+    images_directory: '%kernel.project_dir%/public'
 
 services:
     App\Security\LoginSuccessHandler:
@@ -14,6 +19,14 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
+  # Configuration des repositories
+    App\Repository\JourRepository:
+        tags: ['doctrine.repository_service']
+
+    Dompdf\Dompdf:
+        calls:
+            - method: setPaper
+              arguments: ['A4', 'portrait']
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:

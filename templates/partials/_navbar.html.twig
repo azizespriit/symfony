@@ -1,0 +1,108 @@
+<header class="custom-navbar" role="banner">
+  <div class="container-navbar">
+    <div class="logo">
+      <a href="#">
+        <img src="{{ asset('assets1/Logo.png') }}" alt="Logo" class="logo-img">
+        <span>Sportify<span class="dot">.</span></span>
+      </a>
+    </div>
+
+    <nav class="nav-links">
+      <a href="#" class="nav-link">Accueil</a>
+      <a href="{{ path('app_objectif_front') }}" class="nav-link">Objectifs</a>
+      <a href="#" class="nav-link">Publications</a>
+      <a href="#" class="nav-link">Évènements</a>
+      <a href="#" class="nav-link">Produits</a>
+      <a href="#" class="nav-link">Réclamation</a>
+      <a href="{{ path('app_user_profile', {'id_user': app.user.id_user}) }}" class="nav-link">Profil</a>
+      <a href="{{ path('app_logout') }}" class="nav-link logout">Log out</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  body {
+    background-image: url('{{ asset('assets1/hh.jpg') }}');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .custom-navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 10px 40px;
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+  }
+
+  .container-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.6rem;
+    color: #000;
+  }
+
+  .logo-img {
+    height: 50px;
+    margin-right: 10px;
+  }
+
+  .dot {
+    color: #f89d13;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 25px;
+  }
+
+  .nav-link {
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 5px 0;
+    position: relative;
+    transition: color 0.3s;
+  }
+
+  .nav-link:hover {
+    color: #f89d13;
+  }
+
+  .logout {
+    color: #dc3545;
+    font-weight: bold;
+  }
+
+  .logout:hover {
+    color: #a71d2a;
+  }
+
+  .main-content {
+    padding-top: 100px; /* Adjusted to prevent content from hiding behind the navbar */
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  @media (max-width: 768px) {
+    .nav-links {
+      display: none;
+    }
+  }
+</style>

@@ -120,4 +120,16 @@ final class UserController extends AbstractController
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
+    #[Route('/{id_user}/toggle-lock', name: 'app_user_toggle_lock', methods: ['POST'])]
+    public function toggleBlock(User $user, EntityManagerInterface $entityManager): Response
+    {
+        $user->setIsLocked(!$user->getIsLocked());
+        $user->setUpdateAt(new \DateTimeImmutable());
+
+        $entityManager->flush();
+
+        $this->addFlash('success', $user->getIsLocked() ? 'User has been locked.' : 'User has been unlocked.');
+        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+    }
+
 }

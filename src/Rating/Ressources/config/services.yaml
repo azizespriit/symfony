@@ -1,0 +1,5 @@
+services:
+    # Exemple de service pour Rating
+    App\Rating\Controller\RatingController:
+        arguments:
+            $someService: '@App\SomeService'

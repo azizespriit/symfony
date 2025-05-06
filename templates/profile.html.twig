@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'base2.html.twig' %}
 
 {% block title %}User Details{% endblock %}
 
@@ -89,10 +89,7 @@
                 </td>
             </tr>
             <tr><th>Email</th><td>{{ user.email }}</td></tr>
-            <tr><th>Password</th><td>********</td></tr>
-            <tr><th>Is Locked</th><td>{{ user.isLocked ? 'Yes' : 'No' }}</td></tr>
-            <tr><th>Failed Attempts</th><td>{{ user.failedAttempts }}</td></tr>
-            <tr><th>Lockout Time</th><td>{{ user.lockoutTime ? user.lockoutTime|date('Y-m-d H:i:s') : '—' }}</td></tr>
+
             <tr><th>Created At</th><td>{{ user.createdAt ? user.createdAt|date('Y-m-d H:i:s') : '—' }}</td></tr>
             <tr><th>Updated At</th><td>{{ user.updateAt ? user.updateAt|date('Y-m-d H:i:s') : '—' }}</td></tr>
         </table>

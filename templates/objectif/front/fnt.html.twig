@@ -1,0 +1,245 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Objectif index{% endblock %}
+
+{% block body %}
+<style>
+.spinner-border {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    vertical-align: text-bottom;
+    border: 0.2em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner-border .75s linear infinite;
+}
+
+@keyframes spinner-border {
+    to { transform: rotate(360deg); }
+}
+    .rating-stars {
+        display: inline-flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .rating-stars .stars {
+        color: #ffc107;
+        font-size: 1rem;
+    }
+
+    .rating-average {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-left: 5px;
+    }
+
+    .objectif-card {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .card-img-container {
+        text-align: center;
+        padding-top: 10px;
+    }
+
+    .objectif-card-img {
+        max-height: 180px;
+        object-fit: cover;
+        width: 100%;
+        border-radius: 8px;
+    }
+
+    .action-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-top: 10px;
+    }
+</style>
+<div class="container py-5">
+    <div class="page-header">
+        <h1 class="page-title">Les Formes Physiques</h1>
+    </div>
+
+    {% if objectifs|length > 0 %}
+        <div class="row g-4">
+            {% for objectif in objectifs %}
+                <div class="col-md-4 col-lg-3">
+                    <div class="card objectif-card">
+                        <div class="card-img-container">
+                            {% if objectif.image %}
+                                <img src="{{ asset(objectif.image) }}" class="objectif-card-img" alt="{{ objectif.nom }}">
+                            {% else %}
+                                <i class="fas fa-image fa-3x text-muted"></i>
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ objectif.nom }}</h5>
+
+                            {# Affichage des ratings #}
+                            <div class="rating-stars">
+                                <div class="stars">
+                                    {% set averageRating = objectif.averageRating %}
+                                    {% set fullStars = averageRating|round(0, 'floor') %}
+                                    {% set hasHalfStar = (averageRating - fullStars) >= 0.5 %}
+
+                                    {% for i in 1..fullStars %}
+                                        <i class="fas fa-star"></i>
+                                    {% endfor %}
+
+                                    {% if hasHalfStar %}
+                                        <i class="fas fa-star-half-alt"></i>
+                                        {% set fullStars = fullStars + 1 %}
+                                    {% endif %}
+
+                                    {% for i in (fullStars + 1)..5 %}
+                                        <i class="far fa-star"></i>
+                                    {% endfor %}
+                                </div>
+                                <span class="rating-average">
+                                    {% if objectif.ratings|length > 0 %}
+                                        {{ averageRating|number_format(1) }} ({{ objectif.ratings|length }} avis)
+                                    {% else %}
+                                        Pas encore noté
+                                    {% endif %}
+                                </span>
+                            </div>
+
+                          <p class="card-text description"
+   id="description-{{ objectif.id }}"
+   data-original="{{ objectif.description }}">
+   {{ objectif.description|length > 80 ? objectif.description|slice(0, 80) ~ '...' : objectif.description }}
+</p>
+
+
+                       <button class="btn btn-outline-secondary btn-sm translate-btn" data-id="{{ objectif.id }}">
+                                <i class="fas fa-language"></i> Traduire en anglais?
+                            </button>
+
+                            <div class="mb-2">
+                                <span class="badge bg-info">Niveau: {{ objectif.niveau }}</span>
+                                <span class="badge bg-secondary">Semaine: {{ objectif.semaine }}</span>
+                            </div>
+
+                            <div class="action-buttons">
+                                <a href="{{ path('app_plan_by_objectif1', {'id': objectif.id}) }}" class="btn btn-warning btn-sm">
+                                    <i class="fas fa-file-alt"></i> Plans
+                                </a>
+                                {% if objectif.lien %}
+                                    <a href="{{ objectif.lien }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-link"></i> Lien
+                                    </a>
+                                {% endif %}
+                                <a href="{{ path('rating_add', {'objectifId': objectif.id}) }}" class="btn btn-success btn-sm">
+                                    <i class="fas fa-star"></i> Noter
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center mt-5">
+            <i class="fas fa-exclamation-circle fa-2x mb-3"></i>
+            <p>Aucun objectif enregistré</p>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const translateButtons = document.querySelectorAll('.translate-btn');
+
+    translateButtons.forEach(button => {
+        button.addEventListener('click', async function() {
+            const card = this.closest('.card-body');
+            const descriptionElement = card.querySelector('.description');
+            const originalText = descriptionElement.dataset.original;
+
+            // UI Loading state
+            this.disabled = true;
+            const originalHtml = this.innerHTML;
+            this.innerHTML = `
+                <span class="spinner-border spinner-border-sm me-1"></span>
+                Traduction...
+            `;
+
+            try {
+                const response = await fetch('/api/translate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: originalText
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Service indisponible');
+                }
+
+                // Validation de la traduction
+                if (!data.translatedText || data.translatedText === originalText) {
+                    throw new Error('Traduction non fiable');
+                }
+
+                // Mise à jour de l'UI
+                descriptionElement.textContent = data.translatedText;
+                descriptionElement.dataset.translated = "true";
+                this.innerHTML = `
+                    <i class="fas fa-check-circle me-1"></i>
+                    Traduit (${data.service?.split('.')[1] || '?'})
+                `;
+
+                showToast(`Traduction réussie via ${data.service}`, 'success');
+
+            } catch (error) {
+                console.error('Échec:', error);
+                showToast(error.message, 'danger');
+                
+                // Fallback: Afficher l'original avec marqueur d'échec
+                descriptionElement.innerHTML = `
+                    ${originalText}
+                    <span class="badge bg-danger ms-2">Échec traduction</span>
+                `;
+            } finally {
+                setTimeout(() => {
+                    this.disabled = false;
+                    this.innerHTML = originalHtml;
+                }, 2000);
+            }
+        });
+    });
+
+    function showToast(message, type) {
+        const toast = document.createElement('div');
+        toast.className = `toast show position-fixed bottom-0 end-0 m-3`;
+        toast.innerHTML = `
+            <div class="toast-header bg-${type} text-white">
+                <strong class="me-auto">Traduction</strong>
+                <button class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">${message}</div>
+        `;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 5000);
+    }
+});
+</script>
+{% endblock %}

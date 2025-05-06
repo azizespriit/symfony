@@ -1,0 +1,80 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Plan index{% endblock %}
+
+{% block body %}
+    <style>
+        .table td, .table th {
+            padding: 20px !important;
+            font-size: 1.65rem;
+            vertical-align: middle;
+        }
+
+        .table th {
+            background-color: #343a40;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .btn-sm-custom {
+            padding: 8px 20px;
+            font-size: 0.8rem;
+        }
+    </style>
+
+<div class="bg-white tm-block h-100 p-4" style="max-width: 1500px; margin: 0 auto;">
+        <div class="row mb-8">
+            <div class="col-8">
+<h2 class="tm-block-title" style="font-size: 1.2rem;">Liste Des plans de Formule " {{ objectif.nom }} "</h2>
+            </div>
+            <div class="col-4 text-end">
+                <a href="{{ path('app_plan_new', {'id': objectif.id}) }}" class="btn btn-primary btn-sm-custom">
+                    <i class="fas fa-plus"></i> NOUVEAU PLAN
+                </a>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Jour</th>
+                        <th>Nutration</th>
+                        <th>Muscle</th>
+                        <th>Course</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for plan in plans %}
+                    <tr>
+                        <td>{{ plan.Jour }}</td>
+                        <td>{{ plan.Nutration }}</td>
+                        <td>{{ plan.Muscle }}</td>
+                        <td>{{ plan.Course }}</td>
+                        <td>
+                            <a href="{{ path('app_plan_show', {'id': plan.id}) }}" class="btn btn-info btn-sm-custom" title="Voir">
+                                👁️
+                            </a>
+                            <a href="{{ path('app_plan_edit', {'id': plan.id}) }}" class="btn btn-warning btn-sm-custom" title="Modifier">
+                                ✏️
+                            </a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center py-4" style="font-size: 1.2rem;">
+                            <i class="fas fa-exclamation-circle mr-2"></i>
+                            Aucun plan enregistré
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

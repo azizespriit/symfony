@@ -1,0 +1,104 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Plans de {{ objectif.nom }}{% endblock %}
+
+{% block body %}
+<style>
+    .plan-card {
+        border-radius: 10px;
+        transition: transform 0.3s ease;
+        margin-bottom: 20px;
+        height: 100%;
+        color: #fff;
+    }
+
+    .plan-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .card-title {
+        font-size: 1.4rem;
+        font-weight: bold;
+    }
+
+    .card-text {
+        margin-bottom: 10px;
+        font-size: 1rem;
+    }
+
+    .no-plans {
+        text-align: center;
+        padding: 40px;
+        font-size: 1.2rem;
+        color: #6c757d;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .page-title {
+        font-size: 2rem;
+        color: #343a40;
+    }
+</style>
+
+<div class="container py-5">
+    <div class="page-header">
+        <h1 class="page-title">Les Plans de la Formule <strong> "{{ objectif.nom }}" </strong></h1>
+    </div>
+
+    {% if plans|length > 0 %}
+     
+        <div class="row">
+      
+            {% for plan in plans %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card plan-card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ plan.Jour }}</h5>
+                            <p class="card-text"><strong>Nutrition :</strong> {{ plan.Nutration }}</p>
+                            <p class="card-text"><strong>Muscle :</strong> {{ plan.Muscle }}</p>
+                            <p class="card-text"><strong>Course :</strong> {{ plan.Course }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+         <a href="{{ path('export_plans', {'id': objectif.id}) }}" class="btn btn-primary">
+    <i class="fas fa-file-pdf"></i> Exporter les plans en PDF
+</a>
+    {% else %}
+        <div class="no-plans">
+            <i class="fas fa-exclamation-circle fa-2x mb-3"></i>
+            <p>Aucun plan enregistré</p>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    // Liste de couleurs pastel
+    const colors = [
+        '#FFB6B9', '#FFDAC1', '#E2F0CB',
+        '#B5EAD7', '#C7CEEA', '#D5AAFF',
+        '#F8B195', '#F67280', '#FDCB9E',
+        '#99CED3', '#C4FAF8', '#B4E1FA'
+    ];
+
+    // Cibler toutes les cards
+    const cards = document.querySelectorAll('.plan-card');
+
+    cards.forEach(card => {
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        card.style.backgroundColor = randomColor;
+    });
+</script>
+{% endblock %}

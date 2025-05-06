@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Form\PublicRegistrationType;
 
 #[Route('/userr')]
 final class ProfileController extends AbstractController
@@ -30,7 +31,7 @@ final class ProfileController extends AbstractController
         EntityManagerInterface $entityManager,
         UserPasswordHasherInterface $passwordHasher
     ): Response {
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(PublicRegistrationType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -50,7 +51,7 @@ final class ProfileController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'User updated successfully!');
-            return $this->redirectToRoute('app_test', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_user_profile', ['id_user' => $user->getId_user()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('editprof.html.twig', [

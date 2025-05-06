@@ -26,7 +26,9 @@ return new RedirectResponse($this->router->generate('app_back')); // route name 
 }
 
 if (in_array('ROLE_USER', $roles)) {
-return new RedirectResponse($this->router->generate('app_test')); // route name for /test
+    // Get the user ID from the token to pass to the route
+    $user = $token->getUser();
+    return new RedirectResponse($this->router->generate('app_objectif_front'));
 }
 
 // fallback
