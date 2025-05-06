@@ -1,0 +1,62 @@
+{% extends 'baseback.html.twig' %}
+
+{% block title %}Liste des réclamations{% endblock %}
+
+{% block body %}
+    <h1>Liste des réclamations</h1>
+    <a href="{{ path('app_reclamation_pdf') }}" class="btn btn-info">Télécharger PDF</a>
+    <br/>
+    <div class="form-group">
+        <input type="text" id="searchInput" class="form-control" placeholder="Rechercher par nom ou email...">
+    </div>
+    <br/>
+    <table class="table" style="color:white">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Image</th>
+                <th>Date</th>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="reclamationsTable">
+            {% include 'reclamation/_table_rows.html.twig' %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_reclamation_new') }}" class="btn btn-primary">Créer une nouvelle réclamation</a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const tableBody = document.getElementById('reclamationsTable');
+            
+            // Délai pour éviter des requêtes trop fréquentes
+            let searchTimer;
+            
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimer);
+                searchTimer = setTimeout(() => {
+                    const searchTerm = this.value.trim();
+                    
+                    fetch(`{{ path('app_reclamation_search') }}?q=${encodeURIComponent(searchTerm)}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.text();
+                        })
+                        .then(html => {
+                            tableBody.innerHTML = html;
+                        })
+                        .catch(error => {
+                            console.error('Error during search:', error);
+                        });
+                }, 300); // Délai de 300ms après la dernière frappe
+            });
+        });
+    </script>
+{% endblock %}
