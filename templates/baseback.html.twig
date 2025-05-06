@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{% block title %}Dashboard Admin{% endblock %}</title>
+    <title>{% block title %}Dashboard Admin Template{% endblock %}</title>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600">
     <link rel="stylesheet" href="{{ asset('backoffice/css/fontawesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backoffice/css/fullcalendar.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backoffice/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backoffice/css/tooplate.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/form-validation.css') }}">
 
     {% block stylesheets %}{% endblock %}
 </head>
@@ -40,19 +41,19 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Reports
+                                    Produits
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#">Daily Report</a>
-                                    <a class="dropdown-item" href="#">Weekly Report</a>
-                                    <a class="dropdown-item" href="#">Yearly Report</a>
+                                    <a class="dropdown-item">Gérer les produits</a>
+                                    <a class="dropdown-item">Gérer les commandes</a>
+                                    <a class="dropdown-item">Gérer les paniers</a>
                                 </div>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ path('app_objectif_index') }}">Objectives</a>
+                                <a class="nav-link" href="products.html">Products</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ path('app_user_index') }}">Accounts</a>
+                                <a class="nav-link" href="accounts.html">Accounts</a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button"
@@ -81,10 +82,26 @@
 
         <div class="row tm-content-row tm-mt-big">
             {% block body %}
-                {# Page content goes here #}
+            <!-- Page content goes here -->
+            <div class="tm-col tm-col-big">
+                <div class="bg-white tm-block h-100">
+                    <h2 class="tm-block-title">Latest Hits</h2>
+                    <canvas id="lineChart"></canvas>
+                </div>
+            </div>
+            <div class="tm-col tm-col-big">
+                <div class="bg-white tm-block h-100">
+                    <h2 class="tm-block-title">Performance</h2>
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+            <div class="tm-col tm-col-small">
+                <div class="bg-white tm-block h-100">
+                    <canvas id="pieChart" class="chartjs-render-monitor"></canvas>
+                </div>
+            </div>
             {% endblock %}
         </div>
-
     </div>
 </div>
 
@@ -95,19 +112,27 @@
 <script src="{{ asset('backoffice/js/fullcalendar.min.js') }}"></script>
 <script src="{{ asset('backoffice/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('backoffice/js/tooplate-scripts.js') }}"></script>
+<script src="{{ asset('js/form-validation.js') }}"></script>
 
+{% block js %}
 <script>
-    let ctxLine, ctxBar, ctxPie,
-        optionsLine, optionsBar, optionsPie,
-        configLine, configBar, configPie,
-        lineChart, barChart, pieChart;
-
+    let ctxLine,
+        ctxBar,
+        ctxPie,
+        optionsLine,
+        optionsBar,
+        optionsPie,
+        configLine,
+        configBar,
+        configPie,
+        lineChart;
+    barChart, pieChart;
     $(function () {
         updateChartOptions();
-        drawLineChart();
-        drawBarChart();
-        drawPieChart();
-        drawCalendar();
+        drawLineChart(); // Line Chart
+        drawBarChart(); // Bar Chart
+        drawPieChart(); // Pie Chart
+        drawCalendar(); // Calendar
 
         $(window).resize(function () {
             updateChartOptions();
@@ -117,7 +142,6 @@
         });
     });
 </script>
-
-{% block javascripts %}{% endblock %}
+{% endblock %}
 </body>
 </html>

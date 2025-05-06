@@ -2,151 +2,169 @@
 
 namespace App\Entity;
 
+use App\Repository\ReclamationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-use App\Entity\Produit;
-use Doctrine\Common\Collections\Collection;
-use App\Entity\Reponse;
-
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: ReclamationRepository::class)]
 class Reclamation
 {
-
     #[ORM\Id]
-    #[ORM\Column(type: "integer")]
-    private int $id_reclamation;
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-    #[ORM\Column(type: "string", length: 255)]
-    private string $object;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $updated = null;
 
-    #[ORM\Column(type: "string", length: 255)]
-    private string $content;
+    #[ORM\Column(length: 255)]
+    private ?string $commentaire = null;
 
-    #[ORM\Column(type: "integer")]
-    private int $ticket;
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
 
-        #[ORM\ManyToOne(targetEntity: Service::class, inversedBy: "reclamations")]
-    #[ORM\JoinColumn(name: 'id_service', referencedColumnName: 'ID', onDelete: 'CASCADE')]
-    private Service $id_service;
+    #[ORM\Column(length: 255)]
+    private ?string $image = null;
 
-        #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: "reclamations")]
-    #[ORM\JoinColumn(name: 'id_organisateur', referencedColumnName: 'id_client', onDelete: 'CASCADE')]
-    private Client $id_organisateur;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'reclamations')]
+    #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id_user")]
+    private ?User $user_id = null;
 
-        #[ORM\ManyToOne(targetEntity: Equipement::class, inversedBy: "reclamations")]
-    #[ORM\JoinColumn(name: 'id_equipement', referencedColumnName: 'id_equipement', onDelete: 'CASCADE')]
-    private Equipement $id_equipement;
+    #[ORM\Column(length: 255)]
+    private ?string $statut = null;
 
-        #[ORM\ManyToOne(targetEntity: Produit::class, inversedBy: "reclamations")]
-    #[ORM\JoinColumn(name: 'id_produit', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    private Produit $id_produit;
+    #[ORM\Column(length: 255)]
+    private ?string $email = null;
 
-    #[ORM\Column(type: "datetime")]
-    private \DateTimeInterface $createdAT;
+    /**
+     * @var Collection<int, Reponse>
+     */
+    #[ORM\OneToMany(targetEntity: Reponse::class, mappedBy: 'reclamation')]
+    private Collection $reponse;
 
-    #[ORM\Column(type: "datetime")]
-    private \DateTimeInterface $updateAT;
-
-    public function getId_reclamation()
+    public function __construct()
     {
-        return $this->id_reclamation;
+        $this->reponse = new ArrayCollection();
     }
 
-    public function setId_reclamation($value)
+    public function getId(): ?int
     {
-        $this->id_reclamation = $value;
+        return $this->id;
     }
 
-    public function getObject()
+    public function getUpdated(): ?\DateTimeInterface
     {
-        return $this->object;
+        return $this->updated;
     }
 
-    public function setObject($value)
+    public function setUpdated(\DateTimeInterface $updated): static
     {
-        $this->object = $value;
+        $this->updated = $updated;
+
+        return $this;
     }
 
-    public function getContent()
+    public function getCommentaire(): ?string
     {
-        return $this->content;
+        return $this->commentaire;
     }
 
-    public function setContent($value)
+    public function setCommentaire(string $commentaire): static
     {
-        $this->content = $value;
+        $this->commentaire = $commentaire;
+
+        return $this;
     }
 
-    public function getTicket()
+    public function getName(): ?string
     {
-        return $this->ticket;
+        return $this->name;
     }
 
-    public function setTicket($value)
+    public function setName(string $name): static
     {
-        $this->ticket = $value;
+        $this->name = $name;
+
+        return $this;
     }
 
-    public function getId_service()
+    public function getImage(): ?string
     {
-        return $this->id_service;
+        return $this->image;
     }
 
-    public function setId_service($value)
+    public function setImage(string $image): static
     {
-        $this->id_service = $value;
+        $this->image = $image;
+
+        return $this;
     }
 
-    public function getId_organisateur()
+    public function getUserId(): ?User
     {
-        return $this->id_organisateur;
+        return $this->user_id;
     }
 
-    public function setId_organisateur($value)
+    public function setUserId(?User $user_id): static
     {
-        $this->id_organisateur = $value;
+        $this->user_id = $user_id;
+
+        return $this;
     }
 
-    public function getId_equipement()
+    public function getStatut(): ?string
     {
-        return $this->id_equipement;
+        return $this->statut;
     }
 
-    public function setId_equipement($value)
+    public function setStatut(string $statut): static
     {
-        $this->id_equipement = $value;
+        $this->statut = $statut;
+
+        return $this;
     }
 
-    public function getId_produit()
+    public function getEmail(): ?string
     {
-        return $this->id_produit;
+        return $this->email;
     }
 
-    public function setId_produit($value)
+    public function setEmail(string $email): static
     {
-        $this->id_produit = $value;
+        $this->email = $email;
+
+        return $this;
     }
 
-    public function getCreatedAT()
+    /**
+     * @return Collection<int, Reponse>
+     */
+    public function getReponse(): Collection
     {
-        return $this->createdAT;
+        return $this->reponse;
     }
 
-    public function setCreatedAT($value)
+    public function addReponse(Reponse $reponse): static
     {
-        $this->createdAT = $value;
+        if (!$this->reponse->contains($reponse)) {
+            $this->reponse->add($reponse);
+            $reponse->setReclamation($this);
+        }
+
+        return $this;
     }
 
-    public function getUpdateAT()
+    public function removeReponse(Reponse $reponse): static
     {
-        return $this->updateAT;
-    }
+        if ($this->reponse->removeElement($reponse)) {
+            // set the owning side to null (unless already changed)
+            if ($reponse->getReclamation() === $this) {
+                $reponse->setReclamation(null);
+            }
+        }
 
-    public function setUpdateAT($value)
-    {
-        $this->updateAT = $value;
+        return $this;
     }
-
-    #[ORM\OneToMany(mappedBy: "id_reclamation", targetEntity: Reponse::class)]
-    private Collection $reponses;
 }

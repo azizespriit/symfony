@@ -2,78 +2,94 @@
 
 namespace App\Entity;
 
+use App\Repository\ReponseRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-use App\Entity\Reclamation;
-
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: ReponseRepository::class)]
 class Reponse
 {
-
     #[ORM\Id]
-    #[ORM\Column(type: "integer")]
-    private int $id_reponse;
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-    #[ORM\Column(type: "string", length: 255)]
-    private string $content;
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
 
-        #[ORM\ManyToOne(targetEntity: Reclamation::class, inversedBy: "reponses")]
-    #[ORM\JoinColumn(name: 'id_reclamation', referencedColumnName: 'id_reclamation', onDelete: 'CASCADE')]
-    private Reclamation $id_reclamation;
+    #[ORM\Column(length: 255)]
+    private ?string $fullname = null;
 
-    #[ORM\Column(type: "datetime")]
-    private \DateTimeInterface $createdAt;
+    #[ORM\Column(length: 255)]
+    private ?string $commentaire = null;
 
-    #[ORM\Column(type: "datetime")]
-    private \DateTimeInterface $updateAT;
+    #[ORM\Column]
+    private ?int $rating = null;
 
-    public function getId_reponse()
+    #[ORM\ManyToOne(inversedBy: 'reponse')]
+    private ?Reclamation $reclamation = null;
+
+    public function getId(): ?int
     {
-        return $this->id_reponse;
+        return $this->id;
     }
 
-    public function setId_reponse($value)
+    public function getName(): ?string
     {
-        $this->id_reponse = $value;
+        return $this->name;
     }
 
-    public function getContent()
+    public function setName(string $name): static
     {
-        return $this->content;
+        $this->name = $name;
+
+        return $this;
     }
 
-    public function setContent($value)
+    public function getFullname(): ?string
     {
-        $this->content = $value;
+        return $this->fullname;
     }
 
-    public function getId_reclamation()
+    public function setFullname(string $fullname): static
     {
-        return $this->id_reclamation;
+        $this->fullname = $fullname;
+
+        return $this;
     }
 
-    public function setId_reclamation($value)
+    public function getCommentaire(): ?string
     {
-        $this->id_reclamation = $value;
+        return $this->commentaire;
     }
 
-    public function getCreatedAt()
+    public function setCommentaire(string $commentaire): static
     {
-        return $this->createdAt;
+        $this->commentaire = $commentaire;
+
+        return $this;
     }
 
-    public function setCreatedAt($value)
+    public function getRating(): ?int
     {
-        $this->createdAt = $value;
+        return $this->rating;
     }
 
-    public function getUpdateAT()
+    public function setRating(int $rating): static
     {
-        return $this->updateAT;
+        $this->rating = $rating;
+
+        return $this;
     }
 
-    public function setUpdateAT($value)
+    public function getReclamation(): ?Reclamation
     {
-        $this->updateAT = $value;
+        return $this->reclamation;
+    }
+
+    public function setReclamation(?Reclamation $reclamation): static
+    {
+        $this->reclamation = $reclamation;
+
+        return $this;
     }
 }

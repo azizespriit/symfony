@@ -1,0 +1,295 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle réclamation{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Style général cohérent avec le thème précédent */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 20px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        /* Conteneur du formulaire */
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Styles des groupes de formulaire */
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+            outline: none;
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-control-file {
+            display: block;
+            width: 100%;
+            padding: 10px 0;
+        }
+        
+        /* Styles des erreurs */
+        .form-errors {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        /* Styles des boutons */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-secondary {
+            background-color: #95a5a6;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Aperçu de l'image */
+        .image-preview {
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .image-preview img {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Animation pour le formulaire */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .form-container {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+        
+        /* Style pour les sélecteurs */
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 15px;
+        }
+        
+        /* Style pour le champ fichier personnalisé */
+        .custom-file-upload {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .custom-file-upload:hover {
+            background-color: #e9ecef;
+            border-color: #ccc;
+        }
+        
+        .file-name {
+            margin-left: 10px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="form-container">
+        <h1>Créer une nouvelle réclamation</h1>
+
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'data-turbo': 'false', 'enctype': 'multipart/form-data'}}) }}
+            <div class="form-group">
+                {{ form_label(form.name) }}
+                {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Votre nom complet'}}) }}
+                <div class="form-errors">{{ form_errors(form.name) }}</div>
+            </div>
+            
+            <div class="form-group">
+                {{ form_label(form.email) }}
+                {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'votre@email.com'}}) }}
+                <div class="form-errors">{{ form_errors(form.email) }}</div>
+            </div>
+            
+            <div class="form-group">
+                {{ form_label(form.commentaire) }}
+                {{ form_widget(form.commentaire, {'attr': {'class': 'form-control', 'rows': 5, 'placeholder': 'Décrivez votre réclamation en détail...'}}) }}
+                <div class="form-errors">{{ form_errors(form.commentaire) }}</div>
+            </div>
+            
+            <div class="form-group">
+                {{ form_label(form.image) }}
+                <label for="{{ form.image.vars.id }}" class="custom-file-upload">
+                    <i class="fas fa-cloud-upload-alt"></i> Choisir un fichier
+                </label>
+                <span class="file-name" id="file-name">Aucun fichier sélectionné</span>
+                {{ form_widget(form.image, {'attr': {'class': 'form-control-file', 'style': 'display: none;'}}) }}
+                <div class="form-errors">{{ form_errors(form.image) }}</div>
+                
+                <div class="image-preview" id="image-preview">
+                    <p>Aperçu :</p>
+                    <img id="preview-img" src="#" alt="Aperçu de l'image" style="display: none;">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                {{ form_label(form.statut) }}
+                {{ form_widget(form.statut, {'attr': {'class': 'form-control'}}) }}
+                <div class="form-errors">{{ form_errors(form.statut) }}</div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> {{ button_label|default('Enregistrer') }}
+            </button>
+        {{ form_end(form) }}
+
+        <a href="{{ path('app_reclamation_index') }}" class="btn btn-secondary mt-3">
+            <i class="fas fa-arrow-left"></i> Retour à la liste
+        </a>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize AOS
+        if (typeof AOS !== 'undefined') {
+            try {
+                AOS.init({
+                    duration: 1000,
+                    once: true,
+                });
+            } catch (error) {
+                console.error('Error initializing AOS:', error);
+            }
+        } else {
+            console.error('AOS library is not loaded.');
+        }
+
+        // Gestion de l'affichage du nom du fichier et de l'aperçu
+        const fileInput = document.getElementById('{{ form.image.vars.id }}');
+        const fileNameDisplay = document.getElementById('file-name');
+        const imagePreview = document.getElementById('image-preview');
+        const previewImg = document.getElementById('preview-img');
+
+        if (fileInput) {
+            fileInput.addEventListener('change', function(e) {
+                if (this.files.length > 0) {
+                    // Afficher le nom du fichier
+                    fileNameDisplay.textContent = this.files[0].name;
+                    
+                    // Afficher l'aperçu pour les images
+                    const file = this.files[0];
+                    if (file.type.match('image.*')) {
+                        const reader = new FileReader();
+                        
+                        reader.onload = function(event) {
+                            previewImg.src = event.target.result;
+                            previewImg.style.display = 'block';
+                            imagePreview.style.display = 'block';
+                        };
+                        
+                        reader.readAsDataURL(file);
+                    } else {
+                        previewImg.style.display = 'none';
+                        imagePreview.style.display = 'none';
+                    }
+                } else {
+                    fileNameDisplay.textContent = 'Aucun fichier sélectionné';
+                    previewImg.style.display = 'none';
+                    imagePreview.style.display = 'none';
+                }
+            });
+        }
+
+        // Validation côté client pour le champ email
+        const emailField = document.getElementById('{{ form.email.vars.id }}');
+        if (emailField) {
+            emailField.addEventListener('blur', function() {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(this.value)) {
+                    this.classList.add('is-invalid');
+                } else {
+                    this.classList.remove('is-invalid');
+                }
+            });
+        }
+    });
+    </script>
+{% endblock %}

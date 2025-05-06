@@ -1,0 +1,25 @@
+{% for reclamation in reclamations %}
+    <tr>
+        <td>{{ reclamation.id }}</td>
+        <td>
+            {% if reclamation.image %}
+                <img src="{{ asset('uploads/' ~ reclamation.image) }}" alt="Image" style="max-width: 100px;">
+            {% else %}
+                Pas d'image
+            {% endif %}
+        </td>
+        <td>{{ reclamation.updated ? reclamation.updated|date('Y-m-d H:i:s') : '' }}</td>
+        <td>{{ reclamation.name }}</td>
+        <td>{{ reclamation.email }}</td>
+        <td>{{ reclamation.statut }}</td>
+        <td>
+            <a href="{{ path('app_reponse_new', {'reclamationId': reclamation.id}) }}" class="btn btn-success btn-sm">
+                <i class="fas fa-reply"></i> Répondre
+            </a>
+        </td>
+    </tr>
+{% else %}
+    <tr>
+        <td colspan="7">Aucune réclamation trouvée</td>
+    </tr>
+{% endfor %}

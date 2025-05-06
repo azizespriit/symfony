@@ -1,0 +1,5 @@
+<form method="post" action="{{ path('app_reponse_delete', {'id': reponse.id}) }}" 
+      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette réponse ?');" 
+      data-turbo="false">
+    <button class="btn btn-danger">Supprimer</button>
+</form>

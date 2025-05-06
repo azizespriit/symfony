@@ -1,0 +1,47 @@
+{% extends 'baseback.html.twig' %}
+
+{% block title %}Liste des réponses{% endblock %}
+
+{% block body %}
+    <h1>Liste des réponses</h1>
+
+    <table class="table"style="color:white">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Nom complet</th>
+                <th>Note</th>
+                <th>Réclamation</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reponse in reponses %}
+            <tr>
+                <td>{{ reponse.id }}</td>
+                <td>{{ reponse.name }}</td>
+                <td>{{ reponse.fullname }}</td>
+                <td>{{ reponse.rating }}/5</td>
+                <td>
+                    <a href="{{ path('app_reclamation_show', {'id': reponse.reclamation.id}) }}">
+                        Réclamation #{{ reponse.reclamation.id }}
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ path('app_reponse_edit', {'id': reponse.id}) }}" class="btn btn-warning">Modifier</a>
+
+                    {% include "reponse/_delete_form.html.twig" %}    
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Aucune réponse trouvée</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {# Lien vers la création avec une réclamation spécifique si nécessaire #}
+    {# <a href="{{ path('app_reponse_new', {'reclamationId': 1}) }}" class="btn btn-primary">Nouvelle réponse</a> #}
+{% endblock %}
