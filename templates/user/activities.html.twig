@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Activités{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h2 class="mb-4 text-center">Mes Activités</h2>
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <strong>Mes Publications</strong>
+        </div>
+        <div class="card-body">
+            {% if publications is not empty %}
+                <ul class="list-group">
+                    {% for pub in publications %}
+                        <li class="list-group-item">
+                            {{ pub.contenu }}<br>
+                            <small class="text-muted">Publié le {{ pub.createdAt|date('d/m/Y à H:i') }}</small>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted">Aucune publication trouvée.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            <strong>Mes Commentaires</strong>
+        </div>
+        <div class="card-body">
+            {% if commentaires is not empty %}
+                <ul class="list-group">
+                    {% for com in commentaires %}
+                        <li class="list-group-item">
+                            {{ com.contenu }}<br>
+                            <small class="text-muted">Sur la publication de {{ com.publication.user.fullName }}, le {{ com.createdAt|date('d/m/Y à H:i') }}</small>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted">Aucun commentaire trouvé.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

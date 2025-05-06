@@ -1,0 +1,224 @@
+/* Add to your frontoffice/css/style.css */
+
+/* Publication Grid */
+.publication-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+    padding: 1rem;
+}
+
+/* Publication Card */
+.publication-card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.publication-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+}
+
+/* Publication Media */
+.publication-media {
+    position: relative;
+    overflow: hidden;
+    height: 220px;
+}
+
+.publication-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.image-link:hover .publication-image {
+    transform: scale(1.05);
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.image-link:hover .image-overlay {
+    opacity: 1;
+}
+
+.image-overlay .icon-search-plus {
+    color: white;
+    font-size: 2rem;
+}
+
+/* Publication Content */
+.publication-content {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.publication-author {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.author-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+}
+
+.author-avatar .icon-user-circle-o {
+    font-size: 1.5rem;
+    color: #555;
+}
+
+.author-info h4 {
+    margin: 0;
+    font-size: 1rem;
+    color: #333;
+}
+
+.author-info time {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.publication-body {
+    margin-bottom: 1.5rem;
+}
+
+.publication-text {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.publication-description {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.4;
+}
+
+/* Publication Actions */
+.publication-actions {
+    display: flex;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+    margin-top: auto;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.action-btn:hover {
+    color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.action-btn .icon {
+    margin-right: 0.3rem;
+}
+
+.count {
+    font-size: 0.9rem;
+    margin-left: 0.3rem;
+}
+
+.action-spacer {
+    flex-grow: 1;
+}
+
+.owner-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.delete-form {
+    display: inline;
+}
+
+/* Tooltips */
+[data-tooltip] {
+    position: relative;
+}
+
+[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: white;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+}
+
+[data-tooltip]:hover::after {
+    opacity: 1;
+    visibility: visible;
+    bottom: calc(100% + 5px);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    grid-column: 1 / -1;
+}
+
+.empty-icon {
+    font-size: 3rem;
+    color: #ccc;
+    margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+    color: #555;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    color: #888;
+    margin-bottom: 1.5rem;
+}

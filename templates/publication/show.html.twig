@@ -1,0 +1,820 @@
+{# templates/publication/show.html.twig #}
+{% extends 'frontoffice/index.html.twig' %}
+
+{% block title %}Publication - {{ publication.user.getFullName() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Custom Styles */
+        .publication-card {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+        }
+        
+        .publication-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        
+        .publication-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .publication-image:hover {
+            transform: scale(1.03);
+        }
+        
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #6c757d;
+        }
+        
+        .comment-card {
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        .comment-card:hover {
+            border-left-color: #0d6efd;
+            transform: translateX(5px);
+        }
+        
+        .like-btn {
+            transition: all 0.2s ease;
+        }
+        
+        .like-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .like-btn.active {
+            color: #dc3545;
+        }
+        
+        .social-share .btn {
+            transition: all 0.3s ease;
+        }
+        
+        .social-share .btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        .floating-action-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .tag {
+            display: inline-block;
+            background: #f0f7ff;
+            color: #0d6efd;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+        
+        .tag:hover {
+            background: #0d6efd;
+            color: white;
+        }
+        .floating-action-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1050;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: bounce 2s infinite;
+        }
+
+        .floating-action-btn:hover {
+            box-shadow: 0 0 20px rgba(13, 110, 253, 0.6);
+            transform: scale(1.1);
+        }
+
+        .floating-action-btn i {
+            font-size: 24px;
+            color: #0d6efd;
+            transition: transform 0.3s ease;
+        }
+
+        .floating-action-btn:hover i {
+            transform: rotate(90deg);
+        }
+
+        /* Tooltip */
+        .floating-action-btn::after {
+            content: "Add Publication";
+            position: absolute;
+            right: 70px;
+            background: #0d6efd;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            font-size: 0.85rem;
+        }
+
+        .floating-action-btn:hover::after {
+            opacity: 1;
+            transform: translateX(-5px);
+        }
+
+        /* Bounce animation */
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        
+        /* Animation classes */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.6s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-50px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .reaction-buttons {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+    
+    .reaction-btn {
+        position: relative;
+        padding: 8px 12px;
+        border-radius: 20px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        border: 1px solid #dee2e6;
+        background: white;
+        overflow: hidden;
+    }
+    
+    .reaction-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .reaction-btn:active {
+        transform: translateY(1px);
+    }
+    .reaction-buttons-container {
+    border-bottom: none !important;
+}
+
+    
+    .reaction-btn i {
+        transition: all 0.3s ease;
+    }
+    
+    .like-btn {
+        color: #6c757d;
+    }
+    
+    .like-btn:hover {
+        background: #fff0f0;
+        border-color: #ffc9c9;
+    }
+    
+    .like-btn.active {
+        color: #ff6b6b;
+        border-color: #ff6b6b;
+        background: #fff0f0;
+    }
+    
+    .like-btn.active i {
+        transform: scale(1.2);
+        animation: heartBeat 0.5s;
+    }
+    
+    .dislike-btn {
+        color: #6c757d;
+    }
+    
+    .dislike-btn:hover {
+        background: #f0f0ff;
+        border-color: #c9c9ff;
+    }
+    
+    .dislike-btn.active {
+        color: #6b6bff;
+        border-color: #6b6bff;
+        background: #f0f0ff;
+    }
+    
+    .dislike-btn.active i {
+        transform: scale(1.2) rotate(180deg);
+        animation: shake 0.5s;
+    }
+    
+    .reaction-count {
+        min-width: 24px;
+        text-align: center;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .like-btn.active ~ .like-count {
+        color: #ff6b6b;
+        transform: scale(1.1);
+    }
+    
+    .dislike-btn.active ~ .dislike-count {
+        color: #6b6bff;
+        transform: scale(1.1);
+    }
+    /* Add this to your stylesheets block */
+.comment-actions {
+    opacity: 0;
+    transition: all 0.3s ease;
+    gap: 8px;
+}
+
+.comment-card:hover .comment-actions {
+    opacity: 1;
+}
+
+.edit-btn {
+    background-color: transparent;
+    border: 1px solid #0d6efd;
+    color: #0d6efd;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.edit-btn i {
+    margin-right: 5px;
+    transition: transform 0.3s ease;
+}
+
+.edit-btn:hover {
+    background-color: #0d6efd;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(13, 110, 253, 0.2);
+}
+
+.edit-btn:hover i {
+    transform: scale(1.1);
+}
+
+.delete-btn {
+    background-color: transparent;
+    border: 1px solid #dc3545;
+    color: #dc3545;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.delete-btn i {
+    margin-right: 5px;
+    transition: transform 0.3s ease;
+}
+
+.delete-btn:hover {
+    background-color: #dc3545;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2);
+}
+
+.delete-btn:hover i {
+    transform: scale(1.1);
+}
+
+/* Edit form styling */
+.edit-comment-form {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 10px 0;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.edit-comment-form textarea {
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.edit-comment-form textarea:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.edit-comment-form .btn {
+    font-size: 0.85rem;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.edit-comment-form .btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.edit-comment-form .btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+    transform: translateY(-2px);
+}
+
+.edit-comment-form .btn-outline-secondary {
+    border-color: #6c757d;
+    color: #6c757d;
+}
+
+.edit-comment-form .btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.publication-actions {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.publication-card:hover .publication-actions {
+    opacity: 1;
+}
+
+.edit-publication-btn {
+    background-color: transparent;
+    border: 1px solid #0d6efd;
+    color: #0d6efd;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.edit-publication-btn:hover {
+    background-color: #0d6efd;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(13, 110, 253, 0.2);
+}
+
+.delete-publication-btn {
+    background-color: transparent;
+    border: 1px solid #dc3545;
+    color: #dc3545;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.delete-publication-btn:hover {
+    background-color: #dc3545;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2);
+}
+    /* Animations */
+    @keyframes heartBeat {
+        0% { transform: scale(1); }
+        25% { transform: scale(1.3); }
+        50% { transform: scale(1); }
+        75% { transform: scale(1.2); }
+        100% { transform: scale(1); }
+    }
+    
+    @keyframes shake {
+        0%, 100% { transform: rotate(180deg) translateX(0); }
+        20%, 60% { transform: rotate(180deg) translateX(-3px); }
+        40%, 80% { transform: rotate(180deg) translateX(3px); }
+    }
+    
+    @keyframes floatUp {
+        0% { transform: translateY(0); opacity: 1; }
+        100% { transform: translateY(-20px); opacity: 0; }
+    }
+    
+    .reaction-effect {
+        position: absolute;
+        pointer-events: none;
+        animation: floatUp 1s ease-out forwards;
+    }
+    </style>
+{% endblock %}
+{% block body %}
+{% block intro_section %}
+{% endblock %}
+
+ {% block features_section %}
+ {% endblock %}
+ 
+ {% block banner_section %}
+ {% endblock %}
+{% block publications_section %}
+<a href="{{ path('publication_pdf', { id: publication.id }) }}" class="btn btn-danger" target="_blank">🧾 Exporter en PDF</a>
+
+
+
+
+
+    <div class="container py-5">
+        <div class="publication-grid" id="publications-container" 
+        data-loading="false" 
+        data-page="1" 
+        data-has-more="true">
+        <!-- Existing content -->
+        <div class="loading-indicator" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+        <!-- Main Publication Card -->
+        <div class="card publication-card mb-5 fade-in">
+            {% if publication.imageUrl %}
+                <div class="position-relative overflow-hidden">
+                    <img src="{{ asset('uploads/publications/' ~ publication.imageUrl) }}" 
+                        class="publication-image" 
+                        alt="Publication image"
+                        onerror="this.onerror=null; this.src='{{ asset('frontoffice/images/default-publication.jpg') }}'">
+                </div>
+            {% endif %}
+            
+            <div class="card-body">
+                <!-- Author Section -->
+                <div class="d-flex align-items-center mb-4 slide-in">
+                    <div class="avatar me-3">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">{{ publication.user.getFullName() }}</h5>
+                        <small class="text-muted">
+                            <i class="far fa-clock me-1"></i> {{ publication.datePub|date('M j, Y \\a\\t g:i a') }}
+                        </small>
+                    </div>
+                </div>
+                
+                <!-- Publication Content -->
+                <div class="mb-4 fade-in">
+                    <p class="lead">{{ publication.contenu }}</p>
+                    {% if publication.description %}
+                        <div class="bg-light p-3 rounded mb-3">
+                            <p class="mb-0">{{ publication.description }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="d-flex justify-content-between align-items-center border-top border-bottom py-3 mb-4 reaction-buttons-container">
+
+                    <div class="reaction-buttons">
+                        <div class="reaction-buttons">
+                            <a href="{{ path('app_publication_react', {'id': publication.id, 'type': 'like'}) }}" 
+                            class="reaction-btn like-btn {% if userReaction and userReaction.type == 'like' %}active{% endif %}">
+                                <i class="far fa-heart me-1"></i> Like
+                                <span class="reaction-count">{{ publication.countReactions('like') }}</span>
+                            </a>
+
+                            <a href="{{ path('app_publication_react', {'id': publication.id, 'type': 'dislike'}) }}" 
+                            class="reaction-btn dislike-btn {% if userReaction and userReaction.type == 'dislike' %}active{% endif %}">
+                                <i class="far fa-thumbs-down me-1"></i> Dislike
+                                <span class="reaction-count">{{ publication.countReactions('dislike') }}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Owner Actions -->
+                {% if publication.user.id == staticUser.id %}
+                    <div class="publication-actions d-flex gap-2 mb-4 fade-in">
+                        <a href="{{ path('app_publication_edit', {'id': publication.id}) }}" 
+                        class="btn btn-outline-primary btn-sm edit-publication-btn">
+                            <i class="fas fa-edit me-1"></i> Edit Publication
+                        </a>
+                        <form method="post" action="{{ path('app_publication_delete', {'id': publication.id}) }}" 
+                            onsubmit="return confirm('Are you sure you want to delete this publication?');"
+                            class="d-inline">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ publication.id) }}">
+                            <button type="submit" class="btn btn-outline-danger btn-sm delete-publication-btn">
+                                <i class="fas fa-trash-alt me-1"></i> Delete Publication
+                            </button>
+                        </form>
+
+                        {# <form method="post" action="{{ path('app_publication_delete', {'id': publication.id}) }}"
+                            onsubmit="return confirm('Are you sure?')">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ publication.id) }}">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash-alt"></i> Delete
+                            </button>
+                        </form>  #}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="mb-5 fade-in">
+            <h3 class="mb-4 d-flex align-items-center">
+                <i class="far fa-comments me-2"></i> Comments ({{ commentaires|length }})
+            </h3>
+            
+            <!-- Comment Form -->
+            <div class="card mb-4 slide-in">
+                <div class="card-body">
+                    <h5 class="card-title">Leave a comment</h5>
+                    {{ form_start(form, {'attr': {'class': 'comment-form'}}) }}
+                        <div class="mb-3">
+                            {{ form_widget(form.contenu, {
+                                'attr': {
+                                    'class': 'form-control', 
+                                    'rows': 3,
+                                    'placeholder': 'Write your comment here...'
+                                }
+                            }) }}
+                        </div>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-paper-plane me-1"></i> Post comment
+                        </button>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+
+            <!-- Comments List -->
+<!-- Comments List -->
+<div class="comments-list" id="comments-section">
+    {% for commentaire in commentaires %}
+        <div class="card comment-card mb-3" id="comment-{{ commentaire.id }}" style="animation-delay: {{ loop.index * 0.1 }}s">
+            <div class="card-body">
+                <div class="d-flex">
+                    <div class="flex-shrink-0 me-3">
+                        <div class="avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="mb-0 fw-bold">{{ commentaire.user.getFullName() }}</h6>
+                            <small class="text-muted">
+                                <i class="far fa-clock me-1"></i> 
+                                {{ commentaire.datee|date('M j, Y \\a\\t g:i a') }}
+                                
+                                <form action="{{ path('app_translate_comment') }}" method="post" class="d-inline">
+                                    <input type="hidden" name="comment_id" value="{{ commentaire.id }}">
+                                    <input type="hidden" name="text" value="{{ commentaire.contenu|escape('html_attr') }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-primary translate-btn">
+                                        <i class="fas fa-language me-1"></i> Translate
+                                    </button>
+                                </form>
+                            </small>
+                        </div>
+                        
+                        {% if editComment and editComment.id == commentaire.id and editForm %}
+                            {{ form_start(editForm, {
+                                'attr': {'class': 'edit-comment-form'},
+                                'action': path('app_publication_show', {'id': publication.id, 'edit': commentaire.id})
+                            }) }}
+                                <div class="mb-3">
+                                    {{ form_widget(editForm.contenu, {
+                                        'attr': {
+                                            'class': 'form-control', 
+                                            'rows': 3
+                                        }
+                                    }) }}
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button type="submit" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-save me-1"></i> Save
+                                    </button>
+                                    <a href="{{ path('app_publication_show', {'id': publication.id}) }}" 
+                                       class="btn btn-outline-secondary btn-sm">
+                                        Cancel
+                                    </a>
+                                </div>
+                            {{ form_end(editForm) }}
+                        {% else %}
+                            <p class="mb-2 comment-content" id="comment-content-{{ commentaire.id }}" data-original-text="{{ commentaire.contenu|escape('js')|replace({'%20': ' '}) }}">
+                                {{ commentaire.contenu }}
+                            </p>
+                            <div class="translated-content mt-2 d-none" id="translated-content-{{ commentaire.id }}">
+                                <small class="text-muted">Translated:</small>
+                                <p class="mb-0 translated-text" id="translated-text-{{ commentaire.id }}"></p>
+                            </div>
+                            
+                            {% if commentaire.user.id == staticUser.id %}
+                                <div class="comment-actions d-flex gap-2 mt-2 fade-in">
+                                    <a href="{{ path('app_publication_show', {
+                                        'id': publication.id,
+                                        'edit': commentaire.id
+                                    }) }}#comment-{{ commentaire.id }}" 
+                                       class="btn btn-sm btn-outline-primary edit-btn">
+                                        <i class="fas fa-edit me-1"></i> Edit
+                                    </a>
+                                    <form method="post" action="{{ path('app_commentaire_delete', {'id': commentaire.id}) }}" 
+                                          onsubmit="return confirm('Are you sure you want to delete this comment?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ commentaire.id) }}">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger delete-btn">
+                                            <i class="fas fa-trash-alt me-1"></i> Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-info fade-in">
+            <i class="fas fa-info-circle me-2"></i> No comments yet. Be the first to comment!
+        </div>
+    {% endfor %}
+</div>
+        
+        <!-- Related Publications -->
+        {# <div class="mb-5 fade-in">
+            <h3 class="mb-4 d-flex align-items-center">
+                <i class="fas fa-newspaper me-2"></i> Related Publications
+            </h3>
+            <div class="row">
+                {% for related in relatedPublications|slice(0, 3) %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            {% if related.imageUrl %}
+                                <img src="{{ asset('uploads/publications/' ~ related.imageUrl) }}" 
+                                    class="card-img-top" 
+                                    alt="Related publication"
+                                    style="height: 180px; object-fit: cover;">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ related.user.getFullName() }}</h5>
+                                <p class="card-text">{{ related.contenu|u.truncate(100, '...') }}</p>
+                                <a href="{{ path('app_publication_show', {'id': related.id}) }}" class="btn btn-sm btn-outline-primary">
+                                    Read more
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div> #}
+    </div>
+    
+    {# <!-- Floating Action Button -->
+    <a href="{{ path('app_publication_new') }}" class="btn btn-primary btn-lg rounded-circle floating-action-btn">
+        <i class="fas fa-plus"></i>
+    </a> #}
+    <!-- Floating Action Button -->
+    <a href="{{ path('app_publication_new') }}" 
+    class="btn btn-primary btn-lg rounded-circle floating-action-btn"
+    title="Create new publication"
+    data-bs-toggle="tooltip" 
+    data-bs-placement="left">
+        <i class="fas fa-plus"></i>
+    </a>
+{% endblock %}
+{% endblock %}{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const translateButtons = document.querySelectorAll('.translate-btn');
+
+            translateButtons.forEach(button => {
+                button.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    const commentId = this.getAttribute('data-comment-id');
+                    const commentText = this.getAttribute('data-comment-text');
+                    const isTranslated = this.getAttribute('data-translated') === 'true';
+
+                    const contentElement = document.getElementById(`comment-content-${commentId}`);
+                    const translatedContainer = document.getElementById(`translated-content-${commentId}`);
+                    const translatedTextElement = document.getElementById(`translated-text-${commentId}`);
+
+                    if (isTranslated) {
+                        // Revenir au texte original
+                        contentElement.textContent = contentElement.getAttribute('data-original-text');
+                        translatedContainer.classList.add('d-none');
+                        this.setAttribute('data-translated', 'false');
+                        this.innerHTML = '<i class="fas fa-language me-1"></i> Translate';
+                    } else {
+                        // Traduire le texte
+                        this.disabled = true;
+                        const originalButtonText = this.innerHTML;
+                        this.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Translating...';
+
+                        fetch('{{ path('app_translate_comment') }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({ text: commentText })
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.translatedText) {
+                                // Afficher le texte traduit
+                                translatedTextElement.textContent = data.translatedText;
+                                translatedContainer.classList.remove('d-none');
+                                translatedContainer.classList.add('fade-in');
+                                contentElement.textContent = data.translatedText; // Remplacer le contenu
+                                this.setAttribute('data-translated', 'true');
+                                this.innerHTML = '<i class="fas fa-undo me-1"></i> Original';
+                            } else {
+                                alert('Translation failed: ' + (data.error || 'Unknown error'));
+                            }
+                        })
+                        .catch(error => {
+                            alert('Translation error: ' + error.message);
+                        })
+                        .finally(() => {
+                            this.disabled = false;
+                            if (!isTranslated) {
+                                this.innerHTML = '<i class="fas fa-undo me-1"></i> Original';
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+   
+
+{% endblock %}

@@ -1,0 +1,228 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Publications - Sportify{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            height: 100%;
+            width: 300px;
+            margin-bottom: 30px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .object-fit-cover {
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .share-btn {
+            color: #6c757d;
+            transition: color 0.2s;
+        }
+
+        .share-btn:hover {
+            color: #0d6efd;
+        }
+
+        .image-container {
+            position: relative;
+        }
+
+        #liip-test img {
+            max-height: 200px;
+            object-fit: contain;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <!-- Header Section -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-lg-8 col-md-10 text-center">
+            <h2 class="display-4">Nos dernières publications</h2>
+            <p>Découvrez les partages récents de notre communauté !</p>
+        </div>
+    </div>
+
+    <!-- Tri par date -->
+    <div style="margin-bottom: 1rem;">
+        <strong>Trier par :</strong>
+        <a href="{{ path('app_publications', {'order': 'ASC', 'search': searchTerm}) }}"
+           class="btn btn-outline-primary btn-sm {% if order == 'ASC' %}active{% endif %}">📅 Anciens publications</a>
+        <a href="{{ path('app_publications', {'order': 'DESC', 'search': searchTerm}) }}"
+           class="btn btn-outline-primary btn-sm {% if order == 'DESC' %}active{% endif %}">🆕 Récents publications</a>
+    </div>
+
+    <!-- Barre de recherche -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-lg-8 col-md-10">
+            <form method="get" class="input-group shadow-sm" id="search-form">
+                <input type="text" id="search-input" name="search" class="form-control" placeholder="🔍 Rechercher une publication..." value="{{ searchTerm|default('') }}">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <a href="{{ path('app_mes_publications', {'id': 1}) }}" class="btn btn-primary mb-3">Voir mes publications</a>
+
+    <!-- Bouton nouvelle publication -->
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{{ path('app_publication_new') }}" class="btn btn-success">
+            + Nouvelle publication
+        </a>
+    </div>
+
+    <!-- Grille des publications -->
+    <div id="publication-results">
+        {% if publications|length > 0 %}
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                {% for publication in publications %}
+                    <div class="col d-flex justify-content-center">
+                        <div class="card h-100 shadow-sm border border-1 rounded-3" style="width: 300px;">
+                            {% if publication.imageUrl %}
+                                <div class="image-container" style="height: 180px; overflow: hidden;">
+                                    <img src="{{ asset('uploads/publications/' ~ publication.imageUrl)|imagine_filter('publication_thumbnail') }}"
+                                         class="card-img-top w-100 h-100 object-fit-cover"
+                                         alt="Image publication"
+                                         onerror="this.onerror=null; this.src='{{ asset('frontoffice/images/img_1.jpg') }}'">
+                                </div>
+                            {% else %}
+                                <div class="image-container" style="height: 180px;">
+                                    <img src="{{ asset('frontoffice/images/img_1.jpg') }}"
+                                         class="card-img-top w-100 h-100 object-fit-cover"
+                                         alt="Image par défaut">
+                                </div>
+                            {% endif %}
+
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">{{ publication.user.getFullName() }}</h5>
+                                <p class="text-muted small">{{ publication.datePub|date('d M Y, H:i') }}</p>
+                                <p class="card-text">
+                                    {{ publication.contenu|length > 100 ? publication.contenu[:100] ~ '...' : publication.contenu }}
+                                </p>
+                                {% if publication.description %}
+                                    <p class="text-muted small">
+                                        {{ publication.description|length > 100 ? publication.description[:100] ~ '...' : publication.description }}
+                                    </p>
+                                {% endif %}
+                            </div>
+                            <div class="card-footer d-flex justify-content-between align-items-center bg-light">
+                                <a href="{{ path('app_publication_show', {'id': publication.id}) }}" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-comments"></i> Commentaires
+                                </a>
+                                <div class="share-buttons">
+                                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ url('app_publication_show', {id: publication.id})|url_encode }}"
+                                       target="_blank" class="share-btn">
+                                        <i class="fab fa-facebook"></i>
+                                    </a>
+                                    <a href="https://twitter.com/intent/tweet?text={{ publication.contenu|slice(0, 50)|url_encode }}&url={{ url('app_publication_show', {id: publication.id})|url_encode }}"
+                                       target="_blank" class="share-btn">
+                                        <i class="fab fa-twitter"></i>
+                                    </a>
+                                </div>
+                                {% if publication.user == app.user %}
+                                    <span class="badge bg-secondary">Moi</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Test LiipImagine Bundle -->
+            <div class="alert alert-info mt-5" id="liip-test">
+                <h5 class="mb-3">Test LiipImagineBundle</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <p><strong>Image originale :</strong></p>
+                            <img src="{{ asset('frontoffice/images/img_1.jpg') }}"
+                                 id="original-img"
+                                 style="max-width: 100%; border: 2px solid blue;">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <p><strong>Image avec filtre :</strong></p>
+                            <img src="{{ asset('frontoffice/images/img_1.jpg')|imagine_filter('publication_thumbnail') }}"
+                                 id="filtered-img"
+                                 style="max-width: 100%; border: 2px solid green;"
+                                 onerror="this.style.border='2px solid red'; document.getElementById('liip-result').className='alert alert-danger'; document.getElementById('liip-result').innerHTML='❌ Le filtre ne fonctionne pas'">
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-success" id="liip-result">
+                    ✅ Le filtre fonctionne correctement
+                </div>
+            </div>
+        {% else %}
+            <div class="text-center my-5">
+                <h3>Aucune publication trouvée</h3>
+                {% if searchTerm is defined and searchTerm is not empty %}
+                    <p>Aucun contenu ne correspond à <strong>"{{ searchTerm }}"</strong></p>
+                {% endif %}
+                <a href="{{ path('app_publication_new') }}" class="btn btn-outline-success mt-3">
+                    + Créer une publication
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+    // Recherche AJAX
+    const searchInput = document.getElementById('search-input');
+    const searchForm = document.getElementById('search-form');
+    const publicationResults = document.getElementById('publication-results');
+    const order = "{{ order }}";
+
+    let timeout = null;
+
+    searchInput.addEventListener('input', function () {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            const search = searchInput.value;
+            fetch(`{{ path('app_publications') }}?search=${encodeURIComponent(search)}&order=${order}`, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.text())
+            .then(html => {
+                publicationResults.innerHTML = html;
+            });
+        }, 300);
+    });
+
+    // Test LiipImagine
+    const filteredImg = document.getElementById('filtered-img');
+    if (filteredImg) {
+        filteredImg.onload = function () {
+            if (this.naturalWidth > 0) {
+                document.getElementById('liip-result').className = 'alert alert-success';
+                document.getElementById('liip-result').innerHTML =
+                    '✅ Le filtre fonctionne correctement (Image redimensionnée: ' +
+                    this.naturalWidth + 'x' + this.naturalHeight + 'px)';
+            }
+        };
+    }
+</script>
+{% endblock %}

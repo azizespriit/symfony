@@ -1,0 +1,81 @@
+{# templates/partials/_footer.html.twig #}
+<footer class="footer-section bg-dark">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <h3 class="text-white">Stamina Fitness</h3>
+        <p class="text-muted">Votre application de suivi d'objectifs fitness et de plans d'entraînement personnalisés.</p>
+      </div>
+
+      <div class="col-md-4">
+        <h3 class="text-white">Liens rapides</h3>
+        <ul class="list-unstyled">
+          <li><a href="#" class="text-muted">Accueil</a></li>
+
+          <li><a href="#" class="text-muted">Objectifs</a></li>
+          <li><a href="#" class="text-muted">Plans d'entraînement</a></li>
+          <li><a href="#" class="text-muted">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-4">
+        <h3 class="text-white">Contact</h3>
+        <ul class="list-unstyled text-muted">
+          <li><i class="icon-map-marker mr-2"></i> 123 Rue du Fitness, Paris</li>
+          <li><i class="icon-phone mr-2"></i> +33 1 23 45 67 89</li>
+          <li><i class="icon-envelope mr-2"></i> contact@stamina-fitness.com</li>
+        </ul>
+        
+        <div class="social-icons mt-3">
+          <a href="#" class="text-white mr-3"><i class="icon-facebook"></i></a>
+          <a href="#" class="text-white mr-3"><i class="icon-twitter"></i></a>
+          <a href="#" class="text-white mr-3"><i class="icon-instagram"></i></a>
+          <a href="#" class="text-white"><i class="icon-youtube-play"></i></a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row pt-5">
+      <div class="col-12 text-center">
+        <p class="text-muted">
+          &copy; <script>document.write(new Date().getFullYear());</script> Stamina Fitness. Tous droits réservés.
+          <span class="mx-2">|</span>
+          <a href="#" class="text-muted">Mentions légales</a>
+          <span class="mx-2">|</span>
+          <a href="#" class="text-muted">Politique de confidentialité</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer-section {
+    padding: 4rem 0;
+    margin-top: 5rem;
+  }
+  
+  .footer-section h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+  }
+  
+  .footer-section a {
+    transition: color 0.3s ease;
+  }
+  
+  .footer-section a:hover {
+    color: #fff !important;
+    text-decoration: none;
+  }
+  
+  .social-icons i {
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+  }
+  
+  .social-icons a:hover i {
+    transform: translateY(-3px);
+  }
+</style>

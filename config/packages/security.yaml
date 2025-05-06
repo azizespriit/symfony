@@ -12,7 +12,16 @@ security:
         main:
             lazy: true
             provider: users_in_memory
-
+        backoffice:
+            pattern: ^/admin
+            form_login:
+                login_path: backoffice_login
+                check_path: backoffice_login
+            logout:
+                path: backoffice_logout
+                target: frontoffice_home
+        # access_control:
+        # - { path: ^/admin, roles: ROLE_ADMIN }
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
 

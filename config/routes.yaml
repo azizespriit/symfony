@@ -3,3 +3,13 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+frontoffice_home:
+    path: /
+    controller: App\Controller\HomeController::index
+
+backoffice_dashboard:
+    path: /admin
+    controller: App\Controller\DashboardController::index
+
+_liip_imagine:
+    resource: "@LiipImagineBundle/Resources/config/routing.yaml"
