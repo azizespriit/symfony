@@ -1,0 +1,146 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Confirmation de réservation{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }} {# Pour hériter des styles du base.html.twig, y compris ceux du chatbot #}
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #6f42c1, #c0a0f0);
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .form-control {
+            padding: 12px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 350px;
+            margin: 0 auto;
+            transition: border-color 0.3s ease-in-out;
+        }
+
+        .form-control:focus {
+            border-color: #6f42c1;
+            box-shadow: 0 0 8px rgba(111, 66, 193, 0.5);
+        }
+
+        .btn-gradient {
+            background: linear-gradient(45deg, #6f42c1, #a450f2);
+            color: #fff;
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-gradient:hover {
+            background: linear-gradient(45deg, #a450f2, #6f42c1);
+        }
+
+        .alert {
+            font-size: 1.1rem;
+            border-radius: 8px;
+            margin-top: 20px;
+            padding: 15px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h2>Réservation Confirmée</h2>
+        <p>Un code de confirmation a été envoyé à votre adresse e-mail. Veuillez entrer le code ci-dessous pour confirmer votre réservation.</p>
+        
+        <form method="post">
+            <div class="form-group">
+                <input type="text" id="confirmation_code" name="confirmation_code" class="form-control" placeholder="Entrez votre code" required>
+            </div>
+            <button type="submit" class="btn-gradient">Confirmer</button>
+        </form>
+
+        {% for flash_message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ flash_message }}
+            </div>
+        {% endfor %}
+
+        {% for flash_message in app.flashes('error') %}
+            <div class="alert alert-danger">
+                {{ flash_message }}
+            </div>
+        {% endfor %}
+    </div>
+
+    {# Besoin d'aide ? (Chatbot) #}
+    <button id="chatbot-button">
+        💬 Besoin d'aide ?
+    </button>
+
+    <div id="chatbot-window">
+        <div id="chatbot-header">
+            <span>Assistant Sportify</span>
+            <button id="chatbot-close">×</button>
+        </div>
+        <div id="chatbot-messages"></div>
+        <div id="chatbot-input-container">
+            <input id="chatbot-input" type="text" placeholder="Posez votre question...">
+            <button id="chatbot-send">→</button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# Aucun script supplémentaire nécessaire ici, tout est déjà dans base.html.twig #}
+{% endblock %}
