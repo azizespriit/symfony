@@ -10,11 +10,15 @@
     <nav class="nav-links">
       <a href="#" class="nav-link">Accueil</a>
       <a href="{{ path('app_objectif_front') }}" class="nav-link">Objectifs</a>
-      <a href="#" class="nav-link">Publications</a>
-      <a href="#" class="nav-link">Évènements</a>
+      <a href="{{ path('app_publications') }}" class="nav-link">Publications</a>
+      <a href="{{ path('app_evennement_list') }}" class="nav-link">Évènements</a>
       <a href="{{ path('produit_catalogue') }}" class="nav-link">Produits</a>
-      <a href="#" class="nav-link">Réclamation</a>
-      <a href="{{ path('app_user_profile', {'id_user': app.user.id_user}) }}" class="nav-link">Profil</a>
+      <a href="{{ path('app_reclamation_index') }}" class="nav-link">Réclamation</a>
+      {% if app.user %}
+        <a href="{{ path('app_user_profile', {'id_user': app.user.id_user}) }}" class="nav-link">Profil</a>
+      {% else %}
+        <a href="#" class="nav-link">Profil</a>
+      {% endif %}
       <a href="{{ path('app_logout') }}" class="nav-link logout">Log out</a>
     </nav>
   </div>

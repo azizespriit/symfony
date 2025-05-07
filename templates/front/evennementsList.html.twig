@@ -1,0 +1,37 @@
+{% extends 'base2.html.twig' %}
+
+{% block title %}Liste des Compétitions{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <h1 class="text-center mb-4">🏆 Liste des Compétitions</h1>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for competition in competitions %}
+            <div class="col">
+                <div class="card shadow-sm h-100 border-0 rounded-4">
+                    <div class="card-body p-4">
+                        <h5 class="card-title fw-bold text-primary">{{ competition.nom }}</h5>
+                        <p class="card-text text-muted">
+                            <strong>Description :</strong> {{ competition.description }}<br>
+                            <strong>Type :</strong> {{ competition.type }}<br>
+                            <strong>Date :</strong> {{ competition.dateC ? competition.dateC|date('d/m/Y') : 'N/A' }}<br>
+                            <strong>Lieu :</strong> {{ competition.lieuC }}<br>
+                            <strong>Participants :</strong> {{ competition.nbPart }}
+                        </p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 text-end">
+                        <a href="{{ path('app_reserver_competition', {'id': competition.idC}) }}" class="btn btn-outline-primary btn-sm rounded-pill">Réserver</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    Aucune compétition trouvée.
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

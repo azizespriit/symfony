@@ -1,0 +1,204 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Products Page - Dashboard Template</title>
+    <!--
+
+    Template 2108 Dashboard
+
+	http://www.tooplate.com/view/2108-dashboard
+
+    -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600">
+    <!-- https://fonts.google.com/specimen/Open+Sans -->
+    <link rel="stylesheet" href="{{ asset('assets/css/fontawesome.min.css')}}">
+    <!-- https://fontawesome.com/ -->
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css')}}">
+    <!-- https://getbootstrap.com/ -->
+    <link rel="stylesheet" href="{{ asset('assets/css/tooplate.css')}}">
+</head>
+
+<body id="reportsPage" class="bg02">
+    <div class="" id="home">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="navbar navbar-expand-xl navbar-light bg-light">
+                        <a class="navbar-brand" href="index.html">
+                            <i class="fas fa-3x fa-tachometer-alt tm-site-icon"></i>
+                            <h1 class="tm-site-title mb-0">Dashboard</h1>
+                        </a>
+                        <button class="navbar-toggler ml-auto mr-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav mx-auto">
+                                <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_back') }}">Dashboard</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_competition') }}">Competition</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if app.request.attributes.get('_route') == 'app_reservation' %}active{% endif %}" href="{{ path('app_reservation') }}">
+                Reservation
+                {% if app.request.attributes.get('_route') == 'app_reservation' %}
+                    <span class="sr-only">(current)</span>
+                {% endif %}
+            </a>
+        </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+            <!-- row -->
+      
+<div class="row tm-content-row tm-mt-big">
+    <div class="col-xl-12 col-lg-12 tm-md-12 tm-sm-12 tm-col">
+        <div class="bg-white tm-block h-100">
+    <h2>Modifier la Compétition</h2>
+
+    <form id="competitionEditForm" method="POST" novalidate>
+    <div class="mb-3">
+        <label for="nom" class="form-label">Nom</label>
+        <input type="text" class="form-control" name="nom" id="nom" value="{{ competition.nom }}">
+        <div class="text-danger" id="error-nom"></div>
+    </div>
+
+    <div class="mb-3">
+        <label for="type" class="form-label">Type</label>
+        <input type="text" class="form-control" name="type" id="type" value="{{ competition.type }}">
+        <div class="text-danger" id="error-type"></div>
+    </div>
+
+    <div class="mb-3">
+        <label for="dateC" class="form-label">Date</label>
+        <input type="date" class="form-control" name="dateC" id="dateC" value="{{ competition.dateC ? competition.dateC|date('Y-m-d') : '' }}">
+        <div class="text-danger" id="error-dateC"></div>
+    </div>
+
+    <div class="mb-3">
+        <label for="lieuC" class="form-label">Lieu</label>
+        <input type="text" class="form-control" name="lieuC" id="lieuC" value="{{ competition.lieuC }}">
+        <div class="text-danger" id="error-lieuC"></div>
+    </div>
+
+    <div class="mb-3">
+        <label for="nbPart" class="form-label">Participants</label>
+        <input type="number" class="form-control" name="nbPart" id="nbPart" value="{{ competition.nbPart }}">
+        <div class="text-danger" id="error-nbPart"></div>
+    </div>
+
+    <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" name="description" id="description" rows="4">{{ competition.description }}</textarea>
+        <div class="text-danger" id="error-description"></div>
+    </div>
+
+    <button type="submit" class="btn btn-success">Enregistrer</button>
+    <a href="{{ path('app_competition') }}" class="btn btn-secondary">Annuler</a>
+</form>
+
+<script>
+document.getElementById('competitionEditForm').addEventListener('submit', function (e) {
+    e.preventDefault(); // Empêche l'envoi pour valider d'abord
+    let valid = true;
+
+    // Réinitialiser les messages d'erreur
+    document.querySelectorAll('.text-danger').forEach(div => div.textContent = '');
+
+    const nom = document.getElementById('nom');
+    const type = document.getElementById('type');
+    const dateC = document.getElementById('dateC');
+    const lieuC = document.getElementById('lieuC');
+    const nbPart = document.getElementById('nbPart');
+    const description = document.getElementById('description');
+
+    // Regex pour les champs texte
+    const regexText = /^[A-Za-zÀ-ÿ\s\-']+$/;
+
+    // Nom
+    if (!regexText.test(nom.value) || nom.value.length < 3 || nom.value.length > 100) {
+        document.getElementById('error-nom').textContent = "Le nom doit contenir entre 3 et 100 lettres.";
+        valid = false;
+    }
+
+    // Type
+    if (!regexText.test(type.value) || type.value.length < 3 || type.value.length > 50) {
+        document.getElementById('error-type').textContent = "Le type doit contenir entre 3 et 50 lettres.";
+        valid = false;
+    }
+
+    // Date
+    const today = new Date().toISOString().split('T')[0];
+    if (!dateC.value || dateC.value < today) {
+        document.getElementById('error-dateC').textContent = "Veuillez choisir une date future.";
+        valid = false;
+    }
+
+    // Lieu
+    if (lieuC.value.trim().length < 3 || lieuC.value.trim().length > 100) {
+        document.getElementById('error-lieuC').textContent = "Le lieu doit faire entre 3 et 100 caractères.";
+        valid = false;
+    }
+
+    // Nombre de participants
+    if (!nbPart.value || nbPart.value < 1 || nbPart.value > 1000) {
+        document.getElementById('error-nbPart').textContent = "Le nombre doit être entre 1 et 1000.";
+        valid = false;
+    }
+
+    // Description
+    if (description.value.trim().length < 10) {
+        document.getElementById('error-description').textContent = "La description doit faire au moins 10 caractères.";
+        valid = false;
+    }
+
+    if (valid) {
+        this.submit(); // Envoie du formulaire si tout est bon
+    }
+});
+</script>
+
+</div>
+
+
+            <footer class="row tm-mt-small">
+                <div class="col-12 font-weight-light">
+                    <p class="d-inline-block tm-bg-black text-white py-2 px-4">
+                        Copyright &copy; 2018 Admin Dashboard . Created by
+                        <a rel="nofollow" href="https://www.tooplate.com" class="text-white tm-footer-link">Tooplate</a>
+                    </p>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script src="{{ asset('assets/js/jquery-3.3.1.min.js')}}"></script>
+    <!-- https://jquery.com/download/ -->
+    <script src="{{ asset('assets/js/bootstrap.min.js')}}"></script>
+    <!-- https://getbootstrap.com/ -->
+    <script>
+        $(function () {
+            $('.tm-product-name').on('click', function () {
+                window.location.href = "edit-product.html";
+            });
+        })
+    </script>
+</body>
+
+</html>
+
+{% endblock %}

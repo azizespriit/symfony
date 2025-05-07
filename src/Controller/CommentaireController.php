@@ -101,7 +101,19 @@ class CommentaireController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_commentaire_delete1', methods: ['POST'])]
+    // #[Route('/{id}', name: 'app_commentaire_delete1', methods: ['POST'])]
+    // public function delete(Request $request, Commentaire $commentaire, EntityManagerInterface $entityManager): Response
+    // {
+    //     if ($this->isCsrfTokenValid('delete'.$commentaire->getId(), $request->request->get('_token'))) {
+    //         $entityManager->remove($commentaire);
+    //         $entityManager->flush();
+    //         $this->addFlash('success', 'Comment deleted successfully!');
+    //     }
+
+    //     return $this->redirectToRoute('backoffice_publication_index');
+    // }
+
+    #[Route('/commentaire/{id}/delete', name: 'app_commentaire_delete1', methods: ['POST'])]
     public function delete(Request $request, Commentaire $commentaire, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$commentaire->getId(), $request->request->get('_token'))) {
@@ -112,4 +124,5 @@ class CommentaireController extends AbstractController
 
         return $this->redirectToRoute('backoffice_publication_index');
     }
+
 }

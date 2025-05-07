@@ -22,7 +22,7 @@ public function onAuthenticationSuccess(Request $request, TokenInterface $token)
 $roles = $token->getRoleNames(); // get roles of the logged-in user
 
 if (in_array('ROLE_ADMIN', $roles)) {
-return new RedirectResponse($this->router->generate('app_back')); // route name for /back
+return new RedirectResponse($this->router->generate('app_backA')); // route name for /back
 }
 
 if (in_array('ROLE_USER', $roles)) {
