@@ -37,11 +37,11 @@ class HomeController extends AbstractController
     }
     
 
-    #[Route('/dashboard', name: 'app_back')]
-    public function indexDash(): Response
-    {
-        return $this->render('back/index.html.twig');
-    }
+    // #[Route('/dashboard', name: 'app_back')]
+    // public function indexDash(): Response
+    // {
+    //     return $this->render('back/index.html.twig');
+    // }
 
 
 #[Route('/reservation/supprimer/{id}', name: 'app_supprimer_res', methods: ['POST'])]
@@ -298,7 +298,7 @@ public function addCompetition(Request $request, EntityManagerInterface $em): Re
             'competitions' => $competitions,
         ]);
     }   
-    #[Route('/dashboard', name: 'app_back')]
+    #[Route('/dashboard/evennements', name: 'app_back')]
     public function homeBack(CompetitionRepository $repo, ReservationRepository $reservationRepo): Response
     {
         // Récupérer toutes les compétitions
