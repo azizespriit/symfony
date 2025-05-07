@@ -19,4 +19,5 @@ return [
     App\Jour\JourBundle::class => ['all' => true],
     App\Rating\RatingBundle::class => ['all' => true],
     Knp\Bundle\SnappyBundle\KnpSnappyBundle::class => ['all' => true],
+    Knp\Bundle\PaginatorBundle\KnpPaginatorBundle::class => ['all' => true],
 ];

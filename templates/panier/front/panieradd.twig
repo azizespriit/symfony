@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Redirection{% endblock %}
+
+{% block body %}
+<div class="site-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h2>Redirection en cours...</h2>
+                <p>Vous allez être redirigé vers votre panier.</p>
+                <div class="mt-4">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="sr-only">Chargement...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+            // Redirection automatique vers le panier
+            setTimeout(function() {
+                window.location.href = "{{ path('panier_view') }}";
+            }, 1000);
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,387 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nos Produits - Stamina{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <style>
+        .products-section {
+            padding: 100px 0;
+            background-color: #f8f9fa;
+        }
+        
+        .subheading {
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            color: #007bff;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .product-card {
+            border: none;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+            height: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .product-image-container {
+            position: relative;
+            overflow: hidden;
+            height: 250px;
+        }
+        
+        .product-image {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+        
+        .product-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(0,0,0,0.7) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .product-card:hover .product-overlay {
+            opacity: 1;
+        }
+        
+        .product-title {
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin-top: 1rem;
+            color: #343a40;
+            transition: color 0.3s ease;
+        }
+        
+        .product-card:hover .product-title {
+            color: #007bff;
+        }
+        
+        .product-price {
+            font-weight: 700;
+            color: #ff5733;
+            font-size: 1.4rem;
+            margin: 0.5rem 0;
+        }
+        
+        .product-description {
+            color: #6c757d;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .stock-status {
+            font-size: 0.85rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: 600;
+        }
+        
+        .in-stock {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .low-stock {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .out-of-stock {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .btn-view-details {
+            background-color: transparent;
+            color: #007bff;
+            border: 1px solid #007bff;
+            transition: all 0.3s ease;
+            border-radius: 50px;
+            padding: 8px 16px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .btn-view-details:hover {
+            background-color: #007bff;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.2);
+        }
+        
+        .btn-add-to-cart {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            transition: all 0.3s ease;
+            border-radius: 50px;
+            padding: 8px 16px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .btn-add-to-cart:hover {
+            background-color: #0062cc;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+            color: white;
+        }
+        
+        .btn-add-product {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            margin-bottom: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-add-product:hover {
+            background-color: #218838;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(33, 136, 56, 0.3);
+            color: white;
+        }
+        
+        .btn-view-cart {
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            margin-left: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-view-cart:hover {
+            background-color: #138496;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(19, 132, 150, 0.3);
+            color: white;
+        }
+        
+        .flash-messages {
+            margin-bottom: 2rem;
+        }
+        
+        .alert {
+            border-radius: 10px;
+            padding: 15px 20px;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            animation: slideIn 0.5s ease-in-out;
+        }
+        
+        @keyframes slideIn {
+            0% { transform: translateY(-20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        
+        .card-content {
+            padding: 1.5rem;
+        }
+        
+        .card-actions {
+            padding: 0 1.5rem 1.5rem 1.5rem;
+        }
+        
+        .section-title-container {
+            margin-bottom: 3rem;
+        }
+        
+        .no-products-message {
+            padding: 3rem;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        
+        .no-products-icon {
+            font-size: 4rem;
+            color: #dee2e6;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="site-section products-section" id="products-section">
+    <div class="container">
+        <div class="row justify-content-center text-center mb-5 section-title-container">
+            <div class="col-md-8 section-heading">
+                <span class="subheading">Découvrez notre gamme</span>
+                <h2 class="heading mb-3">Nos Produits</h2>
+                <p class="text-muted">Découvrez notre sélection d'articles de fitness et d'équipements sportifs pour atteindre vos objectifs.</p>
+            </div>
+        </div>
+        
+        {% for label, messages in app.flashes %}
+            <div class="flash-messages">
+                {% for message in messages %}
+                    <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <a href="{{ path('produit_add_front') }}" class="btn btn-add-product">
+                    <i class="icon-plus mr-2"></i> Ajouter un Produit
+                </a>
+                <a href="{{ path('panier_view') }}" class="btn btn-view-cart">
+                    <i class="icon-shopping-cart mr-2"></i> Voir mon panier
+                </a>
+            </div>
+        </div>
+        
+        <div class="row">
+            {% for produit in pagination %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card product-card">
+                        <div class="product-image-container">
+                            {% if produit.photo %}
+                                <img src="{{ asset('uploads/produits/' ~ produit.photo) }}" alt="{{ produit.nom }}" class="product-image">
+                            {% else %}
+                                <img src="{{ asset('images/no-image.jpg') }}" alt="Pas d'image" class="product-image">
+                            {% endif %}
+                            <div class="product-overlay"></div>
+                        </div>
+                        
+                        <div class="card-content">
+                            <h3 class="product-title">{{ produit.nom }}</h3>
+                            
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <p class="product-price mb-0">{{ produit.prix|number_format(2, ',', ' ') }} €</p>
+                                
+                                {% if produit.stock > 10 %}
+                                    <span class="stock-status in-stock"><i class="icon-check mr-1"></i> En stock</span>
+                                {% elseif produit.stock > 0 %}
+                                    <span class="stock-status low-stock"><i class="icon-alert-circle mr-1"></i> Stock limité</span>
+                                {% else %}
+                                    <span class="stock-status out-of-stock"><i class="icon-x mr-1"></i> Épuisé</span>
+                                {% endif %}
+                            </div>
+                            
+                            {% if produit.description %}
+                                <p class="product-description">{{ produit.description }}</p>
+                            {% else %}
+                                <p class="product-description">Aucune description disponible pour ce produit.</p>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="card-actions">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="{{ path('produit_detail', {'id': produit.id}) }}" class="btn btn-view-details">
+                                    <i class="icon-eye mr-1"></i> Détails
+                                </a>
+                                
+                                {% if produit.stock > 0 %}
+                                    <button class="btn btn-add-to-cart add-to-cart" data-product-id="{{ produit.id }}">
+                                        <i class="icon-shopping-cart mr-1"></i> Ajouter
+                                    </button>
+                                {% else %}
+                                    <button class="btn btn-secondary" disabled style="border-radius: 50px; padding: 8px 16px; font-size: 0.9rem;">
+                                        Indisponible
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <div class="no-products-message">
+                        <div class="no-products-icon">
+                            <i class="icon-shopping-bag"></i>
+                        </div>
+                        <h4>Aucun produit disponible pour le moment.</h4>
+                        <p class="text-muted">Soyez le premier à ajouter un produit en cliquant sur le bouton "Ajouter un Produit".</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        {# Affichage de la pagination #}
+        <div class="row">
+            <div class="col-12 d-flex justify-content-center">
+                <div class="navigation">
+                    {{ knp_pagination_render(pagination, 'pagination/custom_pagination.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+            // Initialize dismissible alerts
+            $('.alert').alert();
+            
+            // Add to cart functionality with animation
+            $('.add-to-cart').on('click', function() {
+                const productId = $(this).data('product-id');
+                const button = $(this);
+                
+                // Animation effect
+                button.html('<i class="icon-check"></i> Ajouté').addClass('btn-success').removeClass('btn-add-to-cart');
+                
+                // Redirect to the add to cart route after a short delay
+                setTimeout(function() {
+                    window.location.href = "{{ path('panier_add_produit', {'id': 'PRODUCT_ID'}) }}".replace('PRODUCT_ID', productId) + "?quantite=1";
+                }, 700);
+            });
+            
+            // Staggered animation effect for product cards
+            $('.product-card').each(function(index) {
+                $(this).css({
+                    'animation-delay': (index * 0.1) + 's'
+                });
+            });
+        });
+    </script>
+{% endblock %}

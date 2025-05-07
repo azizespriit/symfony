@@ -1,6 +1,6 @@
 {% extends 'frontoffice/index.html.twig' %}
 
-{% block title %}Comment - {{ commentaire.user.getFullName() }}{% endblock %}
+{% block title %}Comment - {{ commentaire.user.getLastName() }}{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -55,7 +55,7 @@
                         <i class="fas fa-user"></i>
                     </div>
                     <div>
-                        <h5 class="mb-0">{{ commentaire.user.getFullName() }}</h5>
+                        <h5 class="mb-0">{{ commentaire.user.getLastName() }}</h5>
                         <small class="text-muted">
                             <i class="far fa-clock me-1"></i> {{ commentaire.datee|date('M j, Y \\a\\t g:i a') }}
                         </small>

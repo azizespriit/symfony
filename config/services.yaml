@@ -5,17 +5,34 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     app.chatbot.api_key: '%env(CHATBOT_API_KEY)%'
+    publications_directory: '%kernel.project_dir%/public/uploads/publications'
+    custom_images_directory: '%kernel.project_dir%/public/uploads/publications'
     app.chatbot.api_endpoint: '%env(CHATBOT_API_ENDPOINT)%'
     translate.api_url: 'https://libretranslate.de/translate'
     translate.timeout: 3
     images_directory: '%kernel.project_dir%/public'
     reclamations_upload_dir: '%kernel.project_dir%/public/uploads'
+    produit_images_directory: '%kernel.project_dir%/public/uploads/produits'
+    uploads_base_url: '/uploads'
+    eden_ai_api_key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMzk1NmU2ZGUtODFkYi00NGZmLWE0YjAtZGRjNDY1OTgyMzlkIiwidHlwZSI6ImFwaV90b2tlbiJ9.51k_V4hEIovG3pHESVAYKKbzDUJYupz12N5HlYPWU64'
+    eden_ai_api_key_test: 'VOUS_DEVEZ_OBTENIR_UNE_NOUVELLE_CLE_API'
+    stripe_public_key: 'pk_test_51RJChcI87wbUIWNPJ5mU4xgRSWN8c6180kHGWiu6FPUOPeLpG8tcj4nKdGr9CqNuLnBzJpM7DuahzicrMyx4e3wB00Y2xJ58rV'
+    stripe_private_key: 'sk_test_51RJChcI87wbUIWNPS87ladYDBW9ixBuctugYt18OznZervQqwL13D1fs9T4z12ZvPseLesfhPgYP9I3tu0UKoxEb00AOwlYEf8'
 
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # Makes classes in src/ available to be used as services
+    # This creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
 
     # Service configurations for LoginSuccessHandler
     App\Security\LoginSuccessHandler:
@@ -27,7 +44,6 @@ services:
         arguments:
             $mailer: '@mailer.mailer'
 
-    
     # Vos services personnalisés
     App\Service\GeminiMedicalService: ~
 
@@ -41,14 +57,7 @@ services:
             - method: setPaper
               arguments: ['A4', 'portrait']
 
-    # Makes classes in src/ available to be used as services
-    # This creates a service per class whose id is the fully-qualified class name
-    App\:
-        resource: '../src/'
-        exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
-            - '../src/Kernel.php'
-
-    # Additional service definitions can be added as needed
-    # Please note that last definitions always *replace* previous ones
+    # Stripe service
+    App\Service\StripeService:
+        arguments:
+            $stripePrivateKey: '%stripe_private_key%'

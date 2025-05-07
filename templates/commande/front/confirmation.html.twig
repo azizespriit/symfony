@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande confirmée{% endblock %}
+
+{% block body %}
+<div class="site-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <div class="card shadow-lg border-0 rounded-lg">
+                    <div class="card-body py-5">
+                        <div class="mb-4 confirmation-icon">
+                            <i class="icon-check_circle" style="font-size: 6rem; color: #28a745;"></i>
+                        </div>
+                        <h2 class="heading mb-3">Commande confirmée</h2>
+                        <p class="mb-4 lead text-muted">Votre commande a été enregistrée avec succès!</p>
+                        
+                        <div class="card mb-4 border-0 shadow">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0">Détails de la commande</h5>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-borderless">
+                                    <tbody>
+                                        <tr>
+                                            <th style="width: 30%" class="text-muted">Numéro de commande:</th>
+                                            <td class="font-weight-bold">{{ commande.id }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-muted">Date:</th>
+                                            <td>{{ commande.dateCommande|date('d/m/Y H:i') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-muted">Email:</th>
+                                            <td>{{ commande.email }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-muted">Adresse de livraison:</th>
+                                            <td>{{ commande.localisation }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-muted">Total:</th>
+                                            <td class="text-primary font-weight-bold h5">{{ commande.panier.prixTotal|number_format(2, ',', ' ') }} €</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-center mt-5">
+                            <a href="{{ path('produit_catalogue') }}" class="btn btn-primary btn-lg rounded-pill px-5">
+                                <i class="icon-shopping-bag mr-2"></i> Continuer vos achats
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .confirmation-icon {
+        animation: scaleIn 0.5s ease-in-out;
+    }
+    
+    @keyframes scaleIn {
+        0% { transform: scale(0); opacity: 0; }
+        70% { transform: scale(1.1); }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    
+    .card {
+        transition: all 0.3s ease;
+    }
+    
+    .btn {
+        transition: all 0.3s ease;
+    }
+    
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+    }
+</style>
+{% endblock %} 

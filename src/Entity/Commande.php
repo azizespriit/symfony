@@ -2,78 +2,122 @@
 
 namespace App\Entity;
 
+use App\Repository\CommandeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
-use App\Entity\Panier;
-
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: CommandeRepository::class)]
 class Commande
 {
-
     #[ORM\Id]
-    #[ORM\Column(type: "integer")]
-    private int $id;
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-        #[ORM\ManyToOne(targetEntity: Panier::class, inversedBy: "commandes")]
-    #[ORM\JoinColumn(name: 'id_panier', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    private Panier $id_panier;
+    #[ORM\Column]
+    private ?int $id_panier = null;
 
-    #[ORM\Column(type: "string", length: 255)]
-    private string $email;
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'L\'email est obligatoire')]
+    #[Assert\Email(
+        message: 'L\'email {{ value }} n\'est pas un email valide',
+    )]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: 'L\'email ne peut pas dépasser {{ limit }} caractères'
+    )]
+    private ?string $email = null;
 
-    #[ORM\Column(type: "datetime")]
-    private \DateTimeInterface $date_commande;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\NotNull(message: 'La date de commande ne peut pas être vide')]
+    #[Assert\Type("\DateTimeInterface", message: 'La date n\'est pas valide')]
+    private ?\DateTimeInterface $date_commande = null;
 
-    #[ORM\Column(type: "string", length: 255)]
-    private string $localisation;
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'L\'adresse de livraison est obligatoire')]
+    #[Assert\Length(
+        min: 10,
+        max: 255,
+        minMessage: 'L\'adresse doit comporter au moins {{ limit }} caractères',
+        maxMessage: 'L\'adresse ne peut pas dépasser {{ limit }} caractères'
+    )]
+    private ?string $localisation = null;
 
-    public function getId()
+    #[ORM\OneToOne(inversedBy: 'commande', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: 'id_panier', referencedColumnName: 'id', nullable: false)]
+    #[Assert\NotNull(message: 'Le panier associé est obligatoire')]
+    private ?Panier $panier = null;
+
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId($value)
-    {
-        $this->id = $value;
-    }
-
-    public function getId_panier()
+    public function getIdPanier(): ?int
     {
         return $this->id_panier;
     }
 
-    public function setId_panier($value)
+    public function setIdPanier(int $id_panier): self
     {
-        $this->id_panier = $value;
+        $this->id_panier = $id_panier;
+
+        return $this;
     }
 
-    public function getEmail()
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    public function setEmail($value)
+    public function setEmail(string $email): self
     {
-        $this->email = $value;
+        $this->email = $email;
+
+        return $this;
     }
 
-    public function getDate_commande()
+    public function getDateCommande(): ?\DateTimeInterface
     {
         return $this->date_commande;
     }
 
-    public function setDate_commande($value)
+    public function getDate_commande(): ?\DateTimeInterface
     {
-        $this->date_commande = $value;
+        return $this->date_commande;
     }
 
-    public function getLocalisation()
+    public function setDateCommande(\DateTimeInterface $date_commande): self
+    {
+        $this->date_commande = $date_commande;
+
+        return $this;
+    }
+
+    public function getLocalisation(): ?string
     {
         return $this->localisation;
     }
 
-    public function setLocalisation($value)
+    public function setLocalisation(string $localisation): self
     {
-        $this->localisation = $value;
+        $this->localisation = $localisation;
+
+        return $this;
     }
-}
+
+    public function getPanier(): ?Panier
+    {
+        return $this->panier;
+    }
+
+    public function setPanier(Panier $panier): self
+    {
+        $this->panier = $panier;
+
+        return $this;
+    }
+} 

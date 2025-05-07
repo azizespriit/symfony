@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> produit
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
@@ -23,9 +27,12 @@
 /assets/vendor/
 ###< symfony/asset-mapper ###
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 ###> liip/imagine-bundle ###
 /public/media/cache/
 ###< liip/imagine-bundle ###
 >>>>>>> publication
+=======
+>>>>>>> produit

@@ -2,32 +2,98 @@
 <html lang="fr" class="{% if app.request.cookies.get('darkMode') == 'enabled' %}dark-mode{% endif %}">
 
 <head>
-  <meta charset="utf-8">
   <title>{% block title %}Sportify{% endblock %}</title>
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="shortcut icon" href="{{ asset('assets1/ftco-32x32.png') }}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <!-- Fonts et CSS -->
-  <link href="https://fonts.googleapis.com/css?family=Muli:300,400,700,900" rel="stylesheet">
-  <link rel="stylesheet" href="{{ asset('assets1/fonts/icomoon/style.css') }}">
-  <link rel="stylesheet" href="{{ asset('assets1/css/bootstrap.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('assets1/css/jquery-ui.css') }}">
-  <link rel="stylesheet" href="{{ asset('assets1/css/owl.carousel.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('assets1/css/owl.theme.default.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('assets1/css/jquery.fancybox.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('assets1/css/bootstrap-datepicker.css') }}">
-  <link rel="stylesheet" href="{{ asset('assets1/fonts/flaticon/font/flaticon.css') }}">
-  <link rel="stylesheet" href="{{ asset('assets1/css/aos.css') }}">
-  <link rel="stylesheet" href="{{ asset('assets1/css/jquery.mb.YTPlayer.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('assets1/css/style.css') }}">
-  <!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<!-- Bootstrap Icons -->
+  <meta name="description" content="" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Free-Template.co" />
+  {% block css %}
+
+<link rel="stylesheet" href="{{ asset('css/owl.carousel.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/owl.theme.default.min.css') }}">
+  <link rel="shortcut icon" href="{{ asset('ftco-32x32.png') }}">
+
+  <link href="https://fonts.googleapis.com/css?family=Muli:300,400,700,900" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset('fonts/icomoon/style.css') }}">
+  <link rel="shortcut icon" href="{{ asset('assets1/ftco-32x32.png') }}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
+  <link rel="stylesheet" href="{{ asset('assets1/css/jquery-ui.css') }}">
+  <link rel="stylesheet" href="{{ asset('assets1/css/aos.css') }}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/jquery-ui.css') }}">
   
+
+  <link rel="stylesheet" href="{{ asset('css/jquery.fancybox.min.css') }}">
+
+  <link rel="stylesheet" href="{{ asset('css/bootstrap-datepicker.css') }}">
+
+  <link rel="stylesheet" href="{{ asset('fonts/flaticon/font/flaticon.css') }}">
+
+  <link rel="stylesheet" href="{{ asset('css/aos.css') }}">
+  <link href="{{ asset('css/jquery.mb.YTPlayer.min.css') }}" media="all" rel="stylesheet" type="text/css">
+
+  <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/form-validation.css') }}">
+
   <style>
+    .chatbot-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 350px;
+      height: 500px;
+      z-index: 9999;
+      display: none;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      overflow: hidden;
+    }
+    .chat-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: #ff5733;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      z-index: 10000;
+      font-size: 24px;
+    }
+    .chat-button:hover {
+      background-color: #e64a2e;
+    }
+    .chatbot-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background-color: #ff5733;
+      color: white;
+    }
+    .chatbot-header h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+    .chatbot-close {
+      cursor: pointer;
+      font-size: 18px;
+    }
+    .chatbot-iframe-container {
+      height: calc(100% - 40px);
+    }
+
     /* Style global pour le footer */
     html, body {
       height: 100%;
@@ -47,79 +113,1594 @@
       padding: 2rem 0;
       margin-top: 3rem;
     }
+
   </style>
+
+  {% endblock %}
+
 </head>
 
 <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
-  <div class="site-wrap">
+
     {# Barre de navigation si nécessaire #}
  {% include 'partials/_navbar.html.twig' %}
 
-    <main class="main-content">
-      {% block body %}{% endblock %}
-    </main>
+    {% block body %}
+    <a id="bgndVideo" class="player"
+      data-property="{videoURL:'https://www.youtube.com/watch?v=w-cRWOjlk8c',showYTLogo:false, showAnnotations: false, showControls: false, cc_load_policy: false, containment:'#home-section',autoPlay:true, mute:true, startAt:255, stopAt: 271, opacity:1}">
+    </a>
 
-    <!-- Footer -->
+    <div class="intro-section" id="home-section" style="background-color: #ccc;">
+      <div class="container">
+
+        <div class="row align-items-center">
+          <div class="col-lg-12 mx-auto text-center" data-aos="fade-up">
+            <h1 class="mb-3">We Believe Little Things Matter</h1>
+            <p class="lead mx-auto desc mb-5">A new free template for fitness website template created with love by the fine folks at <a href="https://free-template.co" target="_blank">Free-Template.co</a></p>
+            <p class="text-center">
+              <a href="#" class="btn btn-outline-white py-3 px-5">Get Started</a>
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="schedule-wrap">
+
+      <div class="d-md-flex align-items-center">
+        <div class="hours mr-md-4 mb-4 mb-lg-0">
+          <strong class="d-block">Hours</strong>
+          Opening: 7:30am &mdash;
+          Closing: 9:00pm
+        </div>
+        <div class="cta ml-auto">
+          <a href="#contact-section" class="smoothscroll d-flex d-md-flex align-items-center btn">
+            <span class="mx-auto">  <span>Contact us</span> <span class="arrow icon-keyboard_arrow_right"></span></span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-section">
+      <div class="container">
+
+        <div class="row justify-content-center text-center mb-5">
+          <div class="col-md-8 section-heading">
+            <span class="subheading">Stay Healthy</span>
+            <h2 class="heading mb-3">Get A Perfect Body</h2>
+            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.
+            Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
+          </div>
+        </div>
+
+        <!-- Slider -->
+        <div class="owl-carousel nonloop-block-14 block-14" data-aos="fade">
+          <div class="slide">
+            <div class="ftco-feature-1">
+              <span class="icon flaticon-fit"></span>
+              <div class="ftco-feature-1-text">
+                <h2>Be Fit</h2>
+                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="slide">
+            <div class="ftco-feature-1">
+              <span class="icon flaticon-gym-1"></span>
+              <div class="ftco-feature-1-text">
+                <h2>Join Club</h2>
+                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind
+                  texts.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="slide">
+            <div class="ftco-feature-1">
+              <span class="icon flaticon-gym"></span>
+              <div class="ftco-feature-1-text">
+                <h2>Gym Fitness</h2>
+                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind
+                  texts.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="slide">
+            <div class="ftco-feature-1">
+              <span class="icon flaticon-vegetables"></span>
+              <div class="ftco-feature-1-text">
+                <h2>Eat Vegie</h2>
+                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind
+                  texts.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="slide">
+            <div class="ftco-feature-1">
+              <span class="icon flaticon-fruit-juice"></span>
+              <div class="ftco-feature-1-text">
+                <h2>Fruit Juices</h2>
+                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind
+                  texts.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="slide">
+            <div class="ftco-feature-1">
+              <span class="icon flaticon-stationary-bike"></span>
+              <div class="ftco-feature-1-text">
+                <h2>Body Warmup</h2>
+                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind
+                  texts.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <div class="bgimg" style="background-image: url('{{ asset('images/bg_2.jpg') }}');"  data-stellar-background-ratio="0.5">
+      <div class="container">
+        <div class="row align-items-center justify-content-center text-center">
+          <div class="col-md-7">
+            <h2 class="">Get The Result You Want</h2>
+            <p class="lead mx-auto desc mb-5">A new free template for fitness website template created with love by the fine folks
+              at <a href="https://free-template.co" target="_blank">Free-Template.co</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-section" id="classes-section">
+      <div class="container">
+        <div class="row justify-content-center text-center mb-5">
+          <div class="col-md-8  section-heading">
+            <span class="subheading">Fitness Class</span>
+            <h2 class="heading mb-3">Classes</h2>
+            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.
+            Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="class-item d-flex align-items-center">
+              <a href="single.html" class="class-item-thumbnail">
+                <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+              </a>
+              <div class="class-item-text">
+                
+                <h2><a href="single.html">Fitness Class Name #1</a></h2>
+                <span>By Justin Daniel</span>,
+                <span>30 minutes</span>
+              </div>
+            </div>
+
+            <div class="class-item d-flex align-items-center">
+              <a href="single.html" class="class-item-thumbnail">
+                <img src="{{ asset('images/img_2.jpg') }}" alt="Free website template by Free-Template.co">
+              </a>
+              <div class="class-item-text">
+                
+                <h2><a href="single.html">Fitness Class Name #2</a></h2>
+                <span>By Justin Daniel</span>,
+                <span>30 minutes</span>
+              </div>
+            </div>
+
+            <div class="class-item d-flex align-items-center">
+              <a href="single.html" class="class-item-thumbnail">
+                <img src="{{ asset('images/img_3.jpg') }}" alt="Free website template by Free-Template.co">
+              </a>
+              <div class="class-item-text">
+                
+                <h2><a href="single.html">Fitness Class Name #3</a></h2>
+                <span>By Justin Daniel</span>,
+                <span>30 minutes</span>
+              </div>
+            </div>
+            
+            <div class="class-item d-flex align-items-center">
+              <a href="single.html" class="class-item-thumbnail">
+                <img src="{{ asset('images/img_4.jpg') }}" alt="Free website template by Free-Template.co">
+              </a>
+              <div class="class-item-text">
+                
+                <h2><a href="single.html">Fitness Class Name #4</a></h2>
+                <span>By Justin Daniel</span>,
+                <span>30 minutes</span>
+              </div>
+            </div>
+
+            <div class="class-item d-flex align-items-center">
+              <a href="single.html" class="class-item-thumbnail">
+                <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+              </a>
+              <div class="class-item-text">
+                
+                <h2><a href="single.html">Fitness Class Name #5</a></h2>
+                <span>By Justin Daniel</span>,
+                <span>30 minutes</span>
+              </div>
+            </div>
+            
+           
+          </div>
+          <div class="col-lg-6">
+            <div class="class-item d-flex align-items-center">
+              <a href="single.html" class="class-item-thumbnail">
+                <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+              </a>
+              <div class="class-item-text">
+                
+                <h2><a href="single.html">Fitness Class Name #1</a></h2>
+                <span>By Justin Daniel</span>,
+                <span>30 minutes</span>
+              </div>
+            </div>
+            
+            <div class="class-item d-flex align-items-center">
+              <a href="single.html" class="class-item-thumbnail">
+                <img src="{{ asset('images/img_2.jpg') }}" alt="Free website template by Free-Template.co">
+              </a>
+              <div class="class-item-text">
+                
+                <h2><a href="single.html">Fitness Class Name #2</a></h2>
+                <span>By Justin Daniel</span>,
+                <span>30 minutes</span>
+              </div>
+            </div>
+            
+            <div class="class-item d-flex align-items-center">
+              <a href="single.html" class="class-item-thumbnail">
+                <img src="{{ asset('images/img_3.jpg') }}" alt="Free website template by Free-Template.co">
+              </a>
+              <div class="class-item-text">
+                
+                <h2><a href="single.html">Fitness Class Name #3</a></h2>
+                <span>By Justin Daniel</span>,
+                <span>30 minutes</span>
+              </div>
+            </div>
+            
+            <div class="class-item d-flex align-items-center">
+              <a href="single.html" class="class-item-thumbnail">
+                <img src="{{ asset('images/img_4.jpg') }}" alt="Free website template by Free-Template.co">
+              </a>
+              <div class="class-item-text">
+                
+                <h2><a href="single.html">Fitness Class Name #4</a></h2>
+                <span>By Justin Daniel</span>,
+                <span>30 minutes</span>
+              </div>
+            </div>
+            
+            <div class="class-item d-flex align-items-center">
+              <a href="single.html" class="class-item-thumbnail">
+                <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+              </a>
+              <div class="class-item-text">
+                
+                <h2><a href="single.html">Fitness Class Name #5</a></h2>
+                <span>By Justin Daniel</span>,
+                <span>30 minutes</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bgimg" style="background-image: url('{{ asset('images/bg_3.jpg') }}');"  data-stellar-background-ratio="0.5">
+      <div class="container">
+        <div class="row align-items-center justify-content-center text-center">
+          <div class="col-md-7">
+            <h2 class="">Every Step Counts</h2>
+            <p class="lead mx-auto desc mb-5">A new free template for fitness website template created with love by the fine folks
+              at <a href="https://free-template.co" target="_blank">Free-Template.co</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-section" id="schedule-section">
+      <div class="container">
+        <div class="row justify-content-center text-center mb-5">
+          <div class="col-md-8  section-heading">
+            <span class="subheading">Fitness Sched</span>
+            <h2 class="heading mb-3">Schedule</h2>
+            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind
+              texts.
+              Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
+          </div>
+        </div>
+
+        
+        <div class="row">
+          <div class="col-12">
+            <ul class="nav days d-flex" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="sunday-tab" data-toggle="tab" href="#nav-sunday" role="tab" aria-controls="sunday"
+                  aria-selected="true">S</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="monday-tab" data-toggle="tab" href="#nav-monday" role="tab" aria-controls="monday"
+                  aria-selected="false">M</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="tuesday-tab" data-toggle="tab" href="#nav-tuesday" role="tab" aria-controls="tuesday"
+                  aria-selected="false">T</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="wednesday-tab" data-toggle="tab" href="#nav-wednesday" role="tab" aria-controls="wednesday"
+                  aria-selected="false">W</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" id="thursday-tab" data-toggle="tab" href="#nav-thursday" role="tab" aria-controls="thursday"
+                  aria-selected="false">T</a>
+              </li><li class="nav-item">
+                <a class="nav-link" id="friday-tab" data-toggle="tab" href="#nav-friday" role="tab" aria-controls="friday"
+                  aria-selected="false">F</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="saturday-tab" data-toggle="tab" href="#nav-saturday" role="tab" aria-controls="saturday"
+                  aria-selected="false">S</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="tab-content">
+          <div class="tab-pane fade show active" id="nav-sunday" role="tabpanel" aria-labelledby="nav-sunday-tab">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Sunday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #1</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+            
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_2.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Sunday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #2</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+            
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_3.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Sunday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #3</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+            
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_4.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Sunday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #4</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+            
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Sunday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #5</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+            
+            
+              </div>
+              <div class="col-lg-6">
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Sunday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #1</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+            
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_2.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Sunday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #2</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+            
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_3.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Sunday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #3</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+            
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_4.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Sunday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #4</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+            
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Sunday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #5</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="nav-monday" role="tabpanel" aria-labelledby="nav-monday-tab">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_4.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Monday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #4</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Monday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #1</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_2.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Monday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #2</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_3.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Monday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #3</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Monday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #5</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+          
+              </div>
+              <div class="col-lg-6">
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Monday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #1</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_2.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Monday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #2</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_3.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Monday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #3</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_4.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Monday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #4</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Monday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #5</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="nav-tuesday" role="tabpanel" aria-labelledby="nav-tuesday-tab">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_2.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Tuesday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #2</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Tuesday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #1</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_3.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Tuesday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #3</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_4.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Tuesday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #4</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Tuesday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #5</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+          
+              </div>
+              <div class="col-lg-6">
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_3.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Tuesday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #3</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Tuesday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #1</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_2.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Tuesday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #2</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_4.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Tuesday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #4</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Tuesday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #5</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="nav-wednesday" role="tabpanel" aria-labelledby="nav-wednesday-tab">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_2.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Wednesday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #2</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Wednesday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #1</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+          
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_3.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Wednesday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #3</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_4.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Wednesday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #4</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Wednesday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #5</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+          
+              </div>
+              <div class="col-lg-6">
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_3.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Wednesday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #3</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Wednesday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #1</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_2.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Wednesday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #2</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+          
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_4.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Wednesday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #4</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Wednesday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #5</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane fade" id="nav-thursday" role="tabpanel" aria-labelledby="nav-thursday-tab">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_4.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Thursday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #4</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Thursday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #1</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_2.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Thursday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #2</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_3.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Thursday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #3</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+          
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Thursday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #5</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+          
+              </div>
+              <div class="col-lg-6">
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Thursday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #1</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_2.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Thursday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #2</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_3.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Thursday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #3</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_4.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Thursday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #4</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Thursday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #5</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="nav-friday" role="tabpanel" aria-labelledby="nav-friday-tab">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_2.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Friday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #2</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Friday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #1</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+          
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_3.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Friday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #3</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_4.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Friday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #4</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Friday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #5</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+          
+              </div>
+              <div class="col-lg-6">
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_3.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Friday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #3</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Friday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #1</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_2.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Friday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #2</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+          
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_4.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Friday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #4</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Friday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #5</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="nav-saturday" role="tabpanel" aria-labelledby="nav-saturday-tab">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Saturday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #1</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_2.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Saturday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #2</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+                
+          
+          
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_3.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Saturday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #3</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_4.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Saturday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #4</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Saturday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #5</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+          
+              </div>
+              <div class="col-lg-6">
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_3.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Saturday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #3</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Saturday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #1</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_2.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Saturday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #2</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+          
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_4.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Saturday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #4</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+          
+                <div class="class-item d-flex align-items-center">
+                  <a href="single.html" class="class-item-thumbnail">
+                    <img src="{{ asset('images/img_1.jpg') }}" alt="Free website template by Free-Template.co">
+                  </a>
+                  <div class="class-item-text">
+                    <span>Saturday 7:30am - 9:00am</span>
+                    <h2><a href="single.html">Fitness Class Name #5</a></h2>
+                    <span>By Justin Daniel</span>,
+                    <span>30 minutes</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+
+    <div class="bgimg" style="background-image: url('{{ asset('images/bg_1.jpg') }}');" data-stellar-background-ratio="0.5">
+      <div class="container">
+        <div class="row align-items-center justify-content-center text-center">
+          <div class="col-md-7">
+            <h2 class="">Your Fitness Partner Where Ever You Are</h2>
+            <p class="lead mx-auto desc mb-5">A new free template for fitness website template created with love by the fine
+              folks
+              at <a href="https://free-template.co" target="_blank">Free-Template.co</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    
+    
+    <div class="site-section" id="trainer-section">
+      <div class="container">
+        <div class="row justify-content-center text-center mb-5" data-aos="fade-up">
+          <div class="col-md-8  section-heading">
+            <span class="subheading">Trainer</span>
+            <h2 class="heading mb-3">Our Trainers</h2>
+            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind
+              texts.
+              Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-3 mb-4 mb-lg-0 col-md-6 text-center" data-aos="fade-up" data-aos-delay="">
+            <div class="person">
+              <img src="{{ asset('images/person_1.jpg') }}" alt="Free website template by Free-Template.co" class="img-fluid">
+              <h3>Justin Daniel</h3>
+              <p class="position">Trainer</p>
+              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind
+              texts.</p>
+            </div>
+          </div>
+          <div class="col-lg-3 mb-4 mb-lg-0 col-md-6 text-center" data-aos="fade-up" data-aos-delay="100">
+            <div class="person">
+              <img src="{{ asset('images/person_3.jpg') }}" alt="Free website template by Free-Template.co" class="img-fluid">
+              <h3>Matthew Davidson</h3>
+              <p class="position">Trainer</p>
+              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind
+                texts.</p>
+            </div>
+          </div>
+          <div class="col-lg-3 mb-4 mb-lg-0 col-md-6 text-center" data-aos="fade-up" data-aos-delay="200">
+            <div class="person">
+              <img src="{{ asset('images/person_2.jpg') }}" alt="Free website template by Free-Template.co" class="img-fluid">
+              <h3>Matthew Davidson</h3>
+              <p class="position">Trainer</p>
+              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind
+                texts.</p>
+            </div>
+          </div>
+          <div class="col-lg-3 mb-4 mb-lg-0 col-md-6 text-center" data-aos="fade-up" data-aos-delay="300">
+            <div class="person">
+              <img src="{{ asset('images/person_4.jpg') }}" alt="Free website template by Free-Template.co" class="img-fluid">
+              <h3>Matthew Davidson</h3>
+              <p class="position">Trainer</p>
+              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind
+                texts.</p>
+            </div>
+          </div>
+        
+        </div>
+      </div>
+    </div>
+
+    <div class="site-section" id="services-section">
+      <div class="container">
+        <div class="row justify-content-center text-center mb-5" data-aos="fade-up">
+          <div class="col-md-8  section-heading">
+            <span class="subheading">Fitness Services</span>
+            <h2 class="heading mb-3">Services</h2>
+            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind
+              texts.
+              </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-4 mb-4 col-md-6" data-aos="fade-up" data-aos-delay="">
+            <div class="ftco-feature-1">
+              <span class="icon flaticon-fit"></span>
+              <div class="ftco-feature-1-text">
+                <h2>Be Fit</h2>
+                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind
+                  texts.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 mb-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="ftco-feature-1">
+              <span class="icon flaticon-gym-1"></span>
+              <div class="ftco-feature-1-text">
+                <h2>Join Club</h2>
+                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind
+                  texts.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 mb-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="ftco-feature-1">
+              <span class="icon flaticon-gym"></span>
+              <div class="ftco-feature-1-text">
+                <h2>Gym Fitness</h2>
+                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind
+                  texts.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 mb-4 col-md-6" data-aos="fade-up" data-aos-delay="">
+            <div class="ftco-feature-1">
+              <span class="icon flaticon-vegetables"></span>
+              <div class="ftco-feature-1-text">
+                <h2>Eat Vegie</h2>
+                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind
+                  texts.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 mb-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="ftco-feature-1">
+              <span class="icon flaticon-fruit-juice"></span>
+              <div class="ftco-feature-1-text">
+                <h2>Fruit Juices</h2>
+                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind
+                  texts.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 mb-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="ftco-feature-1">
+              <span class="icon flaticon-stationary-bike"></span>
+              <div class="ftco-feature-1-text">
+                <h2>Body Warmup</h2>
+                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind
+                  texts.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="site-section bg-light contact-wrap" id="contact-section">
+      <div class="container">
+        
+        <div class="row justify-content-center text-center mb-5">
+          <div class="col-md-8  section-heading">
+            <span class="subheading">Get In Touch</span>
+            <h2 class="heading mb-3">Contact Us</h2>
+            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind
+              texts.
+            </p>
+          </div>
+        </div>
+
+        <div class="row justify-content-center">
+          <div class="col-md-7">
+            <form method="post" data-aos="fade">
+              <div class="form-group row">
+                <div class="col-md-6 mb-3 mb-lg-0">
+                  <input type="text" class="form-control" placeholder="First name">
+                </div>
+                <div class="col-md-6">
+                  <input type="text" class="form-control" placeholder="Last name">
+                </div>
+              </div>
+    
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <input type="text" class="form-control" placeholder="Subject">
+                </div>
+              </div>
+    
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <input type="email" class="form-control" placeholder="Email">
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <textarea class="form-control" id="" cols="30" rows="10"
+                    placeholder="Write your message here."></textarea>
+                </div>
+              </div>
+    
+              <div class="form-group row">
+                <div class="col-md-6">
+    
+                  <input type="submit" class="btn btn-primary py-3 px-5 btn-block" value="Send Message">
+                </div>
+              </div>
+    
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="schedule-wrap2 clearfix">
+      <div class="d-md-flex align-items-center">
+        <div class="hours mr-md-4 mb-4 mb-lg-0">
+          <strong class="d-block">Hours</strong>
+          Opening: 7:30am &mdash;
+          Closing: 9:00pm
+        </div>
+        <div class="cta ml-auto">
+          <a href="#" class="d-flex d-md-flex align-items-center btn">
+            <span class="mx-auto"> <span>Contact us</span> <span class="arrow icon-keyboard_arrow_right"></span></span>
+          </a>
+        </div>
+      </div>
+    </div>
+{% endblock %}
     <footer class="footer-section">
       <div class="container">
         <div class="row">
           <div class="col-md-4">
-            <h3 class="text-white">Sportify</h3>
-            <p class="text-muted">Votre application de suivi d'objectifs fitness.</p>
+            <h3 class="text-dark">About Stamina</h3>
+            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
           </div>
 
-          <div class="col-md-4">
-            <h3 class="text-white">Liens rapides</h3>
-            <ul class="list-unstyled">
-              <li><a href="#" class="text-muted">Accueil</a></li>
-              <li><a href="#" class="text-muted">Objectifs</a></li>
-              <li><a href="#" class="text-muted">Contact</a></li>
+          <div class="col-md-3 ml-auto">
+            <h3 class="text-dark">Links</h3>
+            <ul class="list-unstyled footer-links">
+              <li><a href="#">Home</a></li>
+              <li><a href="#">Classes</a></li>
+              <li><a href="#">Schedule</a></li>
+              <li><a href="#">Trainer</a></li>
             </ul>
           </div>
 
           <div class="col-md-4">
-            <h3 class="text-white">Contact</h3>
-            <ul class="list-unstyled text-muted">
-              <li><i class="icon-map-marker mr-2"></i> 123 Rue du Fitness, Paris</li>
-              <li><i class="icon-phone mr-2"></i> +33 1 23 45 67 89</li>
-              <li><i class="icon-envelope mr-2"></i> contact@stamina.com</li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="row pt-4 mt-4 border-top">
-          <div class="col-12 text-center">
-            <p class="text-muted mb-0">
-              &copy; {{ "now"|date("Y") }} Stamina Fitness. Tous droits réservés.
+            <h3 class="text-dark">Subscribe</h3>
+            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.
             </p>
+            <form action="#">
+              <div class="d-flex mb-5">
+                <input type="text" class="form-control rounded-0" placeholder="Email">
+                <input type="submit" class="btn btn-primary rounded-0" value="Subscribe">
+              </div>
+            </form>
           </div>
+
+        </div>
+
+        <div class="row pt-5 mt-5 text-center">
+          <div class="col-md-12">
+            <div class=" pt-5">
+              <!-- Link back to Free-Template.co can't be removed. Template is licensed under CC BY 3.0. -->
+              <p class="copyright"><small>&copy;
+                  <script>document.write(new Date().getFullYear());</script> Stamina. All Rights Reserved. Design by <a
+                    href="https://free-template.co" target="_blank">Free-Template.co</a></small></p>
+            </div>
+          </div>
+
         </div>
       </div>
     </footer>
+
+    
+
+  </div>
+  <!-- .site-wrap -->
+
+  {% block js %}
+   <script src="{{ asset('js/owl.carousel.min.js') }}"></script>
+  <script src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
+  <script src="{{ asset('js/jquery-migrate-3.0.1.min.js') }}"></script>
+  <script src="{{ asset('js/jquery-ui.js') }}"></script>
+  <script src="{{ asset('js/popper.min.js') }}"></script>
+  <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+ 
+  <script src="{{ asset('js/jquery.stellar.min.js') }}"></script>
+  <script src="{{ asset('js/jquery.countdown.min.js') }}"></script>
+  <script src="{{ asset('js/bootstrap-datepicker.min.js') }}"></script>
+  <script src="{{ asset('js/jquery.easing.1.3.js') }}"></script>
+  <script src="{{ asset('js/aos.js') }}"></script>
+  <script src="{{ asset('js/jquery.fancybox.min.js') }}"></script>
+  <script src="{{ asset('js/jquery.sticky.js') }}"></script>
+  <script src="{{ asset('js/jquery.mb.YTPlayer.min.js') }}"></script>
+
+  <script src="{{ asset('js/main.js') }}"></script>
+  <script src="{{ asset('js/form-validation.js') }}"></script>
+  
+  {% endblock %}
+
+  <!-- Chatbot -->
+  <div class="chatbot-container">
+    <div class="chatbot-header">
+      <h3>Chat with us</h3>
+      <div class="chatbot-close" onclick="toggleChat()">
+        <i class="icon-close"></i>
+      </div>
+    </div>
+    <div class="chatbot-iframe-container">
+      <iframe
+        src="https://www.chatbase.co/chatbot-iframe/vJjKtolpuHPzfjADY85GY"
+        width="100%"
+        height="100%"
+        style="border: none;"
+        frameborder="0"
+      ></iframe>
+    </div>
+  </div>
+  
+  <div class="chat-button" onclick="toggleChat()">
+    <i class="icon-chat"></i>
   </div>
 
-  <!-- Scripts JS -->
-  
-  <script src="{{ asset('assets1/js/jquery-3.3.1.min.js') }}"></script>
-  <script src="{{ asset('assets1/js/jquery-migrate-3.0.1.min.js') }}"></script>
-  <script src="{{ asset('assets1/js/jquery-ui.js') }}"></script>
-  <script src="{{ asset('assets1/js/popper.min.js') }}"></script>
-  <script src="{{ asset('assets1/js/bootstrap.min.js') }}"></script>
-  <script src="{{ asset('assets1/js/owl.carousel.min.js') }}"></script>
-  <script src="{{ asset('assets1/js/jquery.stellar.min.js') }}"></script>
-  <script src="{{ asset('assets1/js/jquery.countdown.min.js') }}"></script>
-  <script src="{{ asset('assets1/js/bootstrap-datepicker.min.js') }}"></script>
-  <script src="{{ asset('assets1/js/jquery.easing.1.3.js') }}"></script>
-  <script src="{{ asset('assets1/js/aos.js') }}"></script>
-  <script src="{{ asset('assets1/js/jquery.fancybox.min.js') }}"></script>
-  <script src="{{ asset('assets1/js/jquery.sticky.js') }}"></script>
-  <script src="{{ asset('assets1/js/jquery.mb.YTPlayer.min.js') }}"></script>
-  <script src="{{ asset('assets1/js/main.js') }}"></script>
+  <script>
+    function toggleChat() {
+      const chatbot = document.querySelector('.chatbot-container');
+      if (chatbot.style.display === 'none' || chatbot.style.display === '') {
+        chatbot.style.display = 'block';
+      } else {
+        chatbot.style.display = 'none';
+      }
+    }
+  </script>
+
 </body>
-<script src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
-<script src="{{ asset('js/jquery-migrate-3.0.1.min.js') }}"></script>
-<script src="{{ asset('js/jquery-ui.js') }}"></script>
-<script src="{{ asset('js/popper.min.js') }}"></script>
-<script src="{{ asset('js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('js/main.js') }}"></script>
+
 </html>

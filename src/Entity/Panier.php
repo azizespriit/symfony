@@ -2,72 +2,110 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
+use App\Repository\PanierRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use App\Entity\Commande;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: PanierRepository::class)]
 class Panier
 {
-
     #[ORM\Id]
-    #[ORM\Column(type: "integer")]
-    private int $id;
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+    
+    #[ORM\Column(type: 'float')]
+    #[Assert\NotNull(message: 'Le prix total ne peut pas être null')]
+    #[Assert\GreaterThanOrEqual(
+        value: 0,
+        message: 'Le prix total ne peut pas être négatif'
+    )]
+    #[Assert\Type(
+        type: 'float',
+        message: 'Le prix total {{ value }} n\'est pas un nombre valide.'
+    )]
+    private float $prix_total = 0.0;
 
-    #[ORM\Column(type: "float")]
-    private float $prix_total;
+    #[ORM\OneToOne(mappedBy: 'panier', cascade: ['persist', 'remove'])]
+    private ?Commande $commande = null;
 
-    public function getId()
+    #[ORM\OneToMany(mappedBy: 'panier', targetEntity: PanierProduit::class, orphanRemoval: true)]
+    #[Assert\Valid]
+    private Collection $panierProduits;
+
+    public function __construct()
+    {
+        $this->panierProduits = new ArrayCollection();
+    }
+
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId($value)
-    {
-        $this->id = $value;
-    }
-
-    public function getPrix_total()
+    public function getPrixTotal(): float
     {
         return $this->prix_total;
     }
 
-    public function setPrix_total($value)
+    public function getPrix_total(): float
     {
-        $this->prix_total = $value;
+        return $this->prix_total;
     }
 
-    #[ORM\OneToMany(mappedBy: "id_panier", targetEntity: Panier_produit::class)]
-    private Collection $panier_produits;
+    public function setPrixTotal(float $prix_total): self
+    {
+        $this->prix_total = $prix_total;
 
-        public function getPanier_produits(): Collection
-        {
-            return $this->panier_produits;
-        }
-    
-        public function addPanier_produit(Panier_produit $panier_produit): self
-        {
-            if (!$this->panier_produits->contains($panier_produit)) {
-                $this->panier_produits[] = $panier_produit;
-                $panier_produit->setId_panier($this);
-            }
-    
-            return $this;
-        }
-    
-        public function removePanier_produit(Panier_produit $panier_produit): self
-        {
-            if ($this->panier_produits->removeElement($panier_produit)) {
-                // set the owning side to null (unless already changed)
-                if ($panier_produit->getId_panier() === $this) {
-                    $panier_produit->setId_panier(null);
-                }
-            }
-    
-            return $this;
+        return $this;
+    }
+
+    public function getCommande(): ?Commande
+    {
+        return $this->commande;
+    }
+
+    public function setCommande(Commande $commande): self
+    {
+        // set the owning side of the relation if necessary
+        if ($commande->getPanier() !== $this) {
+            $commande->setPanier($this);
         }
 
-    #[ORM\OneToMany(mappedBy: "id_panier", targetEntity: Commande::class)]
-    private Collection $commandes;
-}
+        $this->commande = $commande;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PanierProduit>
+     */
+    public function getPanierProduits(): Collection
+    {
+        return $this->panierProduits;
+    }
+
+    public function addPanierProduit(PanierProduit $panierProduit): self
+    {
+        if (!$this->panierProduits->contains($panierProduit)) {
+            $this->panierProduits->add($panierProduit);
+            $panierProduit->setPanier($this);
+        }
+
+        return $this;
+    }
+
+    public function removePanierProduit(PanierProduit $panierProduit): self
+    {
+        if ($this->panierProduits->removeElement($panierProduit)) {
+            // set the owning side to null (unless already changed)
+            if ($panierProduit->getPanier() === $this) {
+                $panierProduit->setPanier(null);
+            }
+        }
+
+        return $this;
+    }
+} 
