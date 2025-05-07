@@ -4,6 +4,7 @@ namespace App\Service;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Mime\Address;
 use App\Entity\Apprenant;
 
 class MailerService
@@ -18,7 +19,7 @@ class MailerService
     public function reclame(string $email): void
     {
         $emailMessage = (new TemplatedEmail())
-            ->from('no-reply@gmail.com')
+            ->from(new Address('Sportify.support@gmail.com', 'Sportify Support'))
             ->to($email)
             ->subject('Votre reclamation en cours de traitement')
             ->htmlTemplate('emails/reclamation.html.twig');
