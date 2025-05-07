@@ -23,7 +23,7 @@
                 <td>{{ commentaire.id }}</td>
                 <td>{{ commentaire.contenu }}</td>
                 <td>{{ commentaire.datee|date('Y-m-d H:i') }}</td>
-                <td>{{ commentaire.user.getFullName() }}</td>
+                <td>{{ commentaire.user.getLastName() }}</td>
                 <td>
                     <a href="{{ path('app_publication_show', {'id': commentaire.publication.id}) }}">
                         Publication #{{ commentaire.publication.id }}

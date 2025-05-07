@@ -16,7 +16,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: "integer")]
+    #[ORM\Column(name: "id_user", type: "integer")]
     private int $id_user;
 
     #[ORM\Column(type: "string", length: 255)]

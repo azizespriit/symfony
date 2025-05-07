@@ -78,7 +78,7 @@ class PublicationController extends AbstractController
     
     private function getStaticUser(EntityManagerInterface $entityManager): User
     {
-        return $entityManager->getRepository(User::class)->find(1);
+        return $entityManager->getRepository(User::class)->find(14);
     }
     private function customDecode(string $input = null): ?string
     {
@@ -335,7 +335,7 @@ class PublicationController extends AbstractController
         SluggerInterface $slugger
     ): Response {
         $staticUser = $this->getStaticUser($entityManager);
-        if ($publication->getUser()->getId() !== $staticUser->getId()) {
+        if ($publication->getUser()->getId_user() !== $staticUser->getId_user()) {
             $this->addFlash('error', 'You are not authorized to edit this publication');
             return $this->redirectToRoute('app_publication_show', ['id' => $publication->getId()]);
         }
@@ -566,10 +566,10 @@ class PublicationController extends AbstractController
     {
         // Query to get the count of publications per user
         $query = $entityManager->createQuery(
-            'SELECT u.id, u.firstName, u.lastName, COUNT(p.id) as publicationCount
+            'SELECT u.id_user, u.firstName, u.lastName, COUNT(p.id) as publicationCount
              FROM App\Entity\User u
              LEFT JOIN u.publications p
-             GROUP BY u.id, u.firstName, u.lastName
+             GROUP BY u.id_user, u.firstName, u.lastName
              ORDER BY publicationCount DESC'
         );
         $usersWithPublicationCount = $query->getResult();
@@ -583,7 +583,7 @@ class PublicationController extends AbstractController
         // Combine firstName and lastName in the result
         $usersWithPublicationCount = array_map(function ($user) {
             return [
-                'id' => $user['id'],
+                'id' => $user['id_user'],
                 'fullName' => $user['firstName'] . ' ' . $user['lastName'],
                 'publicationCount' => $user['publicationCount'],
             ];

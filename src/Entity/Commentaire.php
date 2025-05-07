@@ -12,7 +12,7 @@ class Commentaire
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(name: "id", type: 'integer')]
     private $id;
 
     #[ORM\Column(type: 'text')]
@@ -22,7 +22,7 @@ class Commentaire
     private $datee;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'commentaires')]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id_user')]
     private $user;
 
     #[ORM\ManyToOne(targetEntity: Publication::class, inversedBy: 'commentaires')]

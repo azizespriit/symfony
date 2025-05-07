@@ -16,14 +16,24 @@ class PublicationRepository extends ServiceEntityRepository
     }
 
     public function findAllWithUser()
-    {
-        return $this->createQueryBuilder('p')
-            ->leftJoin('p.user', 'u')
-            ->addSelect('u')
-            ->orderBy('p.datePub', 'DESC')
-            ->getQuery()
-            ->getResult();
+{
+    $publications = $this->createQueryBuilder('p')
+        ->leftJoin('p.user', 'u')
+        ->addSelect('u')
+        ->orderBy('p.datePub', 'DESC')
+        ->getQuery()
+        ->getResult();
+
+    // Debug : voir si publications est vide ou contient des données
+    if (empty($publications)) {
+        // Tu peux loguer ou afficher un message
+        // Log::error('No publications found');
+        dump('No publications found');
     }
+
+    return $publications;
+}
+
 
     public function findByUser($user)
     {

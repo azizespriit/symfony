@@ -26,8 +26,16 @@ final class DashboardController extends AbstractController
     #[Route('/dashboard/publicatons', name: 'backoffice_publication_index', methods: ['GET'])]
     public function index(PublicationRepository $publicationRepository): Response
     {
+        $publications = $publicationRepository->findAllWithUser(); // Use the correct method here
+
+        dump($publications); 
+
+        if(empty($publications)){
+            return $this->redirectToRoute('backoffice_publication_index');
+        }
+
         return $this->render('publication/indexBack.html.twig', [
-            'publications' => $publicationRepository->findAllWithUser(),
+            'publications' => $publications,
         ]);
     }
 

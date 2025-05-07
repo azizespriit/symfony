@@ -1,7 +1,7 @@
 {# templates/publication/show.html.twig #}
 {% extends 'frontoffice/index.html.twig' %}
 
-{% block title %}Publication - {{ publication.user.getFullName() }}{% endblock %}
+{% block title %}Publication - {{ publication.user.getFirstName() }}{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -519,7 +519,7 @@
                         <i class="fas fa-user"></i>
                     </div>
                     <div>
-                        <h5 class="mb-0">{{ publication.user.getFullName() }}</h5>
+                        <h5 class="mb-0">{{ publication.user.getFirstName() }}</h5>
                         <small class="text-muted">
                             <i class="far fa-clock me-1"></i> {{ publication.datePub|date('M j, Y \\a\\t g:i a') }}
                         </small>
@@ -557,7 +557,7 @@
                 </div>
                 
                 <!-- Owner Actions -->
-                {% if publication.user.id == staticUser.id %}
+                {% if publication.user.id_user == staticUser.id_user%}
                     <div class="publication-actions d-flex gap-2 mb-4 fade-in">
                         <a href="{{ path('app_publication_edit', {'id': publication.id}) }}" 
                         class="btn btn-outline-primary btn-sm edit-publication-btn">
@@ -625,7 +625,7 @@
                     </div>
                     <div class="flex-grow-1">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="mb-0 fw-bold">{{ commentaire.user.getFullName() }}</h6>
+                            <h6 class="mb-0 fw-bold">{{ commentaire.user.getFirstName() }}</h6>
                             <small class="text-muted">
                                 <i class="far fa-clock me-1"></i> 
                                 {{ commentaire.datee|date('M j, Y \\a\\t g:i a') }}
@@ -672,7 +672,7 @@
                                 <p class="mb-0 translated-text" id="translated-text-{{ commentaire.id }}"></p>
                             </div>
                             
-                            {% if commentaire.user.id == staticUser.id %}
+                            {% if commentaire.user.id_user== staticUser.id_user%}
                                 <div class="comment-actions d-flex gap-2 mt-2 fade-in">
                                     <a href="{{ path('app_publication_show', {
                                         'id': publication.id,

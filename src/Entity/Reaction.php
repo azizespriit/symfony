@@ -19,7 +19,7 @@ class Reaction
     private $publication;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'reactions')]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id_user', nullable: false)]
     private $user;
 
     #[ORM\Column(type: 'string', length: 10, columnDefinition: "ENUM('like','dislike')")]

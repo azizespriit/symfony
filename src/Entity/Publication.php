@@ -32,7 +32,7 @@ class Publication
     
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'publications')]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id_user')]
     private $user;
 
     #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'publication')]

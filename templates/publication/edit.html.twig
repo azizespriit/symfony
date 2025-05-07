@@ -1,7 +1,7 @@
 {# templates/publication/edit.html.twig #}
 {% extends 'frontoffice/index.html.twig' %}
 
-{% block title %}Edit Publication - {{ publication.user.getFullName() }}{% endblock %}
+{% block title %}Edit Publication - {{ publication.user.getFirstName() }}{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
