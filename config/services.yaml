@@ -34,6 +34,9 @@ services:
     arguments:
       $router: '@router'
 
+  MercurySeries\FlashyBundle\Service\FlashyInterface: '@MercurySeries\FlashyBundle\Service\Flashy'
+
+
   # Mailer service
   App\Service\MailerService:
     arguments:

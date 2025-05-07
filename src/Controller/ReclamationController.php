@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Reclamation;
+use Snipe\BanBuilder\CensorWords;
 use App\Form\ReclamationType;
 use App\Repository\ReclamationRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -10,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use App\Service\MailerService;
 use App\Service\PdfGenerator;
@@ -65,21 +67,31 @@ class ReclamationController extends AbstractController
         return $response;
     }
     #[Route('/new', name: 'app_reclamation_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager,MailerService $mailer): Response
-    {
-        $reclamation = new Reclamation();
-        $form = $this->createForm(ReclamationType::class, $reclamation);
-        $form->handleRequest($request);
-    
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Fixer le user_id à 1
-            $user = $entityManager->getReference('App\Entity\User', 14);
-            $reclamation->setUserId($user);
-    
-            // Handle image upload
+public function new(Request $request, EntityManagerInterface $entityManager, MailerService $mailer, FlashyNotifier $flashy): Response
+{
+    $reclamation = new Reclamation();
+    $form = $this->createForm(ReclamationType::class, $reclamation);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Fixer le user_id à 14
+        $user = $entityManager->getReference('App\Entity\User', 14);
+        $reclamation->setUserId($user);
+
+        $censor = new CensorWords();
+        $censor->setDictionary('en-us'); // or 'fr' for French
+
+        $commentaire = $reclamation->getCommentaire();
+        $result = $censor->censorString($commentaire);
+
+        if (!empty($result['matched'])) {
+            $this->addFlash('error', 'Le commentaire contient des mots inappropriés');
+
+
+        } else {
             $imageFile = $form->get('image')->getData();
             if ($imageFile) {
-                $newFilename = uniqid().'.'.$imageFile->guessExtension();
+                $newFilename = uniqid() . '.' . $imageFile->guessExtension();
                 try {
                     $imageFile->move(
                         $this->getParameter('reclamations_upload_dir'),
@@ -87,26 +99,26 @@ class ReclamationController extends AbstractController
                     );
                     $reclamation->setImage($newFilename);
                 } catch (FileException $e) {
-                    // Handle file upload error
-                    $this->addFlash('error', 'Failed to upload image: '.$e->getMessage());
+                    $this->addFlash('error', 'Échec du téléchargement de l’image : ' . $e->getMessage());
                 }
             }
-    
-            // Définir la date de mise à jour
+
             $reclamation->setUpdated(new \DateTime());
 
             $entityManager->persist($reclamation);
             $entityManager->flush();
             $mailer->reclame($user->getEmail());
-    
+
             return $this->redirectToRoute('app_reclamation_index', [], Response::HTTP_SEE_OTHER);
         }
-    
-        return $this->render('reclamation/new.html.twig', [
-            'reclamation' => $reclamation,
-            'form' => $form->createView(),
-        ]);
     }
+
+    return $this->render('reclamation/new.html.twig', [
+        'reclamation' => $reclamation,
+        'form' => $form,
+    ]);
+}
+
     #[Route('/{id}', name: 'app_reclamation_show', methods: ['GET'])]
     public function show(Reclamation $reclamation): Response
     {

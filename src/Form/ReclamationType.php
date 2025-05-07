@@ -43,7 +43,7 @@ class ReclamationType extends AbstractType
                 'constraints' => [
                     new Assert\NotBlank(['message' => 'Le commentaire est obligatoire']),
                     new Assert\Length([
-                        'min' => 10,
+                        'min' => 3,
                         'minMessage' => 'Le commentaire doit contenir au moins {{ limit }} caractères',
                     ]),
                 ],

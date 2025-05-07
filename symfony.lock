@@ -51,6 +51,9 @@
             "./config/routes/liip_imagine.yaml"
         ]
     },
+    "mercuryseries/flashy-bundle": {
+        "version": "v5.1.0"
+    },
     "nelmio/cors-bundle": {
         "version": "2.5",
         "recipe": {

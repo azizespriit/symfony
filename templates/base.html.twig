@@ -12,6 +12,9 @@
   {% block css %}
 {{ encore_entry_link_tags('app') }}
 <link rel="stylesheet" href="{{ asset('css/owl.carousel.min.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">
   <link rel="stylesheet" href="{{ asset('css/owl.theme.default.min.css') }}">
   <link rel="shortcut icon" href="{{ asset('ftco-32x32.png') }}">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
@@ -258,7 +261,26 @@
 
 </head>
 
+{# {% block javascripts %}
+    <script src="{{ asset('bundles/mercuryflashy/js/flashy.js') }}"></script>
+    <script>
+        window.onload = function() {
+            Mercury.flash({{ app.session.flashbag.get('error')|json_encode }});
+            Mercury.flash({{ app.session.flashbag.get('success')|json_encode }});
+        };
+    </script>
+{% endblock %} #}
+
 <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300">
+
+
+{# {% for label, messages in app.flashes %}
+        <div class="alert alert-{{ label }}">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endfor %} #}
 
     {# Barre de navigation si nécessaire #}
     {% block navbarr %}
