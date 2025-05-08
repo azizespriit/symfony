@@ -605,8 +605,8 @@ class PublicationController extends AbstractController
         PublicationRepository $publicationRepository,
         CommentaireRepository $commentaireRepository
     ): Response {
+
         $user = $userRepository->find($id);
-    
         if (!$user) {
             throw $this->createNotFoundException('Utilisateur non trouvé.');
         }
